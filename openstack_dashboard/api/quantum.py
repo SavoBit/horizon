@@ -296,7 +296,7 @@ def network_modify(request, network_id, **kwargs):
 
 
 def network_delete(request, network_id):
-    LOG.debug("network_delete(): netid=%s" % network_id)
+    LOG.error("network_delete(): netid=%s" % network_id)
     quantumclient(request).delete_network(network_id)
 
 
@@ -345,7 +345,7 @@ def subnet_modify(request, subnet_id, **kwargs):
 
 
 def subnet_delete(request, subnet_id):
-    LOG.debug("subnet_delete(): subnetid=%s" % subnet_id)
+    LOG.error("subnet_delete(): subnetid=%s" % subnet_id)
     quantumclient(request).delete_subnet(subnet_id)
 
 
@@ -378,7 +378,7 @@ def port_create(request, network_id, **kwargs):
 
 
 def port_delete(request, port_id):
-    LOG.debug("port_delete(): portid=%s" % port_id)
+    LOG.error("port_delete(): portid=%s" % port_id)
     quantumclient(request).delete_port(port_id)
 
 
@@ -452,8 +452,12 @@ def routerrule_list(request, **params):
 def router_remove_routerrules(request, rule_ids, **kwargs): 
     LOG.debug("router_remove_routerrule(): param=%s" %(kwargs))
     router_id=kwargs['router_id']
-    currentrules = routerrule_list(request,**kwargs)
-    newrules = []
+    if 'reset_rules' in kwargs:
+        newrules = [{'source': 'any', 'destination': 'any', 'action': 'permit'}]
+        currentrules = []
+    else:
+        currentrules = routerrule_list(request,**kwargs)
+        newrules = []
     for oldrule in currentrules:
         if not str(oldrule['id']) in rule_ids:
              newrule={'source':oldrule['source'],

@@ -13,10 +13,143 @@
    {{ interfaces_table.render }}
 </div>
 <hr>
+<div id="routerrules_clickgrid">
+<table class="table table-bordered datatable table-hover table-condensed">
+<thead>
+
+   <tr class='table_caption'>
+     <th class='table_header' colspan='5'>
+       <h3 class='table_title'>Router Rule Grid</h3>
+       <div class="table_actions clearfix">
+         <form action="/project/routers/{{ router.id }}/" method="POST"
+          style='display: inline; background-color: transparent; float: none; margin-left: 0;'>
+          {% csrf_token %}
+          <input type="hidden" name="router_id" value="{{ router.id }}"/>
+          <button class="btn btn-small btn-danger btn-delete" 
+                  type="submit" href="#" name="action" value="routerrules__resetrules">{% trans "Reset to Default" %}</button>
+          <button href="#" class="btn btn-small" id="router_rules_toggle">Show Router Rules</button>
+          </form>
+       </div>
+     </th>
+   </tr>
+   <tr>
+   <th>Destination&rarr;<br/>&darr;Source</th>
+   {% with src=rulesmatrix|first %}
+       {% for dest in src.targets %}
+         <th>
+            <span class="label">{{ dest.networkname }}</span><br/>
+            {% if dest.subnetname|length > 0 %}
+             <span class="label">Subnet: {{ dest.subnetname }}</span></br>
+            {% endif %}
+            {{ dest.cidr }}
+         </th>
+       {% endfor %}
+   {% endwith %}
+   </tr>
+</thead>
+<tbody>
+{% for row in rulesmatrix %}
+<tr>
+<td>
+<span class="label">{{ row.source.networkname }}</span>
+{% if row.source.subnetname|length > 0 %}
+    <br/><span class="label">Subnet: {{ row.source.subnetname }}</span>
+{% endif %}
+<br/>
+<b>{{ row.source.cidr }}</b>
+</td>
+      {% for dest in row.targets %}
+           {% if dest.reachable == 'none' %}
+           <td style="background-color:#FFB2B2;">
+           {% elif dest.reachable == 'partial' %}
+           <td style="background-color:#FFFF66;">
+           {% else %}
+           <td style="background-color:#CCFFCC;">
+           {% endif %}
+           <form action="/project/routers/{{ router.id }}/addrouterrule" method="POST"
+          style='display: inline; background-color: transparent; float: none; margin-left: 0;'>
+           {% csrf_token %}
+           <input type="hidden" name="router_id" value="{{ router.id }}">
+           <input type="hidden" name="source" value="{{ dest.inverse_rule.source }}">
+           <input type="hidden" name="destination" value="{{ dest.inverse_rule.destination }}">
+           <input type="hidden" name="action" value="{{ dest.inverse_rule.action }}">
+           {% if dest.rule_to_delete %}
+               <input type="hidden" name="rule_to_delete" value="{{ dest.rule_to_delete.id }}"/>
+           {% endif %}
+           {% if dest.reachable == 'none' %}
+               <span class="label label-important"><i class="icon-ban-circle"></i> Traffic Blocked</span><br/>
+               <button type="submit" class="btn btn-mini" href="#"><i class="icon-random"></i> {% trans "Add Permit Rule" %}</button>
+           {% elif dest.reachable == 'full' %}
+               {% if not dest.subnetid == row.source.subnetid %}
+                   <span class="label label-success"><i class="icon-ok"></i> Traffic Allowed</span><br/>
+                   <button type="submit" class="btn btn-mini" href="#"><i class="icon-random"></i> {% trans "Add Deny Rule" %}</button>
+               {% else %}
+                   <span class="label label-success"><i class="icon-ok"></i> Traffic Allowed</span>
+               {% endif %}
+           {% else %} 
+               <span class="label">Allowed</span>
+               <a type="button" class="btn btn-mini" href="#modal_{{ dest.subnetid|add:row.source.subnetid }}" data-toggle="modal">
+                 <i class="icon-exclamation-sign"></i> Conflict</a>
+               <div class="modal hide" id="modal_{{ dest.subnetid|add:row.source.subnetid }}">
+                 <div class="modal-header">
+                   <a class="close" data-dismiss="modal">&times;</a>
+                   <h3>Rule Conflict</h3>
+                 </div>
+                 <div class="modal-body">
+                   <p>A more specific rule affects a portion of this traffic so a rule cannot be automatically generated to control the behavior of the entire source/destination combination.</p>
+                   <hr>
+                   <h4>Conflicting Rule:</h4> 
+                   <b>Source:</b> {{ dest.conflicting_rule.source }}<br>
+                   <b>Destination:</b> {{ dest.conflicting_rule.destination }}<br>
+                   <b>Action:</b> {{ dest.conflicting_rule.action }}<br>
+                 </div>
+                 <div class="modal-footer">
+                   <a href="#" class="btn" data-dismiss="modal">Close</a>
+                 </div>
+               </div>
+           {% endif %}
+           </form>
+           </td>
+      {% endfor %}
+   {% endfor %}
+</tr>
+</tbody>
+  <tfoot>
+      
+      <tr>
+        <td colspan="{{ rulesmatrix|length|add:1}}">
+          <span class="table_count"></span>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
 <div id="routerrules">
    {{ routerrules_table.render }}
 </div>
-<div id="candybars">
-   {{ candybars_table.render }}
-</div>
+<script type="text/javascript">
+function clickShowRules(){
+    changeAnchorText('router_rules_toggle','Hide Router Rules');
+    document.getElementById('router_rules_toggle').onclick = clickHideRules;
+    document.getElementById('routerrules').style.display = 'block';
+    return false;
+}
+function clickHideRules(){
+    changeAnchorText('router_rules_toggle','Show Router Rules');
+    document.getElementById('router_rules_toggle').onclick = clickShowRules;
+    document.getElementById('routerrules').style.display = 'none';
+    return false;
+}
+function changeAnchorText(id,text){
+    var anchor = document.getElementById(id);
+    if(anchor.textContent)
+    {
+        anchor.textContent = text;   
+    }else if(anchor.innerText)
+    {
+        anchor.innerText = text;   
+    }
+}
+clickHideRules();
+</script>
 {% endblock %}

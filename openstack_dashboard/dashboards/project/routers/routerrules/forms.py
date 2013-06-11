@@ -48,8 +48,16 @@ class AddRouterRule(forms.SelfHandlingForm):
 
     def handle(self, request, data):
         try:
+            if 'rule_to_delete' in request.POST:
+                api.quantum.router_remove_routerrules(request, 
+                    [request.POST['rule_to_delete']],router_id=data['router_id'])
+        except:
+            exceptions.handle(request, _('Unable to delete router rule.'))
+        try:
             if not 'nexthops' in data:
                 data['nexthops']=''
+            if data['source'] == '0.0.0.0/0': data['source'] = 'any' 
+            if data['destination'] == '0.0.0.0/0': data['destination'] = 'any' 
             api.quantum.router_add_routerrule(request,
                                              router_id=data['router_id'],
                                              action=data['action'],
