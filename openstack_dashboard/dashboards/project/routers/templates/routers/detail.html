@@ -18,7 +18,7 @@
 <thead>
 
    <tr class='table_caption'>
-     <th class='table_header' colspan='5'>
+     <th class='table_header' colspan='{{ rulesmatrix|length|add:1 }}'>
        <h3 class='table_title'>Router Rule Grid</h3>
        <div class="table_actions clearfix">
          <form action="/project/routers/{{ router.id }}/" method="POST"
