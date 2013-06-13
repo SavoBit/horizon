@@ -77,17 +77,12 @@
                <input type="hidden" name="rule_to_delete" value="{{ dest.rule_to_delete.id }}"/>
            {% endif %}
            {% if dest.reachable == 'none' %}
-               <span class="label label-important"><i class="icon-ban-circle"></i> Traffic Blocked</span><br/>
-               <button type="submit" class="btn btn-mini" href="#"><i class="icon-random"></i> {% trans "Add Permit Rule" %}</button>
+               <button type="submit" class="btn btn-mini" href="#"><i class="icon-random"></i></button>
            {% elif dest.reachable == 'full' %}
                {% if not dest.subnetid == row.source.subnetid %}
-                   <span class="label label-success"><i class="icon-ok"></i> Traffic Allowed</span><br/>
-                   <button type="submit" class="btn btn-mini" href="#"><i class="icon-random"></i> {% trans "Add Deny Rule" %}</button>
-               {% else %}
-                   <span class="label label-success"><i class="icon-ok"></i> Traffic Allowed</span>
+                   <button type="submit" class="btn btn-mini" href="#"><i class="icon-random"></i></button>
                {% endif %}
            {% else %} 
-               <span class="label">Allowed</span>
                <a type="button" class="btn btn-mini" href="#modal_{{ dest.subnetid|add:row.source.subnetid }}" data-toggle="modal">
                  <i class="icon-exclamation-sign"></i> Conflict</a>
                <div class="modal hide" id="modal_{{ dest.subnetid|add:row.source.subnetid }}">
@@ -118,7 +113,10 @@
       
       <tr>
         <td colspan="{{ rulesmatrix|length|add:1}}">
-          <span class="table_count"></span>
+          <span class="table_count"></span><br/>
+          <span class="label label-success">A green background means traffic is allowed.</span>
+          <span class="label label-important">A red background means traffic is blocked.</span><br/>
+          <span><i class="icon-random"></i> = Install rule to switch the traffic behavior.</span>
         </td>
       </tr>
     </tfoot>
