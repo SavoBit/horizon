@@ -1,6 +1,7 @@
 # vim: tabstop=4 shiftwidth=4 softtabstop=4
 
 # Copyright 2012,  Nachi Ueno,  NTT MCL,  Inc.
+# Copyright 2013,  Big Switch Networks, Inc.
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
 #    not use this file except in compliance with the License. You may obtain
@@ -144,7 +145,10 @@ class DetailView(tables.MultiTableView):
     def get_context_data(self, **kwargs):
         context = super(DetailView, self).get_context_data(**kwargs)
         context["router"] = self._get_data()
-        context["rulesmatrix"] = self.get_routerrulesgrid_data()
+        rules, supported = self.get_routerrules_data(checksupport=True)
+        context["rulessupported"] = supported
+        if supported:
+            context["rulesmatrix"] = self.get_routerrulesgrid_data(rules)
         return context
 
     def get_interfaces_data(self):
@@ -160,10 +164,9 @@ class DetailView(tables.MultiTableView):
             p.set_id_as_name_if_empty()
         return ports
 
-    def get_routerrulesgrid_data(self):
+    def get_routerrulesgrid_data(self, ruleobjects):
         tenant_id = self.request.user.tenant_id
         ports=self.get_interfaces_data()
-        ruleobjects=self.get_routerrules_data()
         rules = [r.__dict__['_apidict'] for r in ruleobjects]
         networks = api.quantum.network_list_for_tenant(self.request,
                                                            tenant_id)
@@ -181,6 +184,8 @@ class DetailView(tables.MultiTableView):
         subnets = []
         for port in ports:
             for ip in port['fixed_ips']:
+                if ip['subnet_id'] not in subnetmap:
+                    continue
                 sub = {'ip': ip['ip_address'],
                        'subnetid': ip['subnet_id'],
                        'subnetname': subnetmap[ip['subnet_id']]['name'],
@@ -189,6 +194,7 @@ class DetailView(tables.MultiTableView):
                        'cidr': subnetmap[ip['subnet_id']]['cidr'],
                       }
                 subnets.append(sub)
+        # Uncomment the following to enable the 'any' subnet
         #subnets.append({'ip':'0.0.0.0',
         #                'subnetid':'any',
         #                'subnetname':'',
@@ -269,15 +275,18 @@ class DetailView(tables.MultiTableView):
         return connectivity
 
 
-    def get_routerrules_data(self):
+    def get_routerrules_data(self, checksupport=False):
         try:
             device_id = self.kwargs['router_id']
-            routerrules = api.quantum.routerrule_list(self.request,
-                                          device_id=device_id)
+            supported, routerrules = api.quantum.routerrule_list(
+                                         self.request, device_id=device_id)
         except:
             routerrules = []
+            supported = False
             msg = _('Router rule list can not be retrieved.')
             exceptions.handle(self.request, msg)
+        if checksupport:
+            return routerrules, supported
         return routerrules
 
 

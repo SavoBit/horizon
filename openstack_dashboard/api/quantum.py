@@ -444,9 +444,9 @@ def routerrule_list(request, **params):
     if 'router_id' in params:
        params['device_id']=params['router_id']
     router = quantumclient(request).show_router(params['device_id'],**params).get('router')
-    if not 'router_rules' in router:
-        return []
-    return [RouterRule(r) for r in router['router_rules']]
+    if 'router_rules' not in router:
+        return (False, [])
+    return (True, [RouterRule(r) for r in router['router_rules']])
 
 
 def router_remove_routerrules(request, rule_ids, **kwargs): 
@@ -456,7 +456,10 @@ def router_remove_routerrules(request, rule_ids, **kwargs):
         newrules = [{'source': 'any', 'destination': 'any', 'action': 'permit'}]
         currentrules = []
     else:
-        currentrules = routerrule_list(request,**kwargs)
+        supported, currentrules = routerrule_list(request,**kwargs)
+        if not supported:
+           LOG.debug("router rules not supported by router %s" % router_id)
+           return
         newrules = []
     for oldrule in currentrules:
         if not str(oldrule['id']) in rule_ids:
@@ -477,7 +480,7 @@ def router_add_routerrule(request, router_id='', source='', destination='', acti
     if not nexthops=='':
         newrule['nexthops']='+'.join(nexthops.split(','))
     body['router_rules'].append(newrule)
-    currentrules = routerrule_list(request,**{'router_id':router_id})
+    supported, currentrules = routerrule_list(request,**{'router_id':router_id})
     for r in currentrules:
         existingrule={'source':r['source'],
                       'destination':r['destination'],

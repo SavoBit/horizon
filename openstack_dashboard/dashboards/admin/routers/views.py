@@ -70,3 +70,5 @@ class DetailView(r_views.DetailView):
     table_classes = (PortsTable, RouterRulesTable)
     template_name = 'admin/routers/detail.html'
     failure_url = reverse_lazy('horizon:admin:routers:index')
+
+

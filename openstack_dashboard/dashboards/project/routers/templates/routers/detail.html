@@ -12,6 +12,7 @@
 <div id="interfaces">
    {{ interfaces_table.render }}
 </div>
+{% if rulessupported %}
 <hr>
 <div id="routerrules_clickgrid">
 <table class="table table-bordered datatable table-hover table-condensed">
@@ -59,13 +60,18 @@
 <b>{{ row.source.cidr }}</b>
 </td>
       {% for dest in row.targets %}
+           <td id="td_{{ dest.subnetid|add:row.source.subnetid }}"
+               data-mirrortd="td_{{ row.source.subnetid|add:dest.subnetid }}"
+               onMouseOver="highLightMirror(this);"
+               onMouseOut="unHighLightMirror(this);"
            {% if dest.reachable == 'none' %}
-           <td style="background-color:#FFB2B2;">
+               style="background-color:#FFB2B2;"
            {% elif dest.reachable == 'partial' %}
-           <td style="background-color:#FFFF66;">
+               style="background-color:#FFFF66;"
            {% else %}
-           <td style="background-color:#CCFFCC;">
+               style="background-color:#CCFFCC;"
            {% endif %}
+           >
            <form action="/project/routers/{{ router.id }}/addrouterrule" method="POST"
           style='display: inline; background-color: transparent; float: none; margin-left: 0;'>
            {% csrf_token %}
@@ -116,7 +122,8 @@
           <span class="table_count"></span><br/>
           <span class="label label-success">A green background means traffic is allowed.</span>
           <span class="label label-important">A red background means traffic is blocked.</span><br/>
-          <span><i class="icon-random"></i> = Install rule to switch the traffic behavior.</span>
+          <span><i class="icon-random"></i> = Install rule to switch the traffic behavior.</span><br/>
+          <span>Note: Rules only affect one direction of traffic. The opposite direction can be outlined by hovering over an intersection.</span>
         </td>
       </tr>
     </tfoot>
@@ -148,6 +155,25 @@ function changeAnchorText(id,text){
         anchor.innerText = text;   
     }
 }
+/* run once to hide by default */
 clickHideRules();
+
+function highLightMirror(td){
+    var mirror = document.getElementById(td.getAttribute("data-mirrortd"));
+    if (mirror.id == td.id){
+        return;
+    }
+    mirror.style.borderWidth="medium";
+    td.style.borderWidth="medium";
+}
+function unHighLightMirror(td){
+    var mirror = document.getElementById(td.getAttribute("data-mirrortd"));
+    if (mirror.id == td.id){
+        return;
+    }
+    mirror.style.borderWidth="thin";
+    td.style.borderWidth="thin";
+}
 </script>
+{% endif %}
 {% endblock %}
