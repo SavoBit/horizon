@@ -351,8 +351,11 @@ class SimpleDisassociateIP(tables.Action):
 
     def single(self, table, request, instance_id):
         try:
+            target_id = api.network.floating_ip_target_get_by_instance(
+                request, instance_id).split('_')[0]
+
             fips = [fip for fip in api.network.tenant_floating_ip_list(request)
-                    if fip.port_id == instance_id]
+                    if fip.port_id == target_id]
             # Removing multiple floating IPs at once doesn't work, so this pops
             # off the first one.
             if fips:
