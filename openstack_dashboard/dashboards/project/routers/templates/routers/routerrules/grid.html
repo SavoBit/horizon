@@ -1,0 +1,150 @@
+{% load i18n %}
+
+{% block main %}
+
+{% if rulessupported %}
+<div id="routerrules_clickgrid">
+<table class="table table-bordered datatable table-hover table-condensed">
+<thead>
+
+   <tr class='table_caption'>
+     <th class='table_header' colspan='{{ rulesmatrix|length|add:1 }}'>
+       <h3 class='table_title'>Router Rule Grid <img src="data:image/gif;base64,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"/>
+       </h3>
+       <div class="table_actions clearfix">
+         <form action="/project/routers/{{ router.id }}/" method="POST"
+          style='display: inline; background-color: transparent; float: none; margin-left: 0;'>
+          {% csrf_token %}
+          <input type="hidden" name="router_id" value="{{ router.id }}"/>
+          <button class="btn btn-small btn-danger btn-delete" 
+                  type="submit" href="#" name="action" value="routerrules__resetrules">{% trans "Reset to Default" %}</button>
+          </form>
+       </div>
+     </th>
+   </tr>
+   <tr>
+   <th>Destination&rarr;<br/>&darr;Source</th>
+   {% with src=rulesmatrix|first %}
+       {% for dest in src.targets %}
+         <th>
+            {{ dest.networkname }}<br/>
+            {% if dest.subnetname|length > 0 %}
+             Subnet: {{ dest.subnetname }}</br>
+            {% endif %}
+            {{ dest.cidr }}
+         </th>
+       {% endfor %}
+   {% endwith %}
+   </tr>
+</thead>
+<tbody>
+{% for row in rulesmatrix %}
+<tr>
+<td>
+<b>{{ row.source.networkname }}
+{% if row.source.subnetname|length > 0 %}
+    <br/>Subnet: {{ row.source.subnetname }}
+{% endif %}
+<br/>
+{{ row.source.cidr }}
+</b>
+</td>
+      {% for dest in row.targets %}
+           <td id="td_{{ dest.subnetid|add:row.source.subnetid }}"
+               data-mirrortd="td_{{ row.source.subnetid|add:dest.subnetid }}"
+               onMouseOver="highLightMirror(this);"
+               onMouseOut="unHighLightMirror(this);"
+           {% if dest.reachable == 'none' %}
+               style="background-color:#FFB2B2;"
+           {% elif dest.reachable == 'partial' %}
+               style="background-color:#FFFF66;"
+           {% else %}
+               style="background-color:#CCFFCC;"
+           {% endif %}
+           >
+           <form action="/project/routers/{{ router.id }}/addrouterrule" method="POST"
+          style='display: inline; background-color: transparent; float: none; margin-left: 0;'>
+           {% csrf_token %}
+           <input type="hidden" name="router_id" value="{{ router.id }}">
+           <input type="hidden" name="source" value="{{ dest.inverse_rule.source }}">
+           <input type="hidden" name="destination" value="{{ dest.inverse_rule.destination }}">
+           <input type="hidden" name="action" value="{{ dest.inverse_rule.action }}">
+           
+           {% if dest.rule_to_delete %}
+               <center><input type="hidden" name="rule_to_delete" value="{{ dest.rule_to_delete.id }}"/></center>
+           {% endif %}
+           {% if dest.reachable == 'none' %}
+              <center>
+              <i class="icon-ban-circle"></i>
+              <button type="submit" class="btn btn-mini" href="#"><i class="icon-random"></i></button></center>
+           {% elif dest.reachable == 'full' %}
+           <center>
+              <i class="icon-ok"></i>
+              {% if not dest.subnetid == row.source.subnetid %}
+                   <button type="submit" class="btn btn-mini" href="#"><i class="icon-random"></i></button>
+              {% else %}
+                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              {% endif %}
+           </center>
+           {% else %} 
+                <center><a type="button" class="btn btn-mini" href="#modal_{{ dest.subnetid|add:row.source.subnetid }}" data-toggle="modal"><i class="icon-exclamation-sign"></i> Conflict</a></center>
+               <div class="modal hide" id="modal_{{ dest.subnetid|add:row.source.subnetid }}">
+                 <div class="modal-header">
+                   <a class="close" data-dismiss="modal">&times;</a>
+                   <h3>Rule Conflict</h3>
+                 </div>
+                 <div class="modal-body">
+                   <p>A more specific rule affects a portion of this traffic so a rule cannot be automatically generated to control the behavior of the entire source/destination combination.</p>
+                   <hr>
+                   <h4>Conflicting Rule:</h4> 
+                   <b>Source:</b> {{ dest.conflicting_rule.source }}<br>
+                   <b>Destination:</b> {{ dest.conflicting_rule.destination }}<br>
+                   <b>Action:</b> {{ dest.conflicting_rule.action }}<br>
+                 </div>
+                 <div class="modal-footer">
+                   <a href="#" class="btn" data-dismiss="modal">Close</a>
+                 </div>
+               </div>
+           {% endif %}
+           </form>
+           </td>
+      {% endfor %}
+   {% endfor %}
+</tr>
+</tbody>
+  <tfoot>
+      
+      <tr>
+        <td colspan="{{ rulesmatrix|length|add:1}}">
+          <span class="table_count"></span>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+  <h3>Description:</h3>
+  <p>The color and icon of an intersection indicates whether or not traffic is permitted from the source (row) to the destination (column).
+     Clicking the <i class="icon-random"></i> button in the intersection will install a rule to switch the traffic behavior.<br/>
+
+     <b>Note:</b> Rules only affect one direction of traffic. The opposite direction is outlined when hovering over an intersection.
+  </p>
+</div>
+<script type="text/javascript">
+function highLightMirror(td){
+    var mirror = document.getElementById(td.getAttribute("data-mirrortd"));
+    if (mirror.id == td.id){
+        return;
+    }
+    mirror.style.borderWidth="medium";
+    td.style.borderWidth="medium";
+}
+function unHighLightMirror(td){
+    var mirror = document.getElementById(td.getAttribute("data-mirrortd"));
+    if (mirror.id == td.id){
+        return;
+    }
+    mirror.style.borderWidth="thin";
+    td.style.borderWidth="thin";
+}
+</script>
+{% endif %}
+{% endblock %}

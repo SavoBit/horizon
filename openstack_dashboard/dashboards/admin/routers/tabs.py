@@ -16,13 +16,20 @@
 
 from horizon import tabs
 from openstack_dashboard.dashboards.project.routers import tabs as r_tabs
+from .ports.tables import PortsTable
+from .routerrules.tables import RouterRulesTable
+from openstack_dashboard import api
 
+class RouterRulesTab(r_tabs.RouterRulesTab):
+    table_classes = (RouterRulesTable,)
+    pass
 
-class OverviewTab(r_tabs.OverviewTab):
-    template_name = ("admin/routers/_detail_overview.html")
-    redirect_url = 'horizon:admin:routers:index'
+class InterfacesTab(r_tabs.InterfacesTab):
+    table_classes = (PortsTable,)
+    pass
 
-
-class RouterDetailTabs(tabs.TabGroup):
+class RouterDetailTabs(r_tabs.RouterDetailTabs):
     slug = "router_details"
-    tabs = (OverviewTab,)
+    tabs = (InterfacesTab, RouterRulesTab)
+    sticky = True
+

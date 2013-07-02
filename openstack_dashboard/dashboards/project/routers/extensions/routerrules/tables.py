@@ -42,9 +42,6 @@ class RemoveRouterRule(tables.DeleteAction):
     data_type_plural = _("Router Rules")
     failure_url = 'horizon:project:routers:detail'
 
-    def allowed(self, request, data=None):
-        return True
-
 
 class RouterRulesTable(tables.DataTable):
     source = tables.Column("source", verbose_name=_("Source"))
@@ -52,7 +49,6 @@ class RouterRulesTable(tables.DataTable):
     #Uncomment to enable next hop rules
     #nexthops = tables.Column("nexthops", verbose_name=_("Next Hops")) 
     action = tables.Column("action", verbose_name=_("Action"))
-
 
     class Meta:
         name = "routerrules"

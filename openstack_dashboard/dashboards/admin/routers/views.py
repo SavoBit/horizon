@@ -28,8 +28,7 @@ from openstack_dashboard import api
 from openstack_dashboard.dashboards.admin.networks import views as n_views
 from openstack_dashboard.dashboards.project.routers import views as r_views
 
-from .ports.tables import PortsTable
-from .routerrules.tables import RouterRulesTable
+from .tabs import RouterDetailTabs
 from .tables import RoutersTable
 
 
@@ -67,7 +66,7 @@ class IndexView(r_views.IndexView, n_views.IndexView):
 
 
 class DetailView(r_views.DetailView):
-    table_classes = (PortsTable, RouterRulesTable)
+    tab_group_class = RouterDetailTabs
     template_name = 'admin/routers/detail.html'
     failure_url = reverse_lazy('horizon:admin:routers:index')
 

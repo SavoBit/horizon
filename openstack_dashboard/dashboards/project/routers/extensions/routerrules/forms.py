@@ -22,7 +22,7 @@ from django.utils.translation import ugettext_lazy as _
 from horizon import forms
 from horizon import messages
 from horizon import exceptions
-from openstack_dashboard import api
+import rulemanager
 
 LOG = logging.getLogger(__name__)
 
@@ -49,7 +49,7 @@ class AddRouterRule(forms.SelfHandlingForm):
     def handle(self, request, data):
         try:
             if 'rule_to_delete' in request.POST:
-                api.quantum.router_remove_routerrules(request, 
+                rulemanager.remove_rules(request, 
                     [request.POST['rule_to_delete']],router_id=data['router_id'])
         except:
             exceptions.handle(request, _('Unable to delete router rule.'))
@@ -58,12 +58,12 @@ class AddRouterRule(forms.SelfHandlingForm):
                 data['nexthops']=''
             if data['source'] == '0.0.0.0/0': data['source'] = 'any' 
             if data['destination'] == '0.0.0.0/0': data['destination'] = 'any' 
-            api.quantum.router_add_routerrule(request,
-                                             router_id=data['router_id'],
-                                             action=data['action'],
-                                             source=data['source'],
-                                             destination=data['destination'],
-                                             nexthops=data['nexthops'])
+            rulemanager.add_rule(request,
+                                      router_id=data['router_id'],
+                                      action=data['action'],
+                                      source=data['source'],
+                                      destination=data['destination'],
+                                      nexthops=data['nexthops'])
             msg = _('Router rule added')
             LOG.debug(msg)
             messages.success(request, msg)

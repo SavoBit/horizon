@@ -14,31 +14,47 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+import netaddr
+
+from django import template
 from django.core.urlresolvers import reverse
+from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
 from horizon import exceptions
 from horizon import tabs
+from .ports.tables import PortsTable
+from .extensions.routerrules.tabs import RouterRulesTab
+from .extensions.routerrules.tabs import RulesGridTab
 from openstack_dashboard import api
 
 
-class OverviewTab(tabs.Tab):
-    name = _("Overview")
-    slug = "overview"
-    template_name = ("project/routers/_detail_overview.html")
-    redirect_url = 'horizon:project:routers:index'
+class InterfacesTab(tabs.TableTab):
+    table_classes = (PortsTable,)
+    name = _("Interfaces")
+    slug = "interfaces"
+    template_name = "horizon/common/_detail_table.html"
 
-    def get_context_data(self, request):
-        router_id = self.tab_group.kwargs['router_id']
-        try:
-            router = api.quantum.router_get(request, router_id)
-        except:
-            exceptions.handle(self.request,
-                              _('Unable to retrieve router details.'),
-                              redirect=reverse(self.redirect_url))
-        return {'router': router}
+    def get_interfaces_data(self):
+        ports = self.tab_group.ports
+        for p in ports:
+            p.set_id_as_name_if_empty()
+        return ports
 
 
 class RouterDetailTabs(tabs.TabGroup):
     slug = "router_details"
-    tabs = (OverviewTab,)
+    tabs = (InterfacesTab, RulesGridTab, RouterRulesTab)
+    sticky = True
+
+    def __init__(self, request, **kwargs):
+        rid = kwargs['router_id']
+        self.router = kwargs['router']
+        try:
+            self.ports = api.quantum.port_list(request, device_id=rid)
+        except:
+            self.ports = []
+            self.router = {}
+            msg = _('Router information can not be retrieved.')
+            exceptions.handle(request, msg)
+        super(RouterDetailTabs, self).__init__(request,**kwargs)
