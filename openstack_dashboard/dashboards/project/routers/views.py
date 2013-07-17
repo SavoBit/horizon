@@ -90,7 +90,7 @@ class IndexView(tables.DataTableView):
                 exceptions.handle(self.request, msg)
 
 
-class DetailView(tabs.TabView):
+class DetailView(tabs.TabbedTableView):
     tab_group_class = RouterDetailTabs
     template_name = 'project/routers/detail.html'
     failure_url = reverse_lazy('horizon:project:routers:index')
@@ -139,12 +139,10 @@ class DetailView(tabs.TabView):
             self._router = router
         return self._router
 
-    def get_context_data(self, **kwargs):
+    def get(self, request, *args, **kwargs):
         router = self._get_data()
-        kwargs['router'] = router
-        context = super(DetailView, self).get_context_data(**kwargs)
-        context['router'] = router
-        return context
+        self.kwargs['router'] = router
+        return super(DetailView, self).get(request, *args, **kwargs)
 
 
 class CreateView(forms.ModalFormView):
