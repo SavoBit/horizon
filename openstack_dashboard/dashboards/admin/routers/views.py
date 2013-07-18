@@ -69,5 +69,3 @@ class DetailView(r_views.DetailView):
     tab_group_class = RouterDetailTabs
     template_name = 'admin/routers/detail.html'
     failure_url = reverse_lazy('horizon:admin:routers:index')
-
-

@@ -20,16 +20,18 @@ from .ports.tables import PortsTable
 from .routerrules.tables import RouterRulesTable
 from openstack_dashboard import api
 
+
 class RouterRulesTab(r_tabs.RouterRulesTab):
     table_classes = (RouterRulesTable,)
     pass
+
 
 class InterfacesTab(r_tabs.InterfacesTab):
     table_classes = (PortsTable,)
     pass
 
+
 class RouterDetailTabs(r_tabs.RouterDetailTabs):
     slug = "router_details"
     tabs = (InterfacesTab, RouterRulesTab)
     sticky = True
-

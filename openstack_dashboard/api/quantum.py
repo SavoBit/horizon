@@ -347,6 +347,7 @@ def port_list(request, **params):
     ports = quantumclient(request).list_ports(**params).get('ports')
     return [Port(p) for p in ports]
 
+
 def port_get(request, port_id, **params):
     LOG.debug("port_get(): portid=%s, params=%s" % (port_id, params))
     port = quantumclient(request).show_port(port_id, **params).get('port')
@@ -430,4 +431,3 @@ def router_add_gateway(request, router_id, network_id):
 
 def router_remove_gateway(request, router_id):
     quantumclient(request).remove_gateway_router(router_id)
-

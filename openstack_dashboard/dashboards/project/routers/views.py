@@ -103,7 +103,7 @@ class DetailView(tabs.TabbedTableView):
         obj_ids = request.POST.getlist('object_ids')
         action = request.POST['action']
         m = action.split('__')[0]
-        if obj_ids == [] and len(action.split('__'))>2:
+        if obj_ids == [] and len(action.split('__')) > 2:
             obj_ids.append(action.split('__')[2])
         if m == 'routerrules':
             try:
@@ -144,12 +144,13 @@ class DetailView(tabs.TabbedTableView):
         self.kwargs['router'] = router
         return super(DetailView, self).get(request, *args, **kwargs)
 
+    def get_context_data(self, **kwargs):
+        context = super(DetailView, self).get_context_data(**kwargs)
+        context["router"] = self._get_data()
+        return context
+
 
 class CreateView(forms.ModalFormView):
     form_class = CreateForm
     template_name = 'project/routers/create.html'
     success_url = reverse_lazy("horizon:project:routers:index")
-
-
-
-

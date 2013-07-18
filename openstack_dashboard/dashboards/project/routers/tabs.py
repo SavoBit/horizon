@@ -57,4 +57,4 @@ class RouterDetailTabs(tabs.TabGroup):
             self.router = {}
             msg = _('Router information can not be retrieved.')
             exceptions.handle(request, msg)
-        super(RouterDetailTabs, self).__init__(request,**kwargs)
+        super(RouterDetailTabs, self).__init__(request, **kwargs)

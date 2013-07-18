@@ -30,7 +30,7 @@ LOG = logging.getLogger(__name__)
 
 class AddRouterRuleView(forms.ModalFormView):
     form_class = AddRouterRule
-    template_name = 'project/routers/routerrules/create.html'
+    template_name = 'project/routers/extensions/routerrules/create.html'
     success_url = 'horizon:project:routers:detail'
     failure_url = 'horizon:project:routers:detail'
 
@@ -59,6 +59,4 @@ class AddRouterRuleView(forms.ModalFormView):
         router = self.get_object()
         import pprint
         return {"router_id": self.kwargs['router_id'],
-                "router_name": router.name   }
-
-
+                "router_name": router.name}

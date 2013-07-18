@@ -47,11 +47,11 @@ class RouterRulesTable(tables.DataTable):
     source = tables.Column("source", verbose_name=_("Source"))
     destination = tables.Column("destination", verbose_name=_("Destination"))
     #Uncomment to enable next hop rules
-    #nexthops = tables.Column("nexthops", verbose_name=_("Next Hops")) 
+    #nexthops = tables.Column("nexthops", verbose_name=_("Next Hops"))
     action = tables.Column("action", verbose_name=_("Action"))
 
     class Meta:
         name = "routerrules"
         verbose_name = _("Router Rules")
         table_actions = (AddRouterRule, RemoveRouterRule)
-        row_actions = (RemoveRouterRule, )
+        row_actions = (RemoveRouterRule,)
