@@ -89,14 +89,31 @@ class RouterTests(test.TestCase):
         ports = res.context['interfaces_table'].data
         self.assertItemsEqual(ports, [self.ports.first()])
 
-    @test.create_stubs({api.quantum: ('router_get', 'port_list')})
+    @test.create_stubs({api.quantum: ('router_get', 'port_list',
+                                      'network_get')})
+    def test_routerrule_detail(self):
+        router = self.routers_with_rules.first()
+        api.quantum.router_get(IsA(http.HttpRequest), router.id)\
+            .AndReturn(self.routers.first())
+        api.quantum.port_list(IsA(http.HttpRequest),
+                              device_id=router.id)\
+            .AndReturn([self.ports.first()])
+        self._mock_external_network_get(router)
+        self.mox.ReplayAll()
+
+        res = self.client.get(reverse('horizon:%s'
+                                      ':routers:detail' % self.DASHBOARD,
+                                      args=[router.id]))
+
+        self.assertTemplateUsed(res, '%s/routers/detail.html' % self.DASHBOARD)
+        ports = res.context['interfaces_table'].data
+        self.assertItemsEqual(ports, [self.ports.first()])
+
+    @test.create_stubs({api.quantum: ('router_get',)})
     def test_router_detail_exception(self):
         router = self.routers.first()
         api.quantum.router_get(IsA(http.HttpRequest), router.id)\
             .AndRaise(self.exceptions.quantum)
-        api.quantum.port_list(IsA(http.HttpRequest),
-                              device_id=router.id)\
-            .AndReturn([self.ports.first()])
         self.mox.ReplayAll()
 
         res = self.client.get(reverse('horizon:%s'

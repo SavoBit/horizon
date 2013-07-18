@@ -27,6 +27,7 @@ def data(TEST):
     TEST.subnets = TestDataContainer()
     TEST.ports = TestDataContainer()
     TEST.routers = TestDataContainer()
+    TEST.routers_with_rules = TestDataContainer()
     TEST.q_floating_ips = TestDataContainer()
     TEST.pools = TestDataContainer()
     TEST.vips = TestDataContainer()
@@ -220,6 +221,17 @@ def data(TEST):
                    'tenant_id': '1'}
     TEST.api_routers.add(router_dict)
     TEST.routers.add(Router(router_dict))
+    router_dict = {'id': '71fb25e9-cd9f-4a44-a780-85ec3bd8bdd7',
+                   'name': 'rulerouter',
+                   'external_gateway_info':
+                   {'network_id': ext_net['id']},
+                   'tenant_id': '1',
+                   'router_rules': [{'action': 'deny',
+                                     'source': 'any',
+                                     'destination': 'any',
+                                     'nexthops': []}]}
+    TEST.api_routers.add(router_dict)
+    TEST.routers_with_rules.add(Router(router_dict))
 
     #------------------------------------------------------------
     # floating IP
