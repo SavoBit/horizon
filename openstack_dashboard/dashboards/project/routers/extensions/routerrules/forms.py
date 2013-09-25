@@ -132,3 +132,4 @@ class AddRouterRule(forms.SelfHandlingForm):
             messages.error(request, msg)
             redirect = reverse(self.failure_url, args=[data['router_id']])
             exceptions.handle(request, msg, redirect=redirect)
+
