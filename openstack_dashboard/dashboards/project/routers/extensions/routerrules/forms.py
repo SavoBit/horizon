@@ -56,8 +56,9 @@ class AddRouterRule(forms.SelfHandlingForm):
         self.fields['action'].choices = [('permit', 'Permit'),
                                          ('deny', 'Deny')]
         try:
-            networks = api.quantum.network_list_for_tenant(request,
-                                                           request.user.tenant_id)
+            networks = api.quantum.network_list_for_tenant(
+                request,
+                request.user.tenant_id)
             for n in networks:
                 n.set_id_as_name_if_empty()
             self.initial['networks'] = networks
@@ -68,11 +69,10 @@ class AddRouterRule(forms.SelfHandlingForm):
                               redirect=redirect)
         options = sorted([(net.id, net.name + ' (' +
                            net.subnets[0].cidr + ')') for net in networks])
+        options.append(('any', _('any')))
 
-        if options:
-            options.insert(0, ('type', _("Type below or select an existing network")))
-        else:
-            options = [("type", _("No networks available"))]
+        options.insert(0, ('type', _("Type below or select an existing network")))
+
         self.fields['source'].choices = options
         self.fields['destination'].choices = options
 
@@ -89,8 +89,9 @@ class AddRouterRule(forms.SelfHandlingForm):
                 if data['source_text']:
                     raise forms.ValidationError('Specify source from drop-down'
                                                 ' menu or type in text box, not both.')
-                data['source'] = [n.subnets[0].cidr for n in self.initial['networks']
-                                  if n.id == data['source']][0]
+                if data['source'] != 'any':
+                    data['source'] = [n.subnets[0].cidr for n in self.initial['networks']
+                                      if n.id == data['source']][0]
             else:
                 if not data['source_text']:
                     raise forms.ValidationError('Source not specified.')
@@ -100,8 +101,9 @@ class AddRouterRule(forms.SelfHandlingForm):
                 if data['destination_text']:
                     raise forms.ValidationError('Specify destination from drop-down'
                                                 ' menu or type in text box, not both.')
-                data['destination'] = [n.subnets[0].cidr for n in self.initial['networks']
-                                  if n.id == data['destination']][0]
+                if data['destination'] != 'any':
+                    data['destination'] = [n.subnets[0].cidr for n in self.initial['networks']
+                                           if n.id == data['destination']][0]
             else:
                 if not data['destination_text']:
                     raise forms.ValidationError('Destination not specified.')
@@ -132,4 +134,3 @@ class AddRouterRule(forms.SelfHandlingForm):
             messages.error(request, msg)
             redirect = reverse(self.failure_url, args=[data['router_id']])
             exceptions.handle(request, msg, redirect=redirect)
-

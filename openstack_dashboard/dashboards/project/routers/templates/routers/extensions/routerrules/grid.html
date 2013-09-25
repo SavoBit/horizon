@@ -16,7 +16,7 @@
           style='display: inline; background-color: transparent; float: none; margin-left: 0;'>
           {% csrf_token %}
           <input type="hidden" name="router_id" value="{{ router.id }}"/>
-          <button class="btn btn-small btn-danger btn-delete" 
+          <button class="btn btn-small btn-danger btn-delete"
                   type="submit" href="#" name="action" value="routerrules__resetrules">{% trans "Reset to Default" %}</button>
           </form>
        </div>
@@ -66,8 +66,8 @@
           style='display: inline; background-color: transparent; float: none; margin-left: 0;'>
            {% csrf_token %}
            <input type="hidden" name="router_id" value="{{ router.id }}">
-           <input type="hidden" name="source" value="{{ dest.inverse_rule.source }}">
-           <input type="hidden" name="destination" value="{{ dest.inverse_rule.destination }}">
+           <input type="hidden" name="source" value="{{ dest.inverse_rule.source_id }}">
+           <input type="hidden" name="destination" value="{{ dest.inverse_rule.destination_id }}">
            <input type="hidden" name="action" value="{{ dest.inverse_rule.action }}">
            
            {% if dest.rule_to_delete %}

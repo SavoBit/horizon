@@ -110,6 +110,10 @@ class RulesGridTab(tabs.Tab):
             for target in subnets:
                 target.update(self._get_cidr_connectivity(
                               source['cidr'], target['cidr'], rules))
+                target['inverse_rule'].update({'source_id':
+                                                   source['networkid'],
+                                               'destination_id':
+                                                   target['networkid']})
                 row['targets'].append(dict(target))
             matrix.append(row)
         return matrix
