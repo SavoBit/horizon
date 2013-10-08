@@ -71,7 +71,8 @@ class AddRouterRule(forms.SelfHandlingForm):
                            net.subnets[0].cidr + ')') for net in networks])
         options.append(('any', _('any')))
 
-        options.insert(0, ('type', _("Type below or select an existing network")))
+        options.insert(0, ('type',
+                            _("Type below or select an existing network")))
 
         self.fields['source'].choices = options
         self.fields['destination'].choices = options
@@ -87,10 +88,12 @@ class AddRouterRule(forms.SelfHandlingForm):
         try:
             if data['source'] != "type":
                 if data['source_text']:
-                    raise forms.ValidationError('Specify source from drop-down'
-                                                ' menu or type in text box, not both.')
+                    raise forms.ValidationError('Specify source from '
+                                                'drop-down menu or type in '
+                                                'text box, not both.')
                 if data['source'] != 'any':
-                    data['source'] = [n.subnets[0].cidr for n in self.initial['networks']
+                    data['source'] = [n.subnets[0].cidr
+                                      for n in self.initial['networks']
                                       if n.id == data['source']][0]
             else:
                 if not data['source_text']:
@@ -99,10 +102,12 @@ class AddRouterRule(forms.SelfHandlingForm):
 
             if data['destination'] != "type":
                 if data['destination_text']:
-                    raise forms.ValidationError('Specify destination from drop-down'
-                                                ' menu or type in text box, not both.')
+                    raise forms.ValidationError('Specify destination from '
+                                                'drop-down menu or type in '
+                                                'text box, not both.')
                 if data['destination'] != 'any':
-                    data['destination'] = [n.subnets[0].cidr for n in self.initial['networks']
+                    data['destination'] = [n.subnets[0].cidr
+                                           for n in self.initial['networks']
                                            if n.id == data['destination']][0]
             else:
                 if not data['destination_text']:
@@ -129,7 +134,8 @@ class AddRouterRule(forms.SelfHandlingForm):
             message = getattr(e, 'messages', None)
             if not message:
                 message = e.message
-            msg = _('Failed to add router rule. Hint: %s') % json.dumps(message)
+            msg = _('Failed to add router rule. '
+                    'Hint: %s') % json.dumps(message)
             LOG.info(msg)
             messages.error(request, msg)
             redirect = reverse(self.failure_url, args=[data['router_id']])
