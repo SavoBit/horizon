@@ -99,17 +99,23 @@ class RulesGridTab(tabs.Tab):
                        'cidr': subnetmap[ip['subnet_id']]['cidr']}
                 subnets.append(sub)
         subnets.append({'ip': '0.0.0.0',
-                        'subnetid': 'any',
+                        'subnetid': 'external',
                         'subnetname': '',
                         'networkname': 'external',
+                        'networkid': 'external',
+                        'cidr': '0.0.0.0/0'})
+        subnets.append({'ip': '0.0.0.0',
+                        'subnetid': 'any',
+                        'subnetname': '',
+                        'networkname': 'any',
                         'networkid': 'any',
                         'cidr': '0.0.0.0/0'})
         for source in subnets:
             row = {'source': dict(source),
                    'targets': []}
             for target in subnets:
-                target.update(self._get_cidr_connectivity(
-                              source['cidr'], target['cidr'], rules))
+                target.update(self._get_subnet_connectivity(
+                              source, target, rules))
                 target['inverse_rule'].update({'source_id':
                                                    source['networkid'],
                                                'destination_id':
@@ -118,10 +124,16 @@ class RulesGridTab(tabs.Tab):
             matrix.append(row)
         return matrix
 
-    def _get_cidr_connectivity(self, src, dst, rules):
+    def _get_cidr_connectivity(self, src_sub, dst_sub, rules):
+        v4_any_words = ['external', 'any']
         connectivity = {'reachable': '',
                         'inverse_rule': {},
                         'rule_to_delete': False}
+        src = src_sub['cidr']
+        dst = dst_sub['cidr']
+        # differentiate between external and any
+        src_rulename = src_sub['subnetid'] if src == '0.0.0.0/0' else src
+        dst_rulename = dst_sub['subnetid'] if dst == '0.0.0.0/0' else dst
         if str(src) == str(dst):
             connectivity['reachable'] = 'full'
             return connectivity
@@ -129,10 +141,10 @@ class RulesGridTab(tabs.Tab):
 
         for rule in rules:
             rd = rule['destination']
-            if rule['destination'] == 'any':
+            if rule['destination'] in v4_any_words:
                 rd = '0.0.0.0/0'
             rs = rule['source']
-            if rule['source'] == 'any':
+            if rule['source'] in v4_any_words:
                 rs = '0.0.0.0/0'
             rs = netaddr.IPNetwork(rs)
             src = netaddr.IPNetwork(src)
@@ -145,10 +157,16 @@ class RulesGridTab(tabs.Tab):
                    int(src.broadcast) <= int(rs.network)):
                 continue
 
-            # skip matching rules for 'any' network
+            # skip matching rules for 'any' and 'external' network
             if (str(dst) == '0.0.0.0/0' and str(rd) != '0.0.0.0/0'):
                 continue
             if (str(src) == '0.0.0.0/0' and str(rs) != '0.0.0.0/0'):
+                continue
+
+            # external network rules only affect external traffic
+            if rule['source'] == src_rulename == 'external':
+                continue
+            if rule['destination'] == dst_rulename == 'external':
                 continue
 
             match = {'bitsinsrc': rs.prefixlen,
@@ -158,9 +176,9 @@ class RulesGridTab(tabs.Tab):
 
         if not matchingrules:
             connectivity['reachable'] = 'none'
-            connectivity['inverse_rule'] = {'source': str(src),
-                                           'destination': str(dst),
-                                           'action': 'permit'}
+            connectivity['inverse_rule'] = {'source': src_rulename,
+                                            'destination': dst_rulename,
+                                            'action': 'permit'}
             return connectivity
 
         sortedrules = sorted(matchingrules,
@@ -173,8 +191,8 @@ class RulesGridTab(tabs.Tab):
             connectivity['conflicting_rule'] = match['rule']
             return connectivity
 
-        if (match['bitsinsrc'] == src.prefixlen and
-                match['bitsindst'] == dst.prefixlen):
+        if (match['rule']['source'] == src_rulename and
+                match['rule']['destination'] == dst_rulename):
             connectivity['rule_to_delete'] = match['rule']
 
         if match['rule']['action'] == 'permit':
@@ -183,9 +201,9 @@ class RulesGridTab(tabs.Tab):
         else:
             connectivity['reachable'] = 'none'
             inverseaction = 'permit'
-        connectivity['inverse_rule'] = {'source': str(src),
-                                        'destination': str(dst),
-                                         'action': inverseaction}
+        connectivity['inverse_rule'] = {'source': src_rulename,
+                                        'destination': dst_rulename,
+                                        'action': inverseaction}
         return connectivity
 
     def get_routerrules_data(self, checksupport=False):

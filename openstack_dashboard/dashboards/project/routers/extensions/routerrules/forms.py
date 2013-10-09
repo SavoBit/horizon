@@ -69,6 +69,7 @@ class AddRouterRule(forms.SelfHandlingForm):
                               redirect=redirect)
         options = sorted([(net.id, net.name + ' (' +
                            net.subnets[0].cidr + ')') for net in networks])
+        options.append(('external', _('external')))
         options.append(('any', _('any')))
 
         options.insert(0, ('type',
@@ -78,6 +79,7 @@ class AddRouterRule(forms.SelfHandlingForm):
         self.fields['destination'].choices = options
 
     def handle(self, request, data):
+        any_keywords = ['any', 'external']
         try:
             if 'rule_to_delete' in request.POST:
                 rulemanager.remove_rules(request,
@@ -91,7 +93,7 @@ class AddRouterRule(forms.SelfHandlingForm):
                     raise forms.ValidationError('Specify source from '
                                                 'drop-down menu or type in '
                                                 'text box, not both.')
-                if data['source'] != 'any':
+                if data['source'] not in any_keywords:
                     data['source'] = [n.subnets[0].cidr
                                       for n in self.initial['networks']
                                       if n.id == data['source']][0]
@@ -105,7 +107,7 @@ class AddRouterRule(forms.SelfHandlingForm):
                     raise forms.ValidationError('Specify destination from '
                                                 'drop-down menu or type in '
                                                 'text box, not both.')
-                if data['destination'] != 'any':
+                if data['destination'] not in any_keywords:
                     data['destination'] = [n.subnets[0].cidr
                                            for n in self.initial['networks']
                                            if n.id == data['destination']][0]
