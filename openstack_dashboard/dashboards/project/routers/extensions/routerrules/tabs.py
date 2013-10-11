@@ -164,9 +164,11 @@ class RulesGridTab(tabs.Tab):
                 continue
 
             # external network rules only affect external traffic
-            if rule['source'] == src_rulename == 'external':
+            if (rule['source'] == 'external' and
+                    src_rulename not in v4_any_words):
                 continue
-            if rule['destination'] == dst_rulename == 'external':
+            if (rule['destination'] == 'external' and
+                    dst_rulename not in v4_any_words):
                 continue
 
             match = {'bitsinsrc': rs.prefixlen,
