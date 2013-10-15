@@ -184,7 +184,9 @@ class RulesGridTab(tabs.Tab):
             return connectivity
 
         sortedrules = sorted(matchingrules,
-                             key=lambda k: (k['bitsinsrc'], k['bitsindst']),
+                             key=lambda k: (k['bitsinsrc'], k['bitsindst'],
+                                            k['rule']['source'],
+                                            k['rule']['destination']),
                              reverse=True)
         match = sortedrules[0]
         if (match['bitsinsrc'] > src.prefixlen or
