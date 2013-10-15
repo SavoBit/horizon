@@ -124,7 +124,7 @@ class RulesGridTab(tabs.Tab):
             matrix.append(row)
         return matrix
 
-    def _get_cidr_connectivity(self, src_sub, dst_sub, rules):
+    def _get_subnet_connectivity(self, src_sub, dst_sub, rules):
         v4_any_words = ['external', 'any']
         connectivity = {'reachable': '',
                         'inverse_rule': {},
