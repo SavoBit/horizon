@@ -37,7 +37,8 @@ class NetworkPanels(horizon.PanelGroup):
               'routers',
               'loadbalancers',
               'firewalls',
-              'vpn',)
+              'vpn',
+              'network_troubleshooting')
 
 
 class ObjectStorePanels(horizon.PanelGroup):

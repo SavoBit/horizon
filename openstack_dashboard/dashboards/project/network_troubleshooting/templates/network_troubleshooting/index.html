@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load url from future %}
+{% block title %}{% trans "Network Troubleshooting" %}{% endblock %}
+
+{% block page_header %}
+  {% include "horizon/common/_page_header.html" with title=_("Network Troubleshooting") %}
+{% endblock page_header %}
+
+{% block main %}
+<h2>Network Connectivity between {{ source }} and {{ destination }}</h2>
+<div class="table-responsive">
+   <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Traffic Flow</th>
+          <th>Network Action</th>
+          <th>Failure Reason</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for test in tests %}
+        <tr>
+          <td>{{ test.source }} &rarr; {{ test.destination }}</td>
+          {% if test.routingAction = 'DROP' %}
+              <td class='alert-danger'>{{ test.routingAction }}</td>
+              <td>{{ test.reason }}</td>
+          {% elif test.routingAction = 'FORWARD' %}
+              <td class='alert-success'>{{ test.routingAction }}</td>
+              <td><i>n/a</i></td>
+          {% else %}
+              <td>{{ test.routingAction }}</td>
+              <td>{{ test.reason }}</td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="3">
+          <span class="table_count"></span>
+        </td>
+      </tr>
+    </tfoot>
+   </table>
+</div>
+<!--
+<hr>
+{{ sbody }}
+<hr>
+{{ rbody }}
+-->
+
+{% endblock %}
