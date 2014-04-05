@@ -1,0 +1,17 @@
+{% extends "horizon/common/_modal_form.html" %}
+{% load i18n %}
+{% load url from future %}
+
+{% block form_id %}remove_network_instance_form{% endblock %}
+{% block form_action %}{% url 'horizon:project:connections:network_template:remove' %}{% endblock %}
+
+{% block modal-header %}{% trans "Confirm Remove Network Instance" %}{% endblock %}
+
+{% block modal-body %}
+    <p>{% trans "You have selected to remove the current network instance. Please confirm your selection." %}</p>
+{% endblock %}
+
+{% block modal-footer %}
+      <input class="btn btn-primary pull-right" type="submit" value="{% trans "Remove Instance" %}" />
+      <a href="{% url 'horizon:project:connections:index' %}" class="btn secondary close cancel">{% trans "Cancel" %}</a>
+{% endblock %}
