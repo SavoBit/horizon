@@ -18,17 +18,26 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from django.conf.urls import include  # noqa
 from django.conf.urls import patterns  # noqa
 from django.conf.urls import url  # noqa
 
-from openstack_dashboard.dashboards.project.access_and_security.keypairs \
-    import views
+from openstack_dashboard.dashboards.project.access_and_security.\
+    api_access import urls as api_access_urls
+from openstack_dashboard.dashboards.project.access_and_security.\
+    floating_ips import urls as fip_urls
+from openstack_dashboard.dashboards.project.access_and_security.\
+    keypairs import urls as keypair_urls
+from openstack_dashboard.dashboards.project.access_and_security.\
+    security_groups import urls as sec_group_urls
+from openstack_dashboard.dashboards.project.access_and_security import views
 
 
 urlpatterns = patterns('',
-    url(r'^create/$', views.CreateView.as_view(), name='create'),
-    url(r'^(?P<keypair_name>[^/]+)/download/$', views.DownloadView.as_view(),
-            name='download'),
-    url(r'^(?P<keypair_name>[^/]+)/generate/$', views.GenerateView.as_view(),
-            name='generate'),
+    url(r'^$', views.IndexView.as_view(), name='index'),
+    url(r'api_access/', include(api_access_urls, namespace='api_access')),
+    url(r'keypairs/', include(keypair_urls, namespace='keypairs')),
+    url(r'floating_ips/', include(fip_urls, namespace='floating_ips')),
+    url(r'security_groups/',
+        include(sec_group_urls, namespace='security_groups')),
 )

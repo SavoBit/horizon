@@ -21,14 +21,19 @@
 from django.conf.urls import patterns  # noqa
 from django.conf.urls import url  # noqa
 
-from openstack_dashboard.dashboards.project.access_and_security.keypairs \
-    import views
+from openstack_dashboard.dashboards.project.access_and_security.\
+    security_groups import views
 
 
 urlpatterns = patterns('',
     url(r'^create/$', views.CreateView.as_view(), name='create'),
-    url(r'^(?P<keypair_name>[^/]+)/download/$', views.DownloadView.as_view(),
-            name='download'),
-    url(r'^(?P<keypair_name>[^/]+)/generate/$', views.GenerateView.as_view(),
-            name='generate'),
+    url(r'^(?P<security_group_id>[^/]+)/$',
+        views.DetailView.as_view(),
+        name='detail'),
+    url(r'^(?P<security_group_id>[^/]+)/add_rule/$',
+        views.AddRuleView.as_view(),
+        name='add_rule'),
+    url(r'^(?P<security_group_id>[^/]+)/update/$',
+        views.UpdateView.as_view(),
+        name='update')
 )

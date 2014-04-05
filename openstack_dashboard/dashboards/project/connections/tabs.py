@@ -39,17 +39,25 @@ from openstack_dashboard.dashboards.project.access_and_security.\
     security_groups.tables import SecurityGroupsTable
 
 
-class SecurityGroupsTab(tabs.Tab):
-    name = _("Network Template")
+class SecurityGroupsTab(tabs.TableTab):
+    table_classes = (SecurityGroupsTable,)
+    name = _("Security Groups")
     slug = "security_groups_tab"
     template_name = "horizon/common/_detail_table.html"
-   
-    def get_context_data(self,request):
-	return None
+
+    def get_security_groups_data(self):
+        try:
+            security_groups = network.security_group_list(self.request)
+        except Exception:
+            security_groups = []
+            exceptions.handle(self.request,
+                              _('Unable to retrieve security groups.'))
+        return security_groups
+
 
 class KeypairsTab(tabs.TableTab):
     table_classes = (KeypairsTable,)
-    name = _("Reachability Tests")
+    name = _("Key Pairs")
     slug = "keypairs_tab"
     template_name = "horizon/common/_detail_table.html"
 
@@ -63,18 +71,47 @@ class KeypairsTab(tabs.TableTab):
         return keypairs
 
 
-class FloatingIPsTab(tabs.Tab):
-    name = _("Troubleshoot")
+class FloatingIPsTab(tabs.TableTab):
+    table_classes = (FloatingIPsTable,)
+    name = _("Floating IPs")
     slug = "floating_ips_tab"
     template_name = "horizon/common/_detail_table.html"
-        
-    def get_context_data(self,request):
-	return None
+
+    def get_floating_ips_data(self):
+        try:
+            floating_ips = network.tenant_floating_ip_list(self.request)
+        except Exception:
+            floating_ips = []
+            exceptions.handle(self.request,
+                              _('Unable to retrieve floating IP addresses.'))
+
+        try:
+            floating_ip_pools = network.floating_ip_pools_list(self.request)
+        except Exception:
+            floating_ip_pools = []
+            messages.warning(self.request,
+                             _('Unable to retrieve floating IP pools.'))
+        pool_dict = dict([(obj.id, obj.name) for obj in floating_ip_pools])
+
+        instances = []
+        try:
+            instances, has_more = nova.server_list(self.request)
+        except Exception:
+            exceptions.handle(self.request,
+                        _('Unable to retrieve instance list.'))
+
+        instances_dict = dict([(obj.id, obj.name) for obj in instances])
+
+        for ip in floating_ips:
+            ip.instance_name = instances_dict.get(ip.instance_id)
+            ip.pool_name = pool_dict.get(ip.pool, ip.pool)
+
+        return floating_ips
 
 
 class APIAccessTab(tabs.TableTab):
     table_classes = (EndpointsTable,)
-    name = _("Top Talkers")
+    name = _("API Access")
     slug = "api_access_tab"
     template_name = "horizon/common/_detail_table.html"
 

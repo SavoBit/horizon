@@ -21,14 +21,11 @@
 from django.conf.urls import patterns  # noqa
 from django.conf.urls import url  # noqa
 
-from openstack_dashboard.dashboards.project.access_and_security.keypairs \
-    import views
+from openstack_dashboard.dashboards.project.access_and_security.\
+    api_access import views
 
 
 urlpatterns = patterns('',
-    url(r'^create/$', views.CreateView.as_view(), name='create'),
-    url(r'^(?P<keypair_name>[^/]+)/download/$', views.DownloadView.as_view(),
-            name='download'),
-    url(r'^(?P<keypair_name>[^/]+)/generate/$', views.GenerateView.as_view(),
-            name='generate'),
+    url(r'^ec2/$', views.download_ec2_bundle, name='ec2'),
+    url(r'^openrc/$', views.download_rc_file, name='openrc'),
 )

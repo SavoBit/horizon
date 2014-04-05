@@ -31,38 +31,57 @@ from openstack_dashboard import api
 
 
 NEW_LINES = re.compile(r"\r|\n")
-KEYPAIR_ERROR_MESSAGES = {'invalid': _('Key pair names may '
-                                'only contain letters, numbers, underscores '
-                                'and hyphens.')}
 
 
 class CreateKeypair(forms.SelfHandlingForm):
     name = forms.CharField(max_length="255",
-                           label=_("Key Pair Name"),
-                           validators=[validators.validate_slug],
-                           error_messages=KEYPAIR_ERROR_MESSAGES)
+                           label=_("Name"),
+                           required=True)
+    connection_source = forms.ChoiceField(
+	label=_('Connection Source'),
+	required=True,
+	choices=[('default',_(' ')),
+		('vm1', _('VM 1')),
+		('vm2', _('VM 2'))],
+	widget=forms.Select(attrs={
+		'class': 'switchable',
+		'data-slug': 'source'}))
 
+    connection_destination = forms.ChoiceField(
+        label=_('Connection Destination'),
+        required=True,
+        choices=[('default',_(' ')),
+                ('vm1', _('VM 1')),
+		('vm2', _('VM 2'))],
+        widget=forms.Select(attrs={
+                'class': 'switchable',
+                'data-slug': 'source'}))
+    
+    port = forms.CharField(max_length="255",
+                           label=_("Port (optional)"),
+                           required=False)
+
+    port_protocol = forms.ChoiceField(
+        label=_('Port Protocol (optional)'),
+        required=False,
+        choices=[('default',_('--- Select Protocol ---')),
+		('tcp', _('TCP')),
+                ('udp', _('UDP'))],
+        widget=forms.Select(attrs={
+                'class': 'switchable',
+                'data-slug': 'source'}))
+
+    expected_connection = forms.ChoiceField(
+        label=_('Expected Connection Results'),
+        required=True,
+        choices=[('default',_('--- Select Result ---')),
+                ('connect', _('Must Connect')),
+                ('not_connect', _('Must Not Connect'))],
+        widget=forms.Select(attrs={
+                'class': 'switchable',
+                'data-slug': 'source'}))
+
+    
     def handle(self, request, data):
-        return True  # We just redirect to the download view.
+        return None  # We just redirect to the download view.
 
-
-class ImportKeypair(forms.SelfHandlingForm):
-    name = forms.CharField(max_length="255", label=_("Key Pair Name"),
-                 validators=[validators.validate_slug],
-                 error_messages=KEYPAIR_ERROR_MESSAGES)
-    public_key = forms.CharField(label=_("Public Key"), widget=forms.Textarea)
-
-    def handle(self, request, data):
-        try:
-            # Remove any new lines in the public key
-            data['public_key'] = NEW_LINES.sub("", data['public_key'])
-            keypair = api.nova.keypair_import(request,
-                                              data['name'],
-                                              data['public_key'])
-            messages.success(request, _('Successfully imported public key: %s')
-                                       % data['name'])
-            return keypair
-        except Exception:
-            exceptions.handle(request, ignore=True)
-            self.api_error(_('Unable to import key pair.'))
-            return False

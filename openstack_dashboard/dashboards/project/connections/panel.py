@@ -1,10 +1,7 @@
 # vim: tabstop=4 shiftwidth=4 softtabstop=4
 
-# Copyright 2012 United States Government as represented by the
-# Administrator of the National Aeronautics and Space Administration.
-# All Rights Reserved.
-#
 # Copyright 2012 Nebula, Inc.
+# Copyright 2012 OpenStack Foundation
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
 #    not use this file except in compliance with the License. You may obtain
@@ -18,17 +15,16 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-from django.conf.urls import patterns  # noqa
-from django.conf.urls import url  # noqa
+from django.utils.translation import ugettext_lazy as _
 
-from openstack_dashboard.dashboards.project.access_and_security.keypairs \
-    import views
+import horizon
+
+from openstack_dashboard.dashboards.project import dashboard
 
 
-urlpatterns = patterns('',
-    url(r'^create/$', views.CreateView.as_view(), name='create'),
-    url(r'^(?P<keypair_name>[^/]+)/download/$', views.DownloadView.as_view(),
-            name='download'),
-    url(r'^(?P<keypair_name>[^/]+)/generate/$', views.GenerateView.as_view(),
-            name='generate'),
-)
+class Connections(horizon.Panel):
+    name = _("Connections")
+    slug = 'connections'
+
+
+dashboard.Project.register(Connections)

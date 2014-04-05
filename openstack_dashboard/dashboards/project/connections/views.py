@@ -5,6 +5,7 @@
 # All Rights Reserved.
 #
 # Copyright 2012 Nebula, Inc.
+# Copyright 2012 OpenStack Foundation
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
 #    not use this file except in compliance with the License. You may obtain
@@ -18,17 +19,16 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-from django.conf.urls import patterns  # noqa
-from django.conf.urls import url  # noqa
+"""
+Views for Instances and Volumes.
+"""
 
-from openstack_dashboard.dashboards.project.access_and_security.keypairs \
-    import views
+from horizon import tabs
+
+from openstack_dashboard.dashboards.project.access_and_security \
+    import tabs as project_tabs
 
 
-urlpatterns = patterns('',
-    url(r'^create/$', views.CreateView.as_view(), name='create'),
-    url(r'^(?P<keypair_name>[^/]+)/download/$', views.DownloadView.as_view(),
-            name='download'),
-    url(r'^(?P<keypair_name>[^/]+)/generate/$', views.GenerateView.as_view(),
-            name='generate'),
-)
+class IndexView(tabs.TabbedTableView):
+    tab_group_class = project_tabs.AccessAndSecurityTabs
+    template_name = 'project/access_and_security/index.html'
