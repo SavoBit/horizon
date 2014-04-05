@@ -1,0 +1,36 @@
+{% load i18n sizeformat %}
+
+<h3>{% trans "Quick Test Results" %}</h3>
+
+{% block modal-header %}
+  <a href="{% url 'horizon:project:connections:reachability_tests:save' %}" class="btn btn-primary ajax-modal pull-right">{% trans "Save" %}</a>
+{% endblock %}
+
+<div class="info row-fluid detail">
+  <h4>{% trans "Info" %}</h4>
+  <hr class="header_rule">
+  <dl>
+    <dt>{% trans "Connection Source" %}</dt>
+    <dd>{{ quick_test.connection_source|default:_("None") }}</dd>
+    <dt>{% trans "Connection Destination" %}</dt>
+    <dd>{{ quick_test.connection_destination|default:_("None") }}</dd>
+  </dl>
+</div>
+
+<div class="specs row-fluid detail">
+  <h4>{% trans "Results" %}</h4>
+  <hr class="header_rule">
+  <dl>
+    <dt>{% trans "Time Stamp" %}</dt>
+    <dd>{{ quick_test.last_run|default:_("None") }}</dd>
+    <dt>{% trans "Expected Connection" %}</dt>
+    <dd>{{ quick_test.expected_connection|default:_("None") }}</dd>
+    <dt>{% trans "Test Results" %}</dt>
+    <dd>{{ quick_test.status|default:_("None") }}</dd>
+    <dt>{% trans "Command Line Output" %}</dt>
+    <div class="command-prompt-background">
+        <ul class="command-prompt-text"></ul>
+    </div>
+  </dl>
+</div>
+

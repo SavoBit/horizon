@@ -48,6 +48,8 @@ class IndexView(tables.DataTableView):
             (images,
              self._more_images) = api.glance.image_list_detailed(self.request,
                                                                  marker=marker)
+	    #import pdb
+	    #pdb.set_trace()
         except Exception:
             images = []
             exceptions.handle(self.request, _("Unable to retrieve images."))

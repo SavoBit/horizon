@@ -46,6 +46,8 @@ class IndexView(tables.DataTableView):
         try:
             # "is_public=None" will return all flavors.
             flavors = api.nova.flavor_list(request, None)
+	    #import pdb
+	    #pdb.set_trace()
         except Exception:
             exceptions.handle(request,
                               _('Unable to retrieve flavor list.'))
