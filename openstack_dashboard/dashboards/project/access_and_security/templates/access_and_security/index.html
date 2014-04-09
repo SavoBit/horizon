@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% block title %}{% trans "Connections" %}{% endblock %}
+{% block title %}{% trans "Access &amp; Security" %}{% endblock %}
 
 {% block page_header %}
-  {% include "horizon/common/_page_header.html" with title=_("Connections") %}
+  {% include "horizon/common/_page_header.html" with title=_("Access &amp; Security") %}
 {% endblock page_header %}
 
 {% block main %}
@@ -12,39 +12,4 @@
   {{ tab_group.render }}
   </div>
 </div>
-
-
-<script type='text/javascript'>
-function addReachabilityTestRow(){
-	var testname = $("#id_name").val();
-	var currentdate = new Date();
-        var datetime = currentdate.getFullYear() + "-"
-                + ("0" + (currentdate.getMonth()+1)).slice(-2)  + "-" 
-                + ("0" + currentdate.getDate()).slice(-2) + " T "  
-                + currentdate.getHours() + ":"  
-                + currentdate.getMinutes() + ":" 
-                + currentdate.getSeconds() + " UTC";
-
-	var rowelement = '<tr class data-display='+testname+' data-object-id="" id="keypairs__row__'+testname+'"><td class="multi_select_column"><input class="table-row-multi-select" name="object_ids" type="checkbox" value="'+testname+'"></td><td class="sortable normal_column">'+testname+'</td><td class="sortable normal_column">-</td><td class="sortable normal_column">-</td><td class="actions_column"><div class="btn-group"><a onclick="deleteReachabilityTestRow()" class="btn btn-small btn-edit" id="keypairs__row_'+testname+'__action_run">Run Test</a><a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#"> More <span class="caret"></span></a><ul class="dropdown-menu row_actions clearfix"><li class="clearfix"><a class="btn btn-small btn-edit" id="keypairs__row_'+testname+'__action_update">Edit Test</a></li></ul></div></td></tr>';
-	
-	$('#keypairs').append(rowelement);
-
-
-}
-function deleteReachabilityTestRow(){
-	var testname = "Test";
-	var currentdate = new Date();
-        var datetime = currentdate.getFullYear() + "-"
-                + ("0" + (currentdate.getMonth()+1)).slice(-2)  + "-" 
-                + ("0" + currentdate.getDate()).slice(-2) + " T "  
-                + currentdate.getHours() + ":"  
-                + currentdate.getMinutes() + ":" 
-                + currentdate.getSeconds() + " UTC";
-	document.getElementById("keypairs").deleteRow(5);
-	var rowelement = '<tr class data-display='+testname+' data-object-id="" id="keypairs__row__'+testname+'"><td class="multi_select_column"><input class="table-row-multi-select" name="object_ids" type="checkbox" value="'+testname+'"></td><td class="sortable normal_column">'+testname+'</td><td class="sortable normal_column">'+datetime+'</td><td class="sortable normal_column"><font color="green">Pass</font></td><td class="actions_column"><div class="btn-group"><a onclick="deleteReachabilityTestRow()" class="btn btn-small btn-edit" id="keypairs__row_'+testname+'__action_run">Run Test</a><a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#"> More <span class="caret"></span></a><ul class="dropdown-menu row_actions clearfix"><li class="clearfix"><a class="btn btn-small btn-edit" id="keypairs__row_'+testname+'__action_update">Edit Test</a></li></ul></div></td></tr>';
-	$('#keypairs').append(rowelement);
-}
-</script>
-
 {% endblock %}
-

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block css %}
+  {% include "_stylesheets.html" %}
+
+  {% load compress %}
+  {% compress css %}
+  <link href='{{ STATIC_URL }}admin/less/demo.css' type='text/css' media='screen' rel='stylesheet' />
+  <link href='{{ STATIC_URL }}admin/less/demo-all.css' type='text/css' media='screen' rel='stylesheet' />
+  {% endcompress %}
+{% endblock %}
+

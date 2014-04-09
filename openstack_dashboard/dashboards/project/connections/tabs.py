@@ -29,93 +29,54 @@ from openstack_dashboard.api import keystone
 from openstack_dashboard.api import network
 from openstack_dashboard.api import nova
 
-from openstack_dashboard.dashboards.project.access_and_security.\
-    api_access.tables import EndpointsTable
-from openstack_dashboard.dashboards.project.access_and_security.\
-    floating_ips.tables import FloatingIPsTable
-from openstack_dashboard.dashboards.project.access_and_security.\
-    keypairs.tables import KeypairsTable
-from openstack_dashboard.dashboards.project.access_and_security.\
-    security_groups.tables import SecurityGroupsTable
+from openstack_dashboard.dashboards.project.connections.\
+    top_talkers.tables import TopTalkersTable
+from openstack_dashboard.dashboards.project.connections.\
+    reachability_tests.tables import ReachabilityTestsTable
 
 
-class SecurityGroupsTab(tabs.TableTab):
-    table_classes = (SecurityGroupsTable,)
-    name = _("Security Groups")
-    slug = "security_groups_tab"
+class NetworkTemplateTab(tabs.Tab):
+    name = _("Network Template")
+    slug = "network_template_tab"
+    template_name = "horizon/common/_detail_table.html"
+   
+    def get_context_data(self,request):
+	return None
+
+class ReachabilityTestsTab(tabs.TableTab):
+    table_classes = (ReachabilityTestsTable,)
+    name = _("Reachability Tests")
+    slug = "reachability_test_tab"
     template_name = "horizon/common/_detail_table.html"
 
-    def get_security_groups_data(self):
+    def get_reachability_tests_data(self):
         try:
-            security_groups = network.security_group_list(self.request)
+            reachability_tests = nova.keypair_list(self.request)
+	    #import pdb
+	    #pdb.set_trace()
         except Exception:
-            security_groups = []
+            reachability_tests = []
             exceptions.handle(self.request,
-                              _('Unable to retrieve security groups.'))
-        return security_groups
+                              _('Unable to retrieve reachability test list.'))
+        return reachability_tests
 
 
-class KeypairsTab(tabs.TableTab):
-    table_classes = (KeypairsTable,)
-    name = _("Key Pairs")
-    slug = "keypairs_tab"
+class TroubleshootTab(tabs.Tab):
+    name = _("Troubleshoot")
+    slug = "troubleshoot_tab"
+    template_name = "horizon/common/_detail_table.html"
+        
+    def get_context_data(self,request):
+	return None
+
+
+class TopTalkersTab(tabs.TableTab):
+    table_classes = (TopTalkersTable,)
+    name = _("Top Talkers")
+    slug = "top_talkers_tab"
     template_name = "horizon/common/_detail_table.html"
 
-    def get_keypairs_data(self):
-        try:
-            keypairs = nova.keypair_list(self.request)
-        except Exception:
-            keypairs = []
-            exceptions.handle(self.request,
-                              _('Unable to retrieve key pair list.'))
-        return keypairs
-
-
-class FloatingIPsTab(tabs.TableTab):
-    table_classes = (FloatingIPsTable,)
-    name = _("Floating IPs")
-    slug = "floating_ips_tab"
-    template_name = "horizon/common/_detail_table.html"
-
-    def get_floating_ips_data(self):
-        try:
-            floating_ips = network.tenant_floating_ip_list(self.request)
-        except Exception:
-            floating_ips = []
-            exceptions.handle(self.request,
-                              _('Unable to retrieve floating IP addresses.'))
-
-        try:
-            floating_ip_pools = network.floating_ip_pools_list(self.request)
-        except Exception:
-            floating_ip_pools = []
-            messages.warning(self.request,
-                             _('Unable to retrieve floating IP pools.'))
-        pool_dict = dict([(obj.id, obj.name) for obj in floating_ip_pools])
-
-        instances = []
-        try:
-            instances, has_more = nova.server_list(self.request)
-        except Exception:
-            exceptions.handle(self.request,
-                        _('Unable to retrieve instance list.'))
-
-        instances_dict = dict([(obj.id, obj.name) for obj in instances])
-
-        for ip in floating_ips:
-            ip.instance_name = instances_dict.get(ip.instance_id)
-            ip.pool_name = pool_dict.get(ip.pool, ip.pool)
-
-        return floating_ips
-
-
-class APIAccessTab(tabs.TableTab):
-    table_classes = (EndpointsTable,)
-    name = _("API Access")
-    slug = "api_access_tab"
-    template_name = "horizon/common/_detail_table.html"
-
-    def get_endpoints_data(self):
+    def get_toptalkers_data(self):
         services = []
         for i, service in enumerate(self.request.user.service_catalog):
             service['id'] = i
@@ -125,7 +86,7 @@ class APIAccessTab(tabs.TableTab):
         return services
 
 
-class AccessAndSecurityTabs(tabs.TabGroup):
-    slug = "access_security_tabs"
-    tabs = (SecurityGroupsTab, KeypairsTab, FloatingIPsTab, APIAccessTab)
+class ConnectionsTabs(tabs.TabGroup):
+    slug = "connections_tabs"
+    tabs = (NetworkTemplateTab, ReachabilityTestsTab, TroubleshootTab, TopTalkersTab)
     sticky = True

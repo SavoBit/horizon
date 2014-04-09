@@ -27,6 +27,7 @@ from openstack_dashboard.dashboards.project.access_and_security.keypairs \
 
 urlpatterns = patterns('',
     url(r'^create/$', views.CreateView.as_view(), name='create'),
+    url(r'^import/$', views.ImportView.as_view(), name='import'),
     url(r'^(?P<keypair_name>[^/]+)/download/$', views.DownloadView.as_view(),
             name='download'),
     url(r'^(?P<keypair_name>[^/]+)/generate/$', views.GenerateView.as_view(),

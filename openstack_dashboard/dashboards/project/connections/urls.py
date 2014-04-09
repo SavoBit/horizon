@@ -22,22 +22,21 @@ from django.conf.urls import include  # noqa
 from django.conf.urls import patterns  # noqa
 from django.conf.urls import url  # noqa
 
-from openstack_dashboard.dashboards.project.access_and_security.\
-    api_access import urls as api_access_urls
-from openstack_dashboard.dashboards.project.access_and_security.\
-    floating_ips import urls as fip_urls
-from openstack_dashboard.dashboards.project.access_and_security.\
-    keypairs import urls as keypair_urls
-from openstack_dashboard.dashboards.project.access_and_security.\
-    security_groups import urls as sec_group_urls
-from openstack_dashboard.dashboards.project.access_and_security import views
+from openstack_dashboard.dashboards.project.connections.\
+    top_talkers import urls as top_talkers_urls
+from openstack_dashboard.dashboards.project.connections.\
+    troubleshoot import urls as troubleshoot_urls
+from openstack_dashboard.dashboards.project.connections.\
+    reachability_tests import urls as reachability_tests_urls
+from openstack_dashboard.dashboards.project.connections.\
+    network_template import urls as network_template_urls
+from openstack_dashboard.dashboards.project.connections import views
 
 
 urlpatterns = patterns('',
     url(r'^$', views.IndexView.as_view(), name='index'),
-    url(r'api_access/', include(api_access_urls, namespace='api_access')),
-    url(r'keypairs/', include(keypair_urls, namespace='keypairs')),
-    url(r'floating_ips/', include(fip_urls, namespace='floating_ips')),
-    url(r'security_groups/',
-        include(sec_group_urls, namespace='security_groups')),
+    url(r'top_talkers/', include(top_talkers_urls, namespace='top_talkers')),
+    url(r'reachability_tests/', include(reachability_tests_urls, namespace='reachability_tests')),
+    url(r'troubleshoot/', include(troubleshoot_urls, namespace='troubleshoot')),
+    url(r'network_template/', include(network_template_urls, namespace='network_template')),
 )

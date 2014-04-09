@@ -48,6 +48,15 @@ class CreateView(forms.ModalFormView):
                        kwargs={"keypair_name": self.request.POST['name']})
 
 
+class ImportView(forms.ModalFormView):
+    form_class = project_forms.ImportKeypair
+    template_name = 'project/access_and_security/keypairs/import.html'
+    success_url = reverse_lazy('horizon:project:access_and_security:index')
+
+    def get_object_id(self, keypair):
+        return keypair.name
+
+
 class DownloadView(TemplateView):
     def get_context_data(self, keypair_name=None):
         return {'keypair_name': keypair_name}

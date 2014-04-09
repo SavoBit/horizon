@@ -20,30 +20,40 @@ from django.utils.translation import ugettext_lazy as _
 from horizon import tables
 
 
-class ReloadTopTalkers(tables.LinkAction):
-    name = "reload"
-    verbose_name = _("Reload")
-    classes = ("btn-search",)
+def pretty_service_names(name):
+    name = name.replace('-', ' ')
+    if name in ['ec2', 's3']:
+        name = name.upper()
+    else:
+        name = title(name)
+    return name
+
+
+class DownloadEC2(tables.LinkAction):
+    name = "download_ec2"
+    verbose_name = _("Download EC2 Credentials")
+    verbose_name_plural = _("Download EC2 Credentials")
+    classes = ("btn-download",)
     url = "horizon:project:access_and_security:api_access:ec2"
 
 
-class TopTalkersFilterAction(tables.FilterAction):
+class DownloadOpenRC(tables.LinkAction):
+    name = "download_openrc"
+    verbose_name = _("Download OpenStack RC File")
+    verbose_name_plural = _("Download OpenStack RC File")
+    classes = ("btn-download",)
+    url = "horizon:project:access_and_security:api_access:openrc"
 
-    def filter(self, table, endpoints, filter_string):
-	"""Naive case-insentivite search. """
-	q = filter_string.lower()
-	return [endpoint for endpoint in endpoints
-		if q in endpoints.api_name.lower()]
 
 class EndpointsTable(tables.DataTable):
-    api_name = tables.Column('name', verbose_name=_("Host Name"))
-    api_endpoint = tables.Column('sent_bytes', verbose_name=_("Sent Bytes/sec"))
-    rcvd_bytes = tables.Column('rcvd_bytes', verbose_name=_("Rcvd Bytes/sec"))
-    sent_packets = tables.Column('sent_packets', verbose_name=_("Sent Packets/sec"))
-    rcvd_packets = tables.Column('rcvd_packets', verbose_name=_("Rcvd Packets/sec"))
+    api_name = tables.Column('type',
+                             verbose_name=_("Service"),
+                             filters=(pretty_service_names,))
+    api_endpoint = tables.Column('public_url',
+                                 verbose_name=_("Service Endpoint"))
 
     class Meta:
         name = "endpoints"
-        verbose_name = _("Top Talkers")
+        verbose_name = _("API Endpoints")
         multi_select = False
-        table_actions = (TopTalkersFilterAction, ReloadTopTalkers,)
+        table_actions = (DownloadOpenRC, DownloadEC2,)
