@@ -28,7 +28,9 @@ from horizon import forms
 from horizon import messages
 
 from openstack_dashboard import api
-from openstack_dashboard.dashboards.project.connections.mockdata import ReachabilityTestStub
+from openstack_dashboard.dashboards.project.connections.mockobjects import ReachabilityTestStub
+from openstack_dashboard.dashboards.project.connections.mockapi import ReachabilityTestAPI
+
 
 
 NEW_LINES = re.compile(r"\r|\n")
@@ -84,7 +86,10 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
 
     
     def handle(self, request, data):
-	test = ReachabilityTestStub('Test form','','')
+	test = ReachabilityTestStub(data['name'].encode('ascii','ignore'),'','')
+	messages.success(request, _('Successfully created reachability test: %s') % data['name'])
+	api = ReachabilityTestAPI()
+	api.addReachabilityTest(test)
 	#import pdb
         #pdb.set_trace()
         return test  # We just redirect to the download view.

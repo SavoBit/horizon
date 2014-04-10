@@ -33,7 +33,8 @@ from openstack_dashboard.dashboards.project.connections.\
     top_talkers.tables import TopTalkersTable
 from openstack_dashboard.dashboards.project.connections.\
     reachability_tests.tables import ReachabilityTestsTable
-from openstack_dashboard.dashboards.project.connections.mockdata import ReachabilityTestStub
+from openstack_dashboard.dashboards.project.connections.mockobjects import ReachabilityTestStub
+from openstack_dashboard.dashboards.project.connections.mockapi import ReachabilityTestAPI
 
 
 class NetworkTemplateTab(tabs.Tab):
@@ -52,9 +53,11 @@ class ReachabilityTestsTab(tabs.TableTab):
 
     def get_reachability_tests_data(self):
         try:
-            reachability_tests = [ReachabilityTestStub('Test1','',''),ReachabilityTestStub('Test2','',''),ReachabilityTestStub('Test3','','')]
+	    api = ReachabilityTestAPI()
+            #reachability_tests = [ReachabilityTestStub('Test1','',''),ReachabilityTestStub('Test2','',''),ReachabilityTestStub('Test3','','')]
+	    reachability_tests = api.listReachabilityTest()
 	    #import pdb
-	    #pdb.set_trace()
+            #pdb.set_trace()
         except Exception:
             reachability_tests = []
             exceptions.handle(self.request,
