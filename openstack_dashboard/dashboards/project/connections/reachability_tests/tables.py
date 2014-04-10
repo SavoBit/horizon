@@ -21,6 +21,8 @@ from horizon import tables
 
 from openstack_dashboard import api
 from openstack_dashboard.usage import quotas
+from openstack_dashboard.dashboards.project.connections.mockapi import ReachabilityTestAPI
+from openstack_dashboard.dashboards.project.connections.mockobjects import ReachabilityTestStub
 
 
 class DeleteReachabilityTests(tables.DeleteAction):
@@ -28,7 +30,10 @@ class DeleteReachabilityTests(tables.DeleteAction):
     data_type_plural = _("Tests")
 
     def delete(self, request, obj_id):
-        api.nova.keypair_delete(request, obj_id)
+	#import pdb
+        #pdb.set_trace()
+	api = ReachabilityTestAPI()
+        api.deleteReachabilityTest(obj_id.encode('ascii','ignore'))
 
 class CreateReachabilityTest(tables.LinkAction):
     name = "create"
@@ -44,11 +49,18 @@ class ReachabilityTestFilterAction(tables.FilterAction):
 	return [reachability_test for reachability_test in reachability_tests
 		if q in reachability_tests.name.lower()]
 
-class RunTest(tables.LinkAction):
+class RunTest(tables.BatchAction):
     name = "run"
-    verbose_name = _("Run Test")
-    url = "horizon:project:connections:reachability_tests:create"
+    action_present = _("Run")
+    action_past = _("Running")
+    data_type_singular = _("Test")
     classes = ("btn-edit",)
+    
+    def action(self, request, obj_id):
+	api = ReachabilityTestAPI()
+	api.runReachabilityTest(obj_id.encode('ascii','ignore'))
+	#import pdb
+        #pdb.set_trace()
 
 class UpdateTest(tables.LinkAction):
     name = "update"

@@ -92,5 +92,5 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
 	api.addReachabilityTest(test)
 	#import pdb
         #pdb.set_trace()
-        return test  # We just redirect to the download view.
+        return test
 
