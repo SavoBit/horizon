@@ -21,6 +21,6 @@
 {% endblock %}
 
 {% block modal-footer %}
-  <a href="{% url 'horizon:project:connections:index' %}" onclick="addReachabilityTestRow()" class="btn btn-primary pull-right cancel">{% trans "Create Test" %}</a>
+  <input class="btn btn-primary pull-right" type="submit" value={% trans "Create Test" %}/>
   <a href="{% url 'horizon:project:connections:index' %}" class="btn secondary cancel close">{% trans "Cancel" %}</a>
 {% endblock %}

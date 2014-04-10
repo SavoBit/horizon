@@ -61,7 +61,8 @@ class ReachabilityTestsTable(tables.DataTable):
     name = tables.Column("name", verbose_name=_("Name"))
     last_run = tables.Column("last_run", verbose_name=_("Last Run"))
     status = tables.Column("status", verbose_name=_("Status"))    
-
+    #import pdb
+    #pdb.set_trace()
    # def __init__
 	#items = []
 	#items.push(new ReachabilityTestStub("Test1");

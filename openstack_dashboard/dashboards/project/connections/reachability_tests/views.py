@@ -41,11 +41,7 @@ from openstack_dashboard.dashboards.project.connections.reachability_tests \
 class CreateView(forms.ModalFormView):
     form_class = project_forms.CreateReachabilityTest
     template_name = 'project/connections/reachability_tests/create.html'
-    success_url = 'horizon:project:connections:reachability_tests:download'
-
-    def get_success_url(self):
-        return reverse(self.success_url,
-                       kwargs={"reachability_test_name": self.request.POST['name']})
+    success_url = reverse_lazy("horizon:project:connections:index")
 
 
 class DownloadView(TemplateView):

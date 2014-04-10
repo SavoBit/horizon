@@ -33,6 +33,7 @@ from openstack_dashboard.dashboards.project.connections.\
     top_talkers.tables import TopTalkersTable
 from openstack_dashboard.dashboards.project.connections.\
     reachability_tests.tables import ReachabilityTestsTable
+from openstack_dashboard.dashboards.project.connections.mockdata import ReachabilityTestStub
 
 
 class NetworkTemplateTab(tabs.Tab):
@@ -51,7 +52,7 @@ class ReachabilityTestsTab(tabs.TableTab):
 
     def get_reachability_tests_data(self):
         try:
-            reachability_tests = nova.keypair_list(self.request)
+            reachability_tests = [ReachabilityTestStub('Test1','',''),ReachabilityTestStub('Test2','',''),ReachabilityTestStub('Test3','','')]
 	    #import pdb
 	    #pdb.set_trace()
         except Exception:
