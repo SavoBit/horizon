@@ -27,4 +27,7 @@ from openstack_dashboard.dashboards.project.connections.reachability_tests \
 
 urlpatterns = patterns('',
     url(r'^create/$', views.CreateView.as_view(), name='create'),
+    url(r'^(?P<reachability_test_id>[^/]+)/update/$',
+        views.UpdateView.as_view(),
+        name='update')
 )

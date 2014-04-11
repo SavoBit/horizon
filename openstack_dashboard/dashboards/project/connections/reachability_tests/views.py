@@ -31,8 +31,10 @@ from django.views.generic import View  # noqa
 
 from horizon import exceptions
 from horizon import forms
+from horizon.utils import memoized
 
 from openstack_dashboard import api
+from openstack_dashboard.dashboards.project.connections.mockapi import ReachabilityTestAPI
 
 from openstack_dashboard.dashboards.project.connections.reachability_tests \
     import forms as project_forms
@@ -44,11 +46,33 @@ class CreateView(forms.ModalFormView):
     success_url = reverse_lazy("horizon:project:connections:index")
 
 
-class DownloadView(TemplateView):
-    def get_context_data(self, reachability_test_name=None):
-        return {'reachability_test_name': reachability_test_name}
-    template_name = 'project/connections/reachability_tests/download.html'
+class UpdateView(forms.ModalFormView):
+    form_class = project_forms.UpdateForm
+    template_name = 'project/connections/reachability_tests/update.html'
+    success_url = reverse_lazy('horizon:project:connections:index')
 
+    @memoized.memoized_method
+    def get_object(self):
+        try:
+	    #import pdb
+	    #pdb.set_trace()
+	    api = ReachabilityTestAPI()
+            return api.getReachabilityTest(self.kwargs['reachability_test_id'].encode('ascii','ignore'))
+        except Exception:
+            msg = _('Unable to retrieve test.')
+            url = reverse('horizon:project:connections:index')
+            exceptions.handle(self.request, msg, redirect=url)
+
+    def get_context_data(self, **kwargs):
+        context = super(UpdateView, self).get_context_data(**kwargs)
+        context['reachability_test'] = self.get_object()
+        return context
+
+    def get_initial(self):
+        reachability_test = self.get_object()
+        properties = getattr(reachability_test, 'properties', {})
+        return {'reachability_test_id': self.kwargs['reachability_test_id'],
+                'name': reachability_test.name}
 
 class GenerateView(View):
     def get(self, request, reachability_test_name=None):

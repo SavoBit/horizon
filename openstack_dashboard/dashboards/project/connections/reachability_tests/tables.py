@@ -65,9 +65,14 @@ class RunTest(tables.BatchAction):
 class UpdateTest(tables.LinkAction):
     name = "update"
     verbose_name = _("Edit Test")
-    url = "horizon:admin:connections:update"
-    classes = ( "btn-edit",)
-
+    url = "horizon:project:connections:reachability_tests:update"
+    classes = ("ajax-modal", "btn-edit")
+    #import pdb
+    #pdb.set_trace()
+    #def allowed(self, request, reachability_test=None):
+    #	if not reachability_test:
+    #		return True
+    #	return reachability_test.name != 'default'
 
 class ReachabilityTestsTable(tables.DataTable):
     name = tables.Column("name", verbose_name=_("Name"))

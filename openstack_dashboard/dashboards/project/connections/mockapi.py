@@ -31,3 +31,15 @@ class ReachabilityTestAPI:
 		data.runTest()
 		d[test] = data
 		d.close()
+
+	def getReachabilityTest(self,test):
+		d = shelve.open(self.dbname)
+		data = d[test]
+		d.close()
+		return data
+
+	def updateReachabilityTest(self, test_id, data):
+		d = shelve.open(self.dbname)
+		del d[test_id]
+		d[data.name] = data
+		d.close()
