@@ -32,12 +32,14 @@ from django.views.generic import View  # noqa
 from horizon import exceptions
 from horizon import forms
 from horizon.utils import memoized
+from horizon import tabs
 
 from openstack_dashboard import api
 from openstack_dashboard.dashboards.project.connections.mockapi import ReachabilityTestAPI
-
 from openstack_dashboard.dashboards.project.connections.reachability_tests \
     import forms as project_forms
+from openstack_dashboard.dashboards.project.connections.reachability_tests \
+    import tabs as project_tabs
 
 
 class CreateView(forms.ModalFormView):
@@ -74,19 +76,26 @@ class UpdateView(forms.ModalFormView):
         return {'reachability_test_id': self.kwargs['reachability_test_id'],
                 'name': reachability_test.name}
 
-class GenerateView(View):
-    def get(self, request, reachability_test_name=None):
-        try:
-            reachability_test = api.nova.keypair_create(request, reachability_test_name)
-        except Exception:
-            redirect = reverse('horizon:project:connections:index')
-            exceptions.handle(self.request,
-                              _('Unable to create key pair: %(exc)s'),
-                              redirect=redirect)
+class DetailView(tabs.TabView):
+    tab_group_class = project_tabs.ReachabilityTestDetailTabs
+    template_name = 'project/connections/reachability_tests/detail.html'
 
-        response = http.HttpResponse(content_type='application/binary')
-        response['Content-Disposition'] = \
-                'attachment; filename=%s.pem' % slugify(reachability_test.name)
-        response.write(reachability_test.private_key)
-        response['Content-Length'] = str(len(response.content))
-        return response
+    def get_context_data(self, **kwargs):
+        context = super(DetailView, self).get_context_data(**kwargs)
+        context["reachability_test"] = self.get_data()
+        return context
+
+    @memoized.memoized_method
+    def get_data(self):
+        try:
+	    api = ReachabilityTestAPI()
+            return  api.getReachabilityTest(self.kwargs['reachability_test_id'].encode('ascii','ignore'))
+        except Exception:
+            url = reverse('horizon:project:connections:index')
+            exceptions.handle(self.request,
+                              _('Unable to retrieve reachability test details.'),
+                              redirect=url)
+
+    def get_tabs(self, request, *args, **kwargs):
+        reachability_test = self.get_data()
+        return self.tab_group_class(request, reachability_test=reachability_test, **kwargs)

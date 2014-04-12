@@ -74,9 +74,18 @@ class UpdateTest(tables.LinkAction):
     #		return True
     #	return reachability_test.name != 'default'
 
+def get_link_url(test):
+    if test.last_run == '':
+    	return ""
+    else: 
+	return "horizon:project:connections:reachability_tests:detail" 
+
+def get_last_run(test):
+    return getattr(test, "last_run", None) or test.last_run
+
 class ReachabilityTestsTable(tables.DataTable):
     name = tables.Column("name", verbose_name=_("Name"))
-    last_run = tables.Column("last_run", verbose_name=_("Last Run"))
+    last_run = tables.Column(get_last_run, link=("horizon:project:connections:reachability_tests:detail"), verbose_name=_("Last Run"))
     status = tables.Column("status", verbose_name=_("Status"))    
     #import pdb
     #pdb.set_trace()
