@@ -80,6 +80,51 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
         #pdb.set_trace()
         return test
 
+class TroubleshootForm(forms.SelfHandlingForm):
+    name = forms.CharField(max_length="255",
+                           label=_("Name"),
+                           required=True)
+    connection_source = forms.ChoiceField(
+        label=_('Connection Source'),
+        required=True,
+        choices=[('default',_(' ')),
+                ('vm1', _('VM 1')),
+                ('vm2', _('VM 2'))],
+        widget=forms.Select(attrs={
+                'class': 'switchable',
+                'data-slug': 'source'}))
+
+    connection_destination = forms.ChoiceField(
+        label=_('Connection Destination'),
+        required=True,
+        choices=[('default',_(' ')),
+                ('vm1', _('VM 1')),
+                ('vm2', _('VM 2'))],
+        widget=forms.Select(attrs={
+                'class': 'switchable',
+                'data-slug': 'source'}))
+
+    expected_connection = forms.ChoiceField(
+        label=_('Expected Connection Results'),
+        required=True,
+        choices=[('default',_('--- Select Result ---')),
+                ('connect', _('Must Connect')),
+                ('not_connect', _('Must Not Connect'))],
+        widget=forms.Select(attrs={
+                'class': 'switchable',
+                'data-slug': 'source'}))
+
+
+    def handle(self, request, data):
+        test = ReachabilityTestStub(data['name'].encode('ascii','ignore'),'','')
+        messages.success(request, _('Successfully created reachability test: %s') % data['name'])
+        api = ReachabilityTestAPI()
+        api.addReachabilityTest(test)
+        #import pdb
+        #pdb.set_trace()
+        return test
+
+
 class UpdateForm(forms.SelfHandlingForm):
     reachability_test_id = forms.CharField(widget=forms.HiddenInput())
     name = forms.CharField(max_length="255",

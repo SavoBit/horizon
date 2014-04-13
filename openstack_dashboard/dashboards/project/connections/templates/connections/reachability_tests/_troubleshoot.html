@@ -2,10 +2,10 @@
 {% load i18n %}
 {% load url from future %}
 
-{% block form_id %}create_keypair_form{% endblock %}
-{% block form_action %}{% url 'horizon:project:connections:reachability_tests:create' %}{% endblock %}
+{% block form_id %}run_troubleshoot_form{% endblock %}
+{% block form_action %}{% url 'horizon:project:connections:reachability_tests:troubleshoot' %}{% endblock %}
 
-{% block modal-header %}{% trans "Create Reachability Test" %}{% endblock %}
+{% block modal-header %}{% trans "Run Troubleshoot Test" %}{% endblock %}
 
 {% block modal-body %}
 <div class="left">
@@ -15,12 +15,12 @@
 </div>
 <div class="right">
     <h3>{% trans "Description" %}:</h3>
-    <p>{% trans "Reachability test are automated test to check for connectivity between two points in a network." %}</p>
+    <p>{% trans "Troubleshoot test are used to find details about the connections problems between two points on a network where you know there is a problem." %}</p>
     <p>{% trans "The test can be between VMs, end point groups, tenants or connections to outside IP address." %}</p>
 </div>
 {% endblock %}
 
 {% block modal-footer %}
-  <input class="btn btn-primary pull-right" type="submit" value="{% trans "Create Test" %}" />
+  <input class="btn btn-primary pull-right" type="submit" value="{% trans "Run Test" %}" />
   <a href="{% url 'horizon:project:connections:index' %}" class="btn secondary cancel close">{% trans "Cancel" %}</a>
 {% endblock %}

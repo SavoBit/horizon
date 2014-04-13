@@ -41,6 +41,12 @@ class CreateReachabilityTest(tables.LinkAction):
     url = "horizon:project:connections:reachability_tests:create"
     classes = ("ajax-modal", "btn-create")
 
+class RunTroubleshootTest(tables.LinkAction):
+    name = "troubleshoot"
+    verbose_name = _("Run Test Now")
+    url = "horizon:project:connections:reachability_tests:troubleshoot"
+    classes = ("ajax-modal", "btn-edit")
+
 class ReachabilityTestFilterAction(tables.FilterAction):
     
     def filter(self, table, reachability_tests, filter_string):
@@ -99,5 +105,5 @@ class ReachabilityTestsTable(tables.DataTable):
     class Meta:
         name = "reachability_tests"
         verbose_name = _("Reachability Tests")
-        table_actions = (CreateReachabilityTest, DeleteReachabilityTests, ReachabilityTestFilterAction)
+        table_actions = (CreateReachabilityTest, RunTroubleshootTest,  DeleteReachabilityTests, ReachabilityTestFilterAction)
         row_actions = (RunTest,UpdateTest,DeleteReachabilityTests)

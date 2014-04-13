@@ -47,6 +47,10 @@ class CreateView(forms.ModalFormView):
     template_name = 'project/connections/reachability_tests/create.html'
     success_url = reverse_lazy("horizon:project:connections:index")
 
+class TroubleshootView(forms.ModalFormView):
+    form_class = project_forms.TroubleshootForm
+    template_name = 'project/connections/reachability_tests/troubleshoot.html'
+    success_url = reverse_lazy("horizon:project:connections:index")
 
 class UpdateView(forms.ModalFormView):
     form_class = project_forms.UpdateForm
