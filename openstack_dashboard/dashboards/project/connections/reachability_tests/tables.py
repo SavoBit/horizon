@@ -16,8 +16,10 @@
 
 from django.utils.translation import string_concat  # noqa
 from django.utils.translation import ugettext_lazy as _
+from django.template.defaultfilters import title
 
 from horizon import tables
+from horizon.utils import filters
 
 from openstack_dashboard import api
 from openstack_dashboard.usage import quotas
@@ -40,6 +42,13 @@ class CreateReachabilityTest(tables.LinkAction):
     verbose_name = _("Create Test")
     url = "horizon:project:connections:reachability_tests:create"
     classes = ("ajax-modal", "btn-create")
+
+   # def allowed(self, request, reachability_test=None):
+   #	import pdb
+   #     pdb.set_trace()
+   #     if reachability_test:
+   #         return reachability_test.status == ''
+   #     return True
 
 class RunTroubleshootTest(tables.LinkAction):
     name = "troubleshoot"
@@ -80,6 +89,16 @@ class UpdateTest(tables.LinkAction):
     #		return True
     #	return reachability_test.name != 'default'
 
+#class UpdateRow(tables.Row):
+#    ajax = True
+
+#    def get_data(self, request, reachability_test_id):
+#	api = ReachabilityTestAPI()
+#        reachability_test = api.getReachabilityTest(reachability_test_id.encode('ascii','ignore'))
+	#import pdb
+	#pdb.set_trace()
+#        return reachability_test
+
 def get_link_url(test):
     if test.last_run == '':
     	return ""
@@ -89,10 +108,31 @@ def get_link_url(test):
 def get_last_run(test):
     return getattr(test, "last_run", None) or test.last_run
 
+STATUS_DISPLAY_CHOICES = (
+    ("pass", _("PASS")),
+    ("pending", _("PENDING")),
+    ("fail", _("FAIL")),
+    ("-", _("-")),
+    ('', _("-")),
+)
+
+
 class ReachabilityTestsTable(tables.DataTable):
+    STATUS_CHOICES = (
+	("pass", True),
+	("-", None),
+	('', None),
+	("pending", None),
+	("fail", False),
+    )
     name = tables.Column("name", verbose_name=_("Name"))
     last_run = tables.Column(get_last_run, link=("horizon:project:connections:reachability_tests:detail"), verbose_name=_("Last Run"))
-    status = tables.Column("status", verbose_name=_("Status"))    
+    status = tables.Column("status", 
+			   filters=(title, filters.replace_underscores), 
+			   verbose_name=_("Status"),
+	   		   #status=True,
+			   status_choices=STATUS_CHOICES,
+			   display_choices=STATUS_DISPLAY_CHOICES)    
     #import pdb
     #pdb.set_trace()
    # def __init__
@@ -105,5 +145,7 @@ class ReachabilityTestsTable(tables.DataTable):
     class Meta:
         name = "reachability_tests"
         verbose_name = _("Reachability Tests")
+	#status_columns = ["status"]
+	#row_class = UpdateRow
         table_actions = (CreateReachabilityTest, RunTroubleshootTest,  DeleteReachabilityTests, ReachabilityTestFilterAction)
         row_actions = (RunTest,UpdateTest,DeleteReachabilityTests)

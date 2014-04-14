@@ -20,13 +20,19 @@
 
 import re
 
+from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.core import validators
+from django.forms import ValidationError  # noqa
 from django.utils.translation import ugettext_lazy as _
 
 from horizon import exceptions
 from horizon import forms
 from horizon import messages
+from horizon.utils import fields
+from horizon.utils import validators as utils_validators
 
+from openstack_dashboard.utils import filters
 from openstack_dashboard import api
 from openstack_dashboard.dashboards.project.connections.mockobjects import ReachabilityTestStub
 from openstack_dashboard.dashboards.project.connections.mockapi import ReachabilityTestAPI
@@ -35,42 +41,123 @@ from openstack_dashboard.dashboards.project.connections.mockapi import Reachabil
 
 NEW_LINES = re.compile(r"\r|\n")
 
-
 class CreateReachabilityTest(forms.SelfHandlingForm):
     name = forms.CharField(max_length="255",
                            label=_("Name"),
                            required=True)
-    connection_source = forms.ChoiceField(
-	label=_('Connection Source'),
-	required=True,
-	choices=[('default',_(' ')),
-		('vm1', _('VM 1')),
-		('vm2', _('VM 2'))],
-	widget=forms.Select(attrs={
-		'class': 'switchable',
-		'data-slug': 'source'}))
 
-    connection_destination = forms.ChoiceField(
-        label=_('Connection Destination'),
-        required=True,
-        choices=[('default',_(' ')),
-                ('vm1', _('VM 1')),
-		('vm2', _('VM 2'))],
+    connection_source_type = forms.ChoiceField(
+        label=_('Connection Source Type'),
+	required=True,
         widget=forms.Select(attrs={
                 'class': 'switchable',
-                'data-slug': 'source'}))
-    
+                'data-slug': 'connection_source_type'
+	})
+    )
+
+    instance_source = forms.ChoiceField(
+	label=_('Use instance as source'),
+	required=True,
+	widget=forms.Select(attrs={
+		'class': 'switched',
+		'data-switch-on': 'connection_source_type',
+		'data-connection_source_type-instance': _('Use instance as source')}))
+
+    ip_source = forms.CharField(max_length="255",
+			  label=_("Use IP address as source"),
+                          required=True,
+                          initial="0.0.0.0/0",
+                          widget=forms.TextInput(
+                              attrs={'class': 'switched',
+                                     'data-switch-on': 'connection_source_type',
+                                     'data-connection_source_type-ip': _('Use IP address as source')}))
+
+    mac_source = forms.CharField(max_length="255",
+                           label=_("Use MAC address as source"),
+			   initial="MAC Address",
+                           required=True,
+			   widget=forms.TextInput(attrs={
+            			'class': 'switched',
+            			'data-switch-on': 'connection_source_type',
+            			'data-connection_source_type-mac': _('Use MAC address as source')}))
+
+    connection_destination_type = forms.ChoiceField(
+        label=_('Connection Destination Type'),
+        required=True,
+        widget=forms.Select(attrs={
+                'class': 'switchable',
+                'data-slug': 'connection_destination_type'}))
+
+    instance_destination = forms.ChoiceField(
+        label=_('Use instance as destination'),
+        required=True,
+        widget=forms.Select(attrs={
+                'class': 'switched',
+		'data-switch-on': 'connection_destination_type',
+                'data-connection_destination_type-instance': _('Use instance as destination')}))
+
+    ip_destination = forms.CharField(max_length="255",
+			  label=_("Use IP address as destination"),
+                          required=True,
+                          initial="0.0.0.0/0",
+                          widget=forms.TextInput(
+                              attrs={'class': 'switched',
+                                     'data-switch-on': 'connection_destination_type',
+                                     'data-connection_destination_type-ip': _('Use IP address as destination')}))
+
+    mac_destination = forms.CharField(max_length="255",
+                           label=_("Use MAC address as destination"),
+			   initial="MAC Address",
+                           required=True,
+                           widget=forms.TextInput(attrs={
+                                'class': 'switched',
+                                'data-switch-on': 'connection_destination_type',
+                                'data-connection_destination_type-mac': _('Use MAC address as destination')}))
+
     expected_connection = forms.ChoiceField(
         label=_('Expected Connection Results'),
         required=True,
         choices=[('default',_('--- Select Result ---')),
-                ('connect', _('Must Connect')),
-                ('not_connect', _('Must Not Connect'))],
+                ('forward', _('Forward')),
+                ('drop', _('Drop'))],
         widget=forms.Select(attrs={
                 'class': 'switchable',
-                'data-slug': 'source'}))
+                'data-slug': 'expected_connection'}))
 
-    
+    def __init__(self, *args, **kwargs):
+        super(CreateReachabilityTest, self).__init__(*args, **kwargs)
+   	connection_type=[
+		('default', _('--- Select Source Type ---')),
+                ('instance', _('Instance')),
+                ('ip', _('IP Address')),
+                ('mac', _('MAC Address'))
+        ]
+	instance_list = [
+		('default',_('--- Select Instance ---')),
+                ('vm1', _('VM 1')),
+                ('vm2', _('VM 2'))
+	]
+	self.fields['connection_source_type'].choices = connection_type
+	connection_type[0] = ('default', _('--- Select Destination Type ---'))
+	self.fields['connection_destination_type'].choices = connection_type
+	self.fields['instance_source'].choices = instance_list
+	self.fields['instance_destination'].choices = instance_list
+	 
+    def clean(self):
+        cleaned_data = super(CreateReachabilityTest, self).clean()
+
+        def update_cleaned_data(key, value):
+            cleaned_data[key] = value
+            self.errors.pop(key, None)
+	
+	#name = cleaned_data.get("name")
+	#update_cleaned_data('name',name)
+
+	#import pdb
+	#pdb.set_trace()
+
+	return cleaned_data
+
     def handle(self, request, data):
 	test = ReachabilityTestStub(data['name'].encode('ascii','ignore'),'','')
 	messages.success(request, _('Successfully created reachability test: %s') % data['name'])
