@@ -8,27 +8,20 @@
 
 {% block main %}
 <link rel="stylesheet" href="css/status-light.css">
+<link rel="stylesheet" href="css/opentip.css">
 
 <div class="row-fluid">
   <div class="span12">
   {{ tab_group.render }}
-  	<div id="info" style="display: none;">
-		<ul>
-          	<li>Item 1</li>
-          	<li>Item 2</li>
-          	<li>Item 3</li>
-          	<li>Item 4</li>
-          	<li>Item 5</li>
-          	<li>Item 6</li>
-          	<li>Item 7</li>
-     		</ul>
-  	</div>
+  	<div id="info" style="display: none;"></div>
   </div>
 </div>
-<div class="led-red"></div>
+<div id="test"></div>
 <div class="led-yellow"></div>
 <div class="led-green"></div>
 
+
+<script src="js/opentip-jquery-excanvas.js"></script>
 
 <script type='text/javascript'>
 $(function(){
@@ -57,22 +50,83 @@ $(function(){
     		})
 		count = 0;
 	})
-     $( ".test-pass" ).wrapInner( "<div class='test-pass-msg'></div>");
-     $( ".test-pending" ).wrapInner( "<div class='test-pending-msg'></div>");
-     $( ".test-fail" ).wrapInner( "<div class='test-fail-msg'></div>");
-     hoverOverMenu('.test-pass-msg');
-     hoverOverMenu('.test-pending-msg');
-     hoverOverMenu('.test-fail-msg');
+	//debugger
+	
+    	$( ".test-pass" ).wrapInner( "<div class='test-pass-msg'></div>");
+     	$( ".test-pending" ).wrapInner( "<div class='test-pending-msg'></div>");
+     	$( ".test-fail" ).wrapInner( "<div class='test-fail-msg'></div>");
+     	hoverOverMenu('.test-pass-msg');
+     	hoverOverMenu('.test-pending-msg');
+     	hoverOverMenu('.test-fail-msg');
+	initializeToolTips('.test-pass-msg','pass');
+        initializeToolTips('.test-pending-msg','pending');
+	initializeToolTips('.test-fail-msg','fail');
 });
 
-function hoverOverMenu(hovermenu){
+function initializeToolTips(tipMenuItems, initialContent){
+	Opentip.styles.runListStyle = {
+	  // Make it look like the alert style. If you omit this, it will default to "standard"
+                extends: "dark",
+                // Tells the tooltip to be fixed and be attached to the trigger, which is the default target
+                target: true,
+                stem: true,
+                delay: 1,
+                hideDelay: 0.4
+        };
+
+	if($(tipMenuItems).length > 0){
+                $(tipMenuItems).each(function(){
+                        $(this).opentip(initialContent, { style: 'runListStyle' });
+                })
+        }
+}
+
+function hoverOverMenu(hoverMenu){
 	//debugger
-	$(hovermenu).hover(function(){
-          	$('#info').show();
+	$(hoverMenu).hover(function(){
+		//debugger
+		populateMenu($($(this.parentElement.parentElement).children()[4]).html());		  
+		if($(hoverMenu).length > 0){
+			$(hoverMenu).each(function(){
+				$(this).data("opentips")[0].setContent($("#info").text());
+		})
+		}
+		//debugger
+          	//$('#info').show();
      	},function(){
-          	$('#info').hide();
+		$('#info').empty();
+          	//$('#info').hide();
      	});
 
+}
+
+function populateMenu(rawDataString){
+	//debugger
+	var cleanData = rawDataString.replace(/[^\w\s,:-]/gi, '').split(",");
+	
+	// Make the list itself which is a <ul>
+        var listElement = document.createElement("ul");
+
+	// add it to the page
+        $('#info').append(listElement);
+
+        var numberOfListItems = cleanData.length;
+
+        for( var i =  0 ; i < numberOfListItems ; ++i){
+               
+        	// create a <li> for each one.
+        	var listItem = document.createElement("li");
+		//debugger
+        	// add the item text
+        	listItem.innerHTML = cleanData[i];
+
+        	// add listItem to the listElement
+        	listElement.appendChild(listItem);
+
+        }
+	//$(".test-pass-msg").data("opentips")[0].setContent($("#info").text());
+	//debugger
+	
 }
 
 function addReachabilityTestRow(){

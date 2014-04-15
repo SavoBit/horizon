@@ -4,11 +4,25 @@ from openstack_dashboard.dashboards.project.connections.mockobjects import Reach
 class ReachabilityTestAPI:
 	"""Simple reachability test API"""
 	d = []
-	dbname = "mockreachability"
+	dbname = "reachabilitydb"
+	c = []
+	runlistdb = "runlistdb"
+	run_list = []	
+
+	def __init__(self):
+		self.d = []
+		self.dbname = "reachabilitydb"
+		self.runlistdb = "runlistdb"
+		self.c = []
+		self.run_list = []
+
 	def addReachabilityTest(self,test):
 		d = shelve.open(self.dbname)
 		d[test.name] = test
 		d.close()
+		c = shelve.open(self.runlistdb)
+		c[test.name] = []
+		c.close()
 
 	def listReachabilityTest(self):
 		d = shelve.open(self.dbname)
@@ -21,14 +35,14 @@ class ReachabilityTestAPI:
 		return returnlist
 	
 	def listTestRuns(self,test_name):
-		d = shelve.open(self.dbname)
+		c = shelve.open(self.runlistdb)
+		self.run_list = c[test_name]
+		c.close()
 		run_list = []
 		count = 0
-		test = d[test_name]
-		for item in test.run_list:
-	        	run_list.append(test.run_list[count].last_run)
+		for item in self.run_list:
+	        	run_list.append(self.run_list[count].last_run)
         		count += 1
-		d.close()
         	#import pdb
         	#pdb.set_trace()
     		if(run_list.__len__() < 1):
@@ -41,21 +55,33 @@ class ReachabilityTestAPI:
 		d = shelve.open(self.dbname)
 		del d[test]
 		d.close()
+		c = shelve.open(self.runlistdb)
+		del c[test]
+		c.close()
 
 	def runReachabilityTest(self,test):
+		c = shelve.open(self.runlistdb)
+		self.run_list = c[test]
+		c.close()
 		d = shelve.open(self.dbname)
 		data = d[test]
 		data.runTest()
 		#import pdb
 		#pdb.set_trace()
 		if(data.status == "pass" or data.status == "fail"):
-			data.run_list.append(data)
-			if(data.run_list.__len__() > 5):
-				data.run_list.pop(0)
+			#import pdb
+			#pdb.set_trace()
+			self.run_list.append(data)
+			if(self.run_list.__len__() > 5):
+				self.run_list.pop(0)
+
 		d[test] = data
 		#import pdb
 		#pdb.set_trace()
 		d.close()
+		c = shelve.open(self.runlistdb)
+		c[test] = self.run_list
+		c.close()
 
 	def getReachabilityTest(self,test):
 		d = shelve.open(self.dbname)
@@ -68,3 +94,7 @@ class ReachabilityTestAPI:
 		del d[test_id]
 		d[data.name] = data
 		d.close()
+		c = shelve.open(self.runlistdb)
+		del d[test_id]
+		c[data.name] = []
+		c.close()
