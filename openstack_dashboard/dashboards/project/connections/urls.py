@@ -21,6 +21,8 @@
 from django.conf.urls import include  # noqa
 from django.conf.urls import patterns  # noqa
 from django.conf.urls import url  # noqa
+import os
+from .views import IndexView
 
 from openstack_dashboard.dashboards.project.connections.\
     top_talkers import urls as top_talkers_urls
@@ -33,10 +35,13 @@ from openstack_dashboard.dashboards.project.connections.\
 from openstack_dashboard.dashboards.project.connections import views
 
 
+CSS_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__).decode('utf-7')), 'templates', 'connections', 'css')
+
 urlpatterns = patterns('',
     url(r'^$', views.IndexView.as_view(), name='index'),
     url(r'top_talkers/', include(top_talkers_urls, namespace='top_talkers')),
     url(r'reachability_tests/', include(reachability_tests_urls, namespace='reachability_tests')),
     url(r'troubleshoot/', include(troubleshoot_urls, namespace='troubleshoot')),
     url(r'network_template/', include(network_template_urls, namespace='network_template')),
+    url(r'^css/(?P<path>.*)$', 'django.views.static.serve', {'document_root': CSS_PATH, 'show_indexes': True}),
 )

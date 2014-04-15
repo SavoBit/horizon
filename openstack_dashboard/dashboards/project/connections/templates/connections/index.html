@@ -7,14 +7,74 @@
 {% endblock page_header %}
 
 {% block main %}
+<link rel="stylesheet" href="css/status-light.css">
+
 <div class="row-fluid">
   <div class="span12">
   {{ tab_group.render }}
+  	<div id="info" style="display: none;">
+		<ul>
+          	<li>Item 1</li>
+          	<li>Item 2</li>
+          	<li>Item 3</li>
+          	<li>Item 4</li>
+          	<li>Item 5</li>
+          	<li>Item 6</li>
+          	<li>Item 7</li>
+     		</ul>
+  	</div>
   </div>
 </div>
+<div class="led-red"></div>
+<div class="led-yellow"></div>
+<div class="led-green"></div>
 
 
 <script type='text/javascript'>
+$(function(){
+     	//debugger
+	var count = 0;
+     	$('#reachability_tests tr').each(function(){
+    		$(this).find('td').each(function(){
+			//debugger
+			if(count == 3 && (this.textContent === "PASS" || this.textContent === "FAIL" || this.textContent === "PENDING")){
+				$(this).addClass("status-light");
+				if(this.textContent === "PASS"){
+					$(this).addClass("test-pass");
+					$(this).empty();
+				}
+				else if(this.textContent === "PENDING"){
+					$(this).addClass("test-pending");
+					$(this).empty();
+				}
+				else if(this.textContent === "FAIL"){
+                                        $(this).addClass("test-fail");
+					$(this).empty();
+                                }
+			}
+			count++;
+        		//do your stuff, you can use $(this) to get current cell
+    		})
+		count = 0;
+	})
+     $( ".test-pass" ).wrapInner( "<div class='test-pass-msg'></div>");
+     $( ".test-pending" ).wrapInner( "<div class='test-pending-msg'></div>");
+     $( ".test-fail" ).wrapInner( "<div class='test-fail-msg'></div>");
+     hoverOverMenu('.test-pass-msg');
+     hoverOverMenu('.test-pending-msg');
+     hoverOverMenu('.test-fail-msg');
+});
+
+function hoverOverMenu(hovermenu){
+	//debugger
+	$(hovermenu).hover(function(){
+          	$('#info').show();
+     	},function(){
+          	$('#info').hide();
+     	});
+
+}
+
 function addReachabilityTestRow(){
 	var testname = $("#id_name").val();
 	var currentdate = new Date();

@@ -108,6 +108,14 @@ def get_link_url(test):
 def get_last_run(test):
     return getattr(test, "last_run", None) or test.last_run
 
+def get_run_list(test):
+    #import pdb
+    #pdb.set_trace()
+    api = ReachabilityTestAPI()
+    #import pdb
+    #pdb.set_trace()
+    return api.listTestRuns(test.name)
+
 STATUS_DISPLAY_CHOICES = (
     ("pass", _("PASS")),
     ("pending", _("PENDING")),
@@ -132,7 +140,8 @@ class ReachabilityTestsTable(tables.DataTable):
 			   verbose_name=_("Status"),
 	   		   #status=True,
 			   status_choices=STATUS_CHOICES,
-			   display_choices=STATUS_DISPLAY_CHOICES)    
+			   display_choices=STATUS_DISPLAY_CHOICES)
+    run_list = tables.Column(get_run_list, hidden=True, verbose_name=_("Run List"))    
     #import pdb
     #pdb.set_trace()
    # def __init__
@@ -140,6 +149,8 @@ class ReachabilityTestsTable(tables.DataTable):
 	#items.push(new ReachabilityTestStub("Test1");
 
     def get_object_id(self, reachability_test):
+	#import pdb
+	#pdb.set_trace()
         return reachability_test.name
 
     class Meta:

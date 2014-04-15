@@ -8,16 +8,18 @@ class ReachabilityTestStub():
     last_run = ''
     status = ''
     count = ''
+    run_list = []
 
     def __init__(self,name,last_run,status):
         self.name = name
         self.last_run = "-"
         self.status = "-"
 	self.count = 0
+	self.run_list = []
 
     def runTest(self):
 	if self.count == 0:
-		self.last_run = "-"
+		#self.last_run = "-"
 		self.status = "pending"
 		self.count += 1
 	else:
