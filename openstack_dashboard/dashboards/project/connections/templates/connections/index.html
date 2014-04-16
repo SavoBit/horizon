@@ -52,16 +52,29 @@ $(function(){
 	})
 	//debugger
 	
-    	$( ".test-pass" ).wrapInner( "<div class='test-pass-msg'></div>");
-     	$( ".test-pending" ).wrapInner( "<div class='test-pending-msg'></div>");
-     	$( ".test-fail" ).wrapInner( "<div class='test-fail-msg'></div>");
-     	hoverOverMenu('.test-pass-msg');
+    	$( ".test-pass" ).wrapInner( "<div class='status-light test-pass-msg'></div>");
+     	$( ".test-pending" ).wrapInner( "<div class='status-light test-pending-msg'></div>");
+     	$( ".test-fail" ).wrapInner( "<div class='status-light test-fail-msg'></div>");
+     	initializeToolTips('.test-pass-msg','pass');
+        initializeToolTips('.test-pending-msg','pending');
+        initializeToolTips('.test-fail-msg','fail');
+	hoverOverMenu('.test-pass-msg');
      	hoverOverMenu('.test-pending-msg');
      	hoverOverMenu('.test-fail-msg');
-	initializeToolTips('.test-pass-msg','pass');
-        initializeToolTips('.test-pending-msg','pending');
-	initializeToolTips('.test-fail-msg','fail');
+	findCurrentElement();
 });
+
+function findCurrentElement(){
+	$(document).mousemove(function(event) {
+        	var x = event.clientX, y = event.clientY,
+        	elementMouseIsOver = document.elementFromPoint(x, y);
+        	if($(elementMouseIsOver).parents("#reachability_tests").length == 0 && $(elementMouseIsOver).hasClass('opentip') == false && $(elementMouseIsOver).parents(".opentip").length == 0){
+			//debugger
+        		for(var i = 0; i < Opentip.tips.length; i ++) { Opentip.tips[i].hide(); }
+        	}
+        });
+
+}
 
 function initializeToolTips(tipMenuItems, initialContent){
 	Opentip.styles.runListStyle = {
@@ -70,8 +83,12 @@ function initializeToolTips(tipMenuItems, initialContent){
                 // Tells the tooltip to be fixed and be attached to the trigger, which is the default target
                 target: true,
                 stem: true,
-                delay: 1,
-                hideDelay: 0.4
+                //delay: 1,
+		showOn: null,
+		//hideOn: "click",
+		hideTrigger: "closeButton",
+		group: "runLists"
+                //hideDelay: 0.4
         };
 
 	if($(tipMenuItems).length > 0){
@@ -83,8 +100,10 @@ function initializeToolTips(tipMenuItems, initialContent){
 
 function hoverOverMenu(hoverMenu){
 	//debugger
+	var current;
 	$(hoverMenu).hover(function(){
 		//debugger
+		var current;
 		populateMenu($($(this.parentElement.parentElement).children()[4]).html());		  
 		if($(hoverMenu).length > 0){
 			$(hoverMenu).each(function(){
@@ -92,8 +111,33 @@ function hoverOverMenu(hoverMenu){
 		})
 		}
 		//debugger
-          	//$('#info').show();
+		current = this;
+		$(this).data("opentips")[0].show();
+          	//$(".opentip-container").mouseenter(function() {
+                //	debugger
+			//$(this).show();
+        	//}).mouseleave(function() {
+                //	debugger
+			//$(this).hide();
+        	//});
+		//$('#info').show();
+		
      	},function(){
+		//debugger
+		//$(this).data("opentips")[0].hide();
+               // var x = event.clientX, y = event.clientY,
+    		//elementMouseIsOver = document.elementFromPoint(x, y);
+		//if($(elementMouseIsOver).hasClass("status-light") == false){
+		//	debugger
+		//	$(this).data("opentips")[0].hide();
+		//}
+		//debugger
+		//	debugger
+			//$(this).show();
+        	//}).mouseleave(function() {
+                //	debugger
+			//$(this).hide();
+        	//});
 		$('#info').empty();
           	//$('#info').hide();
      	});
