@@ -99,12 +99,6 @@ class UpdateTest(tables.LinkAction):
 	#pdb.set_trace()
 #        return reachability_test
 
-def get_link_url(test):
-    if test.last_run == '':
-    	return ""
-    else: 
-	return "horizon:project:connections:reachability_tests:detail" 
-
 def get_last_run(test):
     return getattr(test, "last_run", None) or test.last_run
 

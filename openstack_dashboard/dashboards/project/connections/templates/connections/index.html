@@ -61,10 +61,10 @@ $(function(){
 	hoverOverMenu('.test-pass-msg');
      	hoverOverMenu('.test-pending-msg');
      	hoverOverMenu('.test-fail-msg');
-	findCurrentElement();
+	manageStatusLists();
 });
 
-function findCurrentElement(){
+function manageStatusLists(){
 	$(document).mousemove(function(event) {
         	var x = event.clientX, y = event.clientY,
         	elementMouseIsOver = document.elementFromPoint(x, y);
@@ -83,12 +83,9 @@ function initializeToolTips(tipMenuItems, initialContent){
                 // Tells the tooltip to be fixed and be attached to the trigger, which is the default target
                 target: true,
                 stem: true,
-                //delay: 1,
 		showOn: null,
-		//hideOn: "click",
 		hideTrigger: "closeButton",
 		group: "runLists"
-                //hideDelay: 0.4
         };
 
 	if($(tipMenuItems).length > 0){
@@ -100,54 +97,33 @@ function initializeToolTips(tipMenuItems, initialContent){
 
 function hoverOverMenu(hoverMenu){
 	//debugger
-	var current;
 	$(hoverMenu).hover(function(){
 		//debugger
-		var current;
-		populateMenu($($(this.parentElement.parentElement).children()[4]).html());		  
+		var current = this;
+		populateMenu(current);
+		  
 		if($(hoverMenu).length > 0){
 			$(hoverMenu).each(function(){
-				$(this).data("opentips")[0].setContent($("#info").text());
+				//debugger
+				$(this).data("opentips")[0].setContent($("#info").html());
+				//debugger
 		})
 		}
 		//debugger
-		current = this;
 		$(this).data("opentips")[0].show();
-          	//$(".opentip-container").mouseenter(function() {
-                //	debugger
-			//$(this).show();
-        	//}).mouseleave(function() {
-                //	debugger
-			//$(this).hide();
-        	//});
-		//$('#info').show();
-		
      	},function(){
-		//debugger
-		//$(this).data("opentips")[0].hide();
-               // var x = event.clientX, y = event.clientY,
-    		//elementMouseIsOver = document.elementFromPoint(x, y);
-		//if($(elementMouseIsOver).hasClass("status-light") == false){
-		//	debugger
-		//	$(this).data("opentips")[0].hide();
-		//}
-		//debugger
-		//	debugger
-			//$(this).show();
-        	//}).mouseleave(function() {
-                //	debugger
-			//$(this).hide();
-        	//});
 		$('#info').empty();
-          	//$('#info').hide();
      	});
 
 }
 
-function populateMenu(rawDataString){
+function populateMenu(dataObject){
 	//debugger
-	var cleanData = rawDataString.replace(/[^\w\s,:-]/gi, '').split(",");
-	
+	var rowElement = $(dataObject.parentElement.parentElement);
+	var rawData = $(rowElement.children()[4]).html();
+	var cleanData = rawData.replace(/[^\w\s,:-]/gi, '').split(",");
+	var testName = $($(rowElement).children()[1]).text();
+	var statusMsg = '';
 	// Make the list itself which is a <ul>
         var listElement = document.createElement("ul");
 
@@ -157,22 +133,32 @@ function populateMenu(rawDataString){
         var numberOfListItems = cleanData.length;
 
         for( var i =  0 ; i < numberOfListItems ; ++i){
-               
-        	// create a <li> for each one.
-        	var listItem = document.createElement("li");
 		//debugger
-        	// add the item text
-        	listItem.innerHTML = cleanData[i];
-
-        	// add listItem to the listElement
-        	listElement.appendChild(listItem);
-
+		statusMsg = listItemStatus(dataObject);
+		$(listElement).append("<a href='{% url 'horizon:project:connections:index' %}reachability_tests/"+testName+"/'>"+ statusMsg + cleanData[i]+"<br></a>");
         }
-	//$(".test-pass-msg").data("opentips")[0].setContent($("#info").text());
 	//debugger
 	
 }
 
+function listItemStatus(statusListItem){
+	var statusMsg = '';
+	var randNum = 0;
+	if($(statusListItem).hasClass('test-pass-msg')){
+	        statusMsg = " Succeeded at ";
+        }else if($(statusListItem).hasClass('test-fail-msg')){
+		statusMsg = " Failed at ";
+	}else if($(statusListItem).hasClass('test-pending-msg')){
+		randNum = Math.floor((Math.random()*1)+0); 
+		if(randNum == 0){
+			statusMsg = " Succeeded at ";
+		}else{
+			statusMsg = " Failed at ";
+		}
+	}
+	return statusMsg;
+}
+/******
 function addReachabilityTestRow(){
 	var testname = $("#id_name").val();
 	var currentdate = new Date();
@@ -202,6 +188,7 @@ function deleteReachabilityTestRow(){
 	var rowelement = '<tr class data-display='+testname+' data-object-id="" id="keypairs__row__'+testname+'"><td class="multi_select_column"><input class="table-row-multi-select" name="object_ids" type="checkbox" value="'+testname+'"></td><td class="sortable normal_column">'+testname+'</td><td class="sortable normal_column">'+datetime+'</td><td class="sortable normal_column"><font color="green">Pass</font></td><td class="actions_column"><div class="btn-group"><a onclick="deleteReachabilityTestRow()" class="btn btn-small btn-edit" id="keypairs__row_'+testname+'__action_run">Run Test</a><a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#"> More <span class="caret"></span></a><ul class="dropdown-menu row_actions clearfix"><li class="clearfix"><a class="btn btn-small btn-edit" id="keypairs__row_'+testname+'__action_update">Edit Test</a></li></ul></div></td></tr>';
 	$('#reachability_tests').append(rowelement);
 }
+*******/
 </script>
 
 {% endblock %}
