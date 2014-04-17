@@ -7,7 +7,7 @@
     margin: 1px auto;
     position:relative;
     top: 5px;
-    right:55px;
+    left:5px;
     width: 40px;
     height: 40px;
 }
@@ -15,7 +15,7 @@
     margin: 1px auto;
     position:relative;
     bottom:55px;
-    left:15px;
+    right:60px;
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -29,7 +29,7 @@
     margin: 1px auto;
     position:relative;
     bottom:55px;
-    left:25px;
+    right:55px;
     width: 40px;
     height: 40px;
     color: #C9B501;
@@ -43,7 +43,7 @@
     margin: 1px auto;
     position:relative;
     bottom:55px;
-    left:15px;
+    right:60px;
     width: 40px;
     height: 40px;
     color: #690;

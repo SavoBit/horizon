@@ -75,8 +75,6 @@ class RunTest(tables.BatchAction):
     def action(self, request, obj_id):
 	api = ReachabilityTestAPI()
 	api.runReachabilityTest(obj_id.encode('ascii','ignore'))
-	#import pdb
-        #pdb.set_trace()
 
 class UpdateTest(tables.LinkAction):
     name = "update"

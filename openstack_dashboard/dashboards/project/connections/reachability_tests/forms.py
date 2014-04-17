@@ -204,9 +204,9 @@ class TroubleshootForm(forms.SelfHandlingForm):
 
     def handle(self, request, data):
         test = ReachabilityTestStub(data['name'].encode('ascii','ignore'),'','')
-        messages.success(request, _('Successfully created reachability test: %s') % data['name'])
+        messages.success(request, _('Successfully ran quick test: %s') % data['name'])
         api = ReachabilityTestAPI()
-        api.addReachabilityTest(test)
+        api.addQuickTest(test)
         #import pdb
         #pdb.set_trace()
         return test

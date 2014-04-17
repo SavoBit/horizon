@@ -50,7 +50,7 @@ class CreateView(forms.ModalFormView):
 class TroubleshootView(forms.ModalFormView):
     form_class = project_forms.TroubleshootForm
     template_name = 'project/connections/reachability_tests/troubleshoot.html'
-    success_url = reverse_lazy("horizon:project:connections:reachability_tests:create")
+    success_url = reverse_lazy("horizon:project:connections:reachability_tests:quick")
 
 class UpdateView(forms.ModalFormView):
     form_class = project_forms.UpdateForm
@@ -92,8 +92,10 @@ class DetailView(tabs.TabView):
     @memoized.memoized_method
     def get_data(self):
         try:
+	    #import pdb
+	    #pdb.set_trace()
 	    api = ReachabilityTestAPI()
-            return  api.getReachabilityTest(self.kwargs['reachability_test_id'].encode('ascii','ignore'))
+            return api.getReachabilityTest(self.kwargs['reachability_test_id'].encode('ascii','ignore'))
         except Exception:
             url = reverse('horizon:project:connections:index')
             exceptions.handle(self.request,
@@ -103,3 +105,34 @@ class DetailView(tabs.TabView):
     def get_tabs(self, request, *args, **kwargs):
         reachability_test = self.get_data()
         return self.tab_group_class(request, reachability_test=reachability_test, **kwargs)
+
+class QuickDetailView(tabs.TabView):
+    tab_group_class = project_tabs.QuickTestDetailTabs
+    template_name = 'project/connections/reachability_tests/quick_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(QuickDetailView, self).get_context_data(**kwargs)
+        context["quick_test"] = self.get_data()
+	#import pdb
+	#pdb.set_trace()
+        return context
+
+    @memoized.memoized_method
+    def get_data(self):
+        try:
+	    #import pdb
+	    #pdb.set_trace()
+            api = ReachabilityTestAPI()
+            return  api.getQuickTest()
+        except Exception:
+            url = reverse('horizon:project:connections:index')
+            exceptions.handle(self.request,
+                              _('Could not run quick test.'),
+                              redirect=url)
+
+    def get_tabs(self, request, *args, **kwargs):
+	#import pdb
+	#pdb.set_trace()
+        quick_test = self.get_data()
+        return self.tab_group_class(request, quick_test=quick_test, **kwargs)
+

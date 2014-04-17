@@ -8,6 +8,7 @@ class ReachabilityTestAPI:
 	c = []
 	runlistdb = "runlistdb"
 	run_list = []	
+	quick_test = "temporaryvariabletoholdquicktest"
 
 	def __init__(self):
 		self.d = []
@@ -15,6 +16,7 @@ class ReachabilityTestAPI:
 		self.runlistdb = "runlistdb"
 		self.c = []
 		self.run_list = []
+		self.quick_test = "temporaryvariabletoholdquicktest"
 
 	def addReachabilityTest(self,test):
 		d = shelve.open(self.dbname)
@@ -23,9 +25,19 @@ class ReachabilityTestAPI:
 		c = shelve.open(self.runlistdb)
 		c[test.name] = []
 		c.close()
+	
+	def addQuickTest(self,test):
+		d = shelve.open(self.dbname)
+		d[self.quick_test] = test
+		d.close()
+	
 
 	def listReachabilityTest(self):
 		d = shelve.open(self.dbname)
+		if(d.has_key(self.quick_test)):
+			del d[self.quick_test]
+		#import pdb
+		#pdb.set_trace()
 		testlist = d.keys()
 		testlist.sort()
 		returnlist = []
@@ -36,7 +48,8 @@ class ReachabilityTestAPI:
 	
 	def listTestRuns(self,test_name):
 		c = shelve.open(self.runlistdb)
-		self.run_list = c[test_name]
+		if(c.has_key(test_name)):
+			self.run_list = c[test_name]
 		c.close()
 		run_list = []
 		count = 0
@@ -53,12 +66,21 @@ class ReachabilityTestAPI:
 	
 	def deleteReachabilityTest(self,test):
 		d = shelve.open(self.dbname)
-		del d[test]
+		#import pdb
+		#pdb.set_trace()
+		if(d.has_key(test)):
+			del d[test]
 		d.close()
 		c = shelve.open(self.runlistdb)
-		del c[test]
+		if(c.has_key(test)):
+			del c[test]
 		c.close()
-
+	
+	def deleteQuickTest(self):
+		d = shelve.open(self.dbname)
+		del d[self.quick_test]
+		d.close()
+	
 	def runReachabilityTest(self,test):
 		c = shelve.open(self.runlistdb)
 		self.run_list = c[test]
@@ -88,7 +110,13 @@ class ReachabilityTestAPI:
 		data = d[test]
 		d.close()
 		return data
-
+	
+	def getQuickTest(self):
+		d = shelve.open(self.dbname)
+		data = d[self.quick_test]
+		d.close()
+		return data
+	
 	def updateReachabilityTest(self, test_id, data):
 		d = shelve.open(self.dbname)
 		del d[test_id]
