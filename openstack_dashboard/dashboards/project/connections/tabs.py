@@ -54,25 +54,12 @@ class ReachabilityTestsTab(tabs.TableTab):
     def get_reachability_tests_data(self):
         try:
 	    api = ReachabilityTestAPI()
-            #reachability_tests = [ReachabilityTestStub('Test1','',''),ReachabilityTestStub('Test2','',''),ReachabilityTestStub('Test3','','')]
 	    reachability_tests = api.listReachabilityTest()
-	    #import pdb
-            #pdb.set_trace()
         except Exception:
             reachability_tests = []
             exceptions.handle(self.request,
                               _('Unable to retrieve reachability test list.'))
         return reachability_tests
-
-
-class TroubleshootTab(tabs.Tab):
-    name = _("Troubleshoot")
-    slug = "troubleshoot_tab"
-    template_name = "horizon/common/_detail_table.html"
-        
-    def get_context_data(self,request):
-	return None
-
 
 class TopTalkersTab(tabs.TableTab):
     table_classes = (TopTalkersTable,)
@@ -92,5 +79,5 @@ class TopTalkersTab(tabs.TableTab):
 
 class ConnectionsTabs(tabs.TabGroup):
     slug = "connections_tabs"
-    tabs = (NetworkTemplateTab, ReachabilityTestsTab, TroubleshootTab, TopTalkersTab)
+    tabs = (NetworkTemplateTab, ReachabilityTestsTab, TopTalkersTab)
     sticky = True

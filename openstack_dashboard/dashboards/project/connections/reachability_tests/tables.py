@@ -52,7 +52,7 @@ class CreateReachabilityTest(tables.LinkAction):
 
 class RunTroubleshootTest(tables.LinkAction):
     name = "troubleshoot"
-    verbose_name = _("Run Test Now")
+    verbose_name = _("Quick Test")
     url = "horizon:project:connections:reachability_tests:troubleshoot"
     classes = ("ajax-modal", "btn-edit")
 
@@ -70,6 +70,7 @@ class RunTest(tables.BatchAction):
     action_past = _("Running")
     data_type_singular = _("Test")
     classes = ("btn-edit",)
+    
     
     def action(self, request, obj_id):
 	api = ReachabilityTestAPI()
@@ -136,11 +137,6 @@ class ReachabilityTestsTable(tables.DataTable):
 			   status_choices=STATUS_CHOICES,
 			   display_choices=STATUS_DISPLAY_CHOICES)
     run_list = tables.Column(get_run_list, hidden=True, verbose_name=_("Run List"))    
-    #import pdb
-    #pdb.set_trace()
-   # def __init__
-	#items = []
-	#items.push(new ReachabilityTestStub("Test1");
 
     def get_object_id(self, reachability_test):
 	#import pdb

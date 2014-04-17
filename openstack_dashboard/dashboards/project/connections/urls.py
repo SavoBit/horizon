@@ -27,8 +27,6 @@ from .views import IndexView
 from openstack_dashboard.dashboards.project.connections.\
     top_talkers import urls as top_talkers_urls
 from openstack_dashboard.dashboards.project.connections.\
-    troubleshoot import urls as troubleshoot_urls
-from openstack_dashboard.dashboards.project.connections.\
     reachability_tests import urls as reachability_tests_urls
 from openstack_dashboard.dashboards.project.connections.\
     network_template import urls as network_template_urls
@@ -42,7 +40,6 @@ urlpatterns = patterns('',
     url(r'^$', views.IndexView.as_view(), name='index'),
     url(r'top_talkers/', include(top_talkers_urls, namespace='top_talkers')),
     url(r'reachability_tests/', include(reachability_tests_urls, namespace='reachability_tests')),
-    url(r'troubleshoot/', include(troubleshoot_urls, namespace='troubleshoot')),
     url(r'network_template/', include(network_template_urls, namespace='network_template')),
     url(r'^css/(?P<path>.*)$', 'django.views.static.serve', {'document_root': CSS_PATH, 'show_indexes': True}),
     url(r'^js/(?P<path>.*)$', 'django.views.static.serve', {'document_root': JS_PATH, 'show_indexes': True}),
