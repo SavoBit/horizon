@@ -50,10 +50,10 @@ class CreateReachabilityTest(tables.LinkAction):
    #         return reachability_test.status == ''
    #     return True
 
-class RunTroubleshootTest(tables.LinkAction):
-    name = "troubleshoot"
+class RunQuickTest(tables.LinkAction):
+    name = "quick_test"
     verbose_name = _("Quick Test")
-    url = "horizon:project:connections:reachability_tests:troubleshoot"
+    url = "horizon:project:connections:reachability_tests:run"
     classes = ("ajax-modal", "btn-edit")
 
 class ReachabilityTestFilterAction(tables.FilterAction):
@@ -146,5 +146,5 @@ class ReachabilityTestsTable(tables.DataTable):
         verbose_name = _("Reachability Tests")
 	#status_columns = ["status"]
 	#row_class = UpdateRow
-        table_actions = (CreateReachabilityTest, RunTroubleshootTest,  DeleteReachabilityTests, ReachabilityTestFilterAction)
+        table_actions = (CreateReachabilityTest, RunQuickTest,  DeleteReachabilityTests, ReachabilityTestFilterAction)
         row_actions = (RunTest,UpdateTest,DeleteReachabilityTests)

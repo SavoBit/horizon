@@ -28,7 +28,7 @@ VIEWS_MOD = ('openstack_dashboard.dashboards.project.connections.reachability_te
 
 urlpatterns = patterns(VIEWS_MOD,
     url(r'^create/$', views.CreateView.as_view(), name='create'),
-    url(r'^troubleshoot/$', views.TroubleshootView.as_view(), name='troubleshoot'),
+    url(r'^run/$', views.RunQuickTestView.as_view(), name='run'),
     url(r'^quicktest/$', views.QuickDetailView.as_view(), name='quick'),
     url(r'^save/$', views.SaveQuickTestView.as_view(), name='save'),
     url(r'^(?P<reachability_test_id>[^/]+)/update/$', views.UpdateView.as_view(), name='update'),

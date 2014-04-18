@@ -7,14 +7,13 @@
     margin: 1px auto;
     position:relative;
     top: 5px;
-    left:5px;
     width: 40px;
     height: 40px;
 }
 .test-fail-msg {
     margin: 1px auto;
     position:relative;
-    bottom:55px;
+    bottom:50px;
     right:60px;
     width: 40px;
     height: 40px;
@@ -28,7 +27,7 @@
 .test-pending-msg {
     margin: 1px auto;
     position:relative;
-    bottom:55px;
+    bottom:50px;
     right:55px;
     width: 40px;
     height: 40px;
@@ -42,7 +41,7 @@
 .test-pass-msg {
     margin: 1px auto;
     position:relative;
-    bottom:55px;
+    bottom:50px;
     right:60px;
     width: 40px;
     height: 40px;
