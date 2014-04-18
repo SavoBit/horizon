@@ -77,8 +77,18 @@ class UpdateView(forms.ModalFormView):
     def get_initial(self):
         reachability_test = self.get_object()
         properties = getattr(reachability_test, 'properties', {})
+        #import pdb
+	#pdb.set_trace()
+	
+	connection_source = source = reachability_test.connection_source_type + '_source'
+	connection_destination  = reachability_test.connection_destination_type + '_destination'
         return {'reachability_test_id': self.kwargs['reachability_test_id'],
-                'name': reachability_test.name}
+		'connection_source_type' : reachability_test.connection_source_type,
+		connection_source : reachability_test.connection_source,
+		'connection_destination_type' : reachability_test.connection_destination_type,
+		connection_destination : reachability_test.connection_destination,
+                'name': reachability_test.name,
+		'expected_connection' : reachability_test.expected_connection}
 
 class DetailView(tabs.TabView):
     tab_group_class = project_tabs.ReachabilityTestDetailTabs

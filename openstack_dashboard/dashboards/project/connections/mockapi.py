@@ -172,10 +172,14 @@ class ReachabilityTestAPI:
 	
 	def updateReachabilityTest(self, test_id, data):
 		d = shelve.open(self.dbname)
+		#import pdb
+		#pdb.set_trace()
 		del d[test_id]
 		d[data.name] = data
+		#import pdb
+		#pdb.set_trace()
 		d.close()
 		c = shelve.open(self.runlistdb)
-		del d[test_id]
+		del c[test_id]
 		c[data.name] = []
 		c.close()
