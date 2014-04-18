@@ -203,10 +203,12 @@ class TroubleshootForm(forms.SelfHandlingForm):
 
 
     def handle(self, request, data):
-        test = ReachabilityTestStub(data['name'].encode('ascii','ignore'),'','')
+        test = ReachabilityTestStub(data['name'].encode('ascii','ignore'),'','') 
         messages.success(request, _('Successfully ran quick test: %s') % data['name'])
         api = ReachabilityTestAPI()
         api.addQuickTest(test)
+	api.runQuickTest()
+	test = api.getQuickTest()
         #import pdb
         #pdb.set_trace()
         return test
@@ -258,3 +260,30 @@ class UpdateForm(forms.SelfHandlingForm):
 	messages.success(request, _('Successfully updated reachability test.'))
         return test
 
+
+class SaveQuickTestForm(forms.SelfHandlingForm):
+    name = forms.CharField(max_length="255",
+                           label=_("Name"),
+                           required=True)
+
+    def __init__(self, *args, **kwargs):
+        super(SaveQuickTestForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super(SaveQuickTestForm, self).clean()
+
+        def update_cleaned_data(key, value):
+            cleaned_data[key] = value
+            self.errors.pop(key, None)
+
+        return cleaned_data
+
+    def handle(self, request, data):
+	api = ReachabilityTestAPI()
+        test = api.saveQuickTest(data['name'].encode('ascii','ignore'))
+	#import pdb
+	#pdb.set_trace()
+        messages.success(request, _('Successfully saved quick test: %s') % data['name'])
+        #import pdb
+        #pdb.set_trace()
+        return test

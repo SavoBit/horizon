@@ -136,3 +136,8 @@ class QuickDetailView(tabs.TabView):
         quick_test = self.get_data()
         return self.tab_group_class(request, quick_test=quick_test, **kwargs)
 
+
+class SaveQuickTestView(forms.ModalFormView):
+    form_class = project_forms.SaveQuickTestForm
+    template_name = 'project/connections/reachability_tests/save.html'
+    success_url = reverse_lazy("horizon:project:connections:index")

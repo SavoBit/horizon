@@ -30,6 +30,7 @@ urlpatterns = patterns(VIEWS_MOD,
     url(r'^create/$', views.CreateView.as_view(), name='create'),
     url(r'^troubleshoot/$', views.TroubleshootView.as_view(), name='troubleshoot'),
     url(r'^quicktest/$', views.QuickDetailView.as_view(), name='quick'),
+    url(r'^save/$', views.SaveQuickTestView.as_view(), name='save'),
     url(r'^(?P<reachability_test_id>[^/]+)/update/$', views.UpdateView.as_view(), name='update'),
     url(r'^(?P<reachability_test_id>[^/]+)/$', views.DetailView.as_view(), name='detail'),
 )

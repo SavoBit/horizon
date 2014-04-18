@@ -2,6 +2,10 @@
 
 <h3>{% trans "Quick Test Results" %}</h3>
 
+{% block modal-header %}
+  <a href="{% url 'horizon:project:connections:reachability_tests:save' %}" class="btn btn-primary pull-right">{% trans "Save" %}</a>
+{% endblock %}
+
 <div class="info row-fluid detail">
   <h4>{% trans "Info" %}</h4>
   <hr class="header_rule">
