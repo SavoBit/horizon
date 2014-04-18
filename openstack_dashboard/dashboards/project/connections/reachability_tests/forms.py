@@ -152,6 +152,19 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
 	
 	#name = cleaned_data.get("name")
 	#update_cleaned_data('name',name)
+        connection_source_type = cleaned_data.get('conection_source_type')
+	connection_destination_type = cleaned_data.get('connection_destination_type')
+	expected_connection = cleaned_data.get('expected_connection')	
+
+	if connection_source_type == 'default':
+		msg = _('A connection source type must be selected.')
+		raise ValidationError(msg)
+	if connection_destination_type == 'default':
+		msg = _('A connection destination type must be selected.')
+                raise ValidationError(msg)
+	if expected_connection == 'default':
+		msg = _('A expected connection result must be selected.')
+                raise ValidationError(msg)
 
 	#import pdb
 	#pdb.set_trace()
@@ -159,7 +172,28 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
 	return cleaned_data
 
     def handle(self, request, data):
-	test = ReachabilityTestStub(data['name'].encode('ascii','ignore'),'','')
+	if data['connection_source_type'] == 'instance':
+		source = data['instance_source'].encode('ascii','ignore')
+	elif data['connection_source_type'] == 'ip':
+                source = data['ip_source'].encode('ascii','ignore')
+	elif data['connection_source_type'] == 'mac':
+                source = data['mac_source'].encode('ascii','ignore')
+
+	if data['connection_destination_type'] == 'instance':
+                dest = data['instance_destination'].encode('ascii','ignore')
+        elif data['connection_destination_type'] == 'ip':
+                dest = data['ip_destination'].encode('ascii','ignore')
+        elif data['connection_destination_type'] == 'mac':
+                dest = data['mac_destination'].encode('ascii','ignore')
+
+	expected = data['expected_connection'].encode('ascii','ignore')
+
+	new_test_data = {'name' : data['name'].encode('ascii','ignore'),
+			'connection_source' : source,
+			'connection_destination' : dest,
+			'expected_connection' : expected}
+
+	test = ReachabilityTestStub(new_test_data)
 	messages.success(request, _('Successfully created reachability test: %s') % data['name'])
 	api = ReachabilityTestAPI()
 	api.addReachabilityTest(test)

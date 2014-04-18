@@ -5,15 +5,23 @@ import random
 class ReachabilityTestStub():
     """Class to mimick the data added to the reachability test"""
     name = ''
+    connection_source = ''
+    connection_destination = ''
+    expected_connection = ''
+    command_line = ''
     last_run = ''
     status = ''
     count = ''
     run_list = []
 
-    def __init__(self,name,last_run,status):
-        self.name = name
+    def __init__(self,data):
+        self.name = data['name']
         self.last_run = "-"
         self.status = "-"
+	self.connection_source = data['connection_source']
+	self.connection_destination = data['connection_destination']
+	self.expected_connection = data['expected_connection']
+	self.command_line = "-"
 	self.count = 0
 	self.run_list = []
 
