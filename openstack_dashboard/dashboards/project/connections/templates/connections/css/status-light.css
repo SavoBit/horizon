@@ -17,6 +17,7 @@
     right:60px;
     width: 40px;
     height: 40px;
+    padding-left: 2px;
     border-radius: 50%;
     color: #da4e49;
 }
@@ -31,6 +32,7 @@
     right:55px;
     width: 40px;
     height: 40px;
+    padding-left: 2px;
     color: #C9B501;
     border-radius: 50%;
 }
@@ -45,6 +47,7 @@
     right:60px;
     width: 40px;
     height: 40px;
+    padding-left: 2px;
     color: #690;
     border-radius: 50%;
 }

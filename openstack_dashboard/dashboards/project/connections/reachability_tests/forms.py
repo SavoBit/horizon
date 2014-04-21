@@ -19,6 +19,7 @@
 #    under the License.
 
 import re
+import time
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -209,9 +210,10 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
         return test
 
 class RunQuickTestForm(forms.SelfHandlingForm):
-    name = forms.CharField(max_length="255",
-                           label=_("Name"),
-                           required=True)
+
+    #name = forms.CharField(max_length="255",
+    #                       label=_("Name"),
+    #                       required=True)
 
     connection_source_type = forms.ChoiceField(
         label=_('Connection Source Type'),
@@ -363,7 +365,7 @@ class RunQuickTestForm(forms.SelfHandlingForm):
 
 	expected = data['expected_connection'].encode('ascii','ignore')
 
-        new_test_data = {'name' : data['name'].encode('ascii','ignore'),
+        new_test_data = {'name' : 'quick test',
                         'connection_source_type' : source_type,
                         'connection_source' : source,
                         'connection_destination_type' : dest_type,
@@ -375,7 +377,7 @@ class RunQuickTestForm(forms.SelfHandlingForm):
         api.addQuickTest(test)
 	api.runQuickTest()
 	test = api.getQuickTest()
-	messages.success(request, _('Successfully ran quick test: %s') % data['name'])
+	messages.success(request, _('Successfully ran quick test.'))
         #import pdb
         #pdb.set_trace()
         return test
@@ -557,7 +559,7 @@ class UpdateForm(forms.SelfHandlingForm):
 class SaveQuickTestForm(forms.SelfHandlingForm):
     name = forms.CharField(max_length="255",
                            label=_("Name"),
-                           required=True)
+                           required=False)
 
     def __init__(self, *args, **kwargs):
         super(SaveQuickTestForm, self).__init__(*args, **kwargs)
@@ -573,6 +575,12 @@ class SaveQuickTestForm(forms.SelfHandlingForm):
 
     def handle(self, request, data):
 	api = ReachabilityTestAPI()
+	#import pdb
+	#pdb.set_trace()
+        if(data['name'] == ''):
+		data['name'] = 'QT-' + str(int(time.time()))[4:] 
+	#import pdb
+	#pdb.set_trace()
         test = api.saveQuickTest(data['name'].encode('ascii','ignore'))
 	#import pdb
 	#pdb.set_trace()
