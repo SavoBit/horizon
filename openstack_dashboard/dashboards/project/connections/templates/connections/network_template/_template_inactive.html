@@ -1,25 +1,13 @@
 {% load i18n sizeformat %}
+{% block main %}
+<link rel="stylesheet" href="css/network-template.css">
 
-<h3>{% trans "Test Overview" %}</h3>
+<h3 id="network_page_title">Network Template</h3>
+{% block modal-header %}
+  <a href="{% url 'horizon:project:connections:reachability_tests:save' %}" class="btn btn-primary ajax-modal pull-right">{% trans "Apply Network Template" %}</a>
+{% endblock %}
 
-<div class="info row-fluid detail">
-  <h4>{% trans "Info" %}</h4>
-  <hr class="header_rule">
-  <dl>
-    <dt>{% trans "Name" %}</dt>
-    <dt>{% trans "Connection Source" %}</dt>
-    <dt>{% trans "Connection Destination" %}</dt>
-  </dl>
+<div id="no_template_message">
+	<h2 id="message_text">No Network Template Applied</h2>
 </div>
-
-<div class="specs row-fluid detail">
-  <h4>{% trans "Results" %}</h4>
-  <hr class="header_rule">
-  <dl>
-    <dt>{% trans "Time Stamp" %}</dt>
-    <dt>{% trans "Expected Connection" %}</dt>
-    <dt>{% trans "Test Results" %}</dt>
-    <dt>{% trans "Command Line Output" %}</dt>
-  </dl>
-</div>
-
+{% endblock %}

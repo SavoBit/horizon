@@ -40,7 +40,7 @@ from openstack_dashboard.dashboards.project.connections.mockapi import Reachabil
 class NetworkTemplateTab(tabs.Tab):
     name = _("Network Template")
     slug = "network_template_tab"
-    template_name = "horizon/common/_detail_table.html"
+    template_name = "project/connections/network_template/_template_inactive.html"
    
     def get_context_data(self,request):
 	return None

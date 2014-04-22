@@ -39,14 +39,10 @@ class RemoveTemplate(tables.DeleteAction):
     data_type_plural = _("Templates")
 
     def delete(self, request, obj_id):
-        api.network.security_group_rule_delete(request, obj_id)
-
-        return reverse("horizon:project:access_and_security:"
-                       "security_groups:detail", args=[sg_id])
-
+	return 0
 
 class NetworkTemplateTable(tables.DataTable):
-    name = tables.Column("name",
+    name = tables.Column("name", hidden=True,
                               verbose_name=_("Name"))
 
     def get_object_id(self, network_template):

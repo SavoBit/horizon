@@ -1,0 +1,20 @@
+#network_page_title {
+	font-family: anivers;
+	font-weight: normal;
+	font-size: 24px;
+	margin-bottom: 5px;
+	float: left;
+}
+#connections_tabs__network_template_tab {
+	height: 280px;
+}
+#no_template_message {
+	width: 100%;
+	height: 100%;
+	text-align: center;
+}
+#message_text {
+	position:relative;
+	top: 140px;
+	right: 60px;
+}

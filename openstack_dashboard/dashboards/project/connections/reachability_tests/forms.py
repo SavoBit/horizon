@@ -559,7 +559,7 @@ class UpdateForm(forms.SelfHandlingForm):
 class SaveQuickTestForm(forms.SelfHandlingForm):
     name = forms.CharField(max_length="255",
                            label=_("Name"),
-                           required=False)
+                           required=True)
 
     def __init__(self, *args, **kwargs):
         super(SaveQuickTestForm, self).__init__(*args, **kwargs)
@@ -575,16 +575,7 @@ class SaveQuickTestForm(forms.SelfHandlingForm):
 
     def handle(self, request, data):
 	api = ReachabilityTestAPI()
-	#import pdb
-	#pdb.set_trace()
-        if(data['name'] == ''):
-		data['name'] = 'QT-' + str(int(time.time()))[4:] 
-	#import pdb
-	#pdb.set_trace()
         test = api.saveQuickTest(data['name'].encode('ascii','ignore'))
-	#import pdb
-	#pdb.set_trace()
         messages.success(request, _('Successfully saved quick test: %s') % data['name'])
-        #import pdb
-        #pdb.set_trace()
-        return test
+        
+	return test
