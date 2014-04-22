@@ -1,0 +1,25 @@
+{% load i18n sizeformat %}
+
+<h3>{% trans "Test Overview" %}</h3>
+
+<div class="info row-fluid detail">
+  <h4>{% trans "Info" %}</h4>
+  <hr class="header_rule">
+  <dl>
+    <dt>{% trans "Name" %}</dt>
+    <dt>{% trans "Connection Source" %}</dt>
+    <dt>{% trans "Connection Destination" %}</dt>
+  </dl>
+</div>
+
+<div class="specs row-fluid detail">
+  <h4>{% trans "Results" %}</h4>
+  <hr class="header_rule">
+  <dl>
+    <dt>{% trans "Time Stamp" %}</dt>
+    <dt>{% trans "Expected Connection" %}</dt>
+    <dt>{% trans "Test Results" %}</dt>
+    <dt>{% trans "Command Line Output" %}</dt>
+  </dl>
+</div>
+

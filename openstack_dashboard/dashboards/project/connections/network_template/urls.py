@@ -26,14 +26,5 @@ from openstack_dashboard.dashboards.project.connections.\
 
 
 urlpatterns = patterns('',
-    url(r'^create/$', views.CreateView.as_view(), name='create'),
-    url(r'^(?P<security_group_id>[^/]+)/$',
-        views.DetailView.as_view(),
-        name='detail'),
-    url(r'^(?P<security_group_id>[^/]+)/add_rule/$',
-        views.AddRuleView.as_view(),
-        name='add_rule'),
-    url(r'^(?P<security_group_id>[^/]+)/update/$',
-        views.UpdateView.as_view(),
-        name='update')
+    url(r'^apply_template/$', views.ApplyTemplateView.as_view(), name='apply'),
 )
