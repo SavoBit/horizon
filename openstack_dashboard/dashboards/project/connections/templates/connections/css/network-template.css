@@ -1,4 +1,4 @@
-#network_page_title {
+.network-template-headers {
 	font-family: anivers;
 	font-weight: normal;
 	font-size: 24px;
@@ -15,6 +15,7 @@
 }
 #message_text {
 	position:relative;
+	font-weight: normal;
 	top: 140px;
 	right: 60px;
 }

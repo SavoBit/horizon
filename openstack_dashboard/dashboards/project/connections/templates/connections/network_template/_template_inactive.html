@@ -2,12 +2,12 @@
 {% block main %}
 <link rel="stylesheet" href="css/network-template.css">
 
-<h3 id="network_page_title">Network Template</h3>
+<h3 id="network_page_title" class="network-template-headers">Network Template</h3>
 {% block modal-header %}
-  <a href="{% url 'horizon:project:connections:reachability_tests:save' %}" class="btn btn-primary ajax-modal pull-right">{% trans "Apply Network Template" %}</a>
+  <a href="{% url 'horizon:project:connections:network_template:apply' %}" id="apply_network_template_button" class="btn btn-small btn-create ajax-modal pull-right"></a>
 {% endblock %}
 
 <div id="no_template_message">
-	<h2 id="message_text">No Network Template Applied</h2>
+	<h3 id="message_text">No Network Template Applied</h3>
 </div>
 {% endblock %}

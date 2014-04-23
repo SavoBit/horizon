@@ -40,5 +40,5 @@ from openstack_dashboard.dashboards.project.connections.\
 
 class ApplyTemplateView(forms.ModalFormView):
     form_class = project_forms.ApplyTemplateForm
-    template_name = 'project/connections/network_template/create.html'
+    template_name = 'project/connections/network_template/apply_template.html'
     success_url = reverse_lazy('horizon:project:connections:index')

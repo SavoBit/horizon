@@ -37,27 +37,21 @@ from openstack_dashboard.utils import filters
 
 
 class ApplyTemplateForm(forms.SelfHandlingForm):
-    name = forms.CharField(label=_("Name"),
-                           max_length=255,
-                           error_messages={
-                               'required': _('This field is required.'),
-                               'invalid': _("The string may only contain"
-                                            " ASCII characters and numbers.")},
-                           validators=[validators.validate_slug])
-    description = forms.CharField(label=_("Description"))
+    network_templates = forms.ChoiceField(
+        label=_('Default Network Templates'),
+        required=True,
+        )    
+    
+    def __init__(self, *args, **kwargs):
+        super(ApplyTemplateForm, self).__init__(*args, **kwargs)
+        templates=[
+                ('default', _('--- Select Network Template ---')),
+                ('template1', _('Template 1')),
+                ('template2', _('Template 2')),
+                ('tempalte3', _('Tempalte 3'))
+        ]
+	self.fields['network_templates'].choices = templates
+
 
     def handle(self, request, data):
-        try:
-            sg = api.network.security_group_create(request,
-                                                   data['name'],
-                                                   data['description'])
-            messages.success(request,
-                             _('Successfully created security group: %s')
-                               % data['name'])
-            return sg
-        except Exception:
-            redirect = reverse("horizon:project:access_and_security:index")
-            exceptions.handle(request,
-                              _('Unable to create security group.'),
-                              redirect=redirect)
-
+	return true
