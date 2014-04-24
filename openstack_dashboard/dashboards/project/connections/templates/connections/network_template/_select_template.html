@@ -2,8 +2,8 @@
 {% load i18n %}
 {% load url from future %}
 
-{% block form_id %}apply_network_template_form{% endblock %}
-{% block form_action %}{% url 'horizon:project:connections:network_template:apply' %}{% endblock %}
+{% block form_id %}select_network_template_form{% endblock %}
+{% block form_action %}{% url 'horizon:project:connections:network_template:select' %}{% endblock %}
 
 {% block modal-header %}{% trans "Apply Network Template" %}{% endblock %}
 
@@ -20,6 +20,7 @@
 {% endblock %}
 
 {% block modal-footer %}
-   <input class="btn btn-primary pull-right" type="submit" value="{% trans "Apply Template" %}" />
-  <a href="{% url 'horizon:project:connections:index' %}" class="btn secondary cancel close">{% trans "Previous" %}</a>
+      <input class="btn btn-primary pull-right" type="submit" value="{% trans "Next" %}" />
+<!--  <a href="{% url 'horizon:project:connections:network_template:apply' %}" class="btn btn-primary ajax-modal pull-right">{% trans "Next" %}</a> -->
+  <a href="{% url 'horizon:project:connections:index' %}" class="btn secondary cancel close">{% trans "Cancel" %}</a>
 {% endblock %}

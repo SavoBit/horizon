@@ -34,16 +34,18 @@ from horizon.utils import validators as utils_validators
 
 from openstack_dashboard import api
 from openstack_dashboard.utils import filters
+from openstack_dashboard.dashboards.project.connections.mockapi import NetworkTemplateAPI
+from openstack_dashboard.dashboards.project.connections.mockobjects import ReachabilityTestStub
 
 
-class ApplyTemplateForm(forms.SelfHandlingForm):
+class SelectTemplateForm(forms.SelfHandlingForm):
     network_templates = forms.ChoiceField(
         label=_('Default Network Templates'),
         required=True,
-        )    
+        )
     
     def __init__(self, *args, **kwargs):
-        super(ApplyTemplateForm, self).__init__(*args, **kwargs)
+        super(SelectTemplateForm, self).__init__(*args, **kwargs)
         templates=[
                 ('default', _('--- Select Network Template ---')),
                 ('template1', _('Template 1')),
@@ -51,7 +53,33 @@ class ApplyTemplateForm(forms.SelfHandlingForm):
                 ('tempalte3', _('Tempalte 3'))
         ]
 	self.fields['network_templates'].choices = templates
+	api = NetworkTemplateAPI()
+	template = api.getHeatTemplate()
+	if( len(template) > 1 ):
+		del self.fields['network_templates']
+	for parameter in template['parameters']:
+		#import pdb
+		#pdb.set_trace()
+		self.fields[parameter] = forms.CharField(max_length ="255",label=_(template['parameters'][parameter]['label']),required=True)
+	
+	#import pdb
+	#pdb.set_trace()
 
 
     def handle(self, request, data):
-	return true
+	import pdb
+	pdb.set_trace()
+	return data
+
+class ApplyTemplateForm(forms.SelfHandlingForm):
+    
+    name = forms.CharField(max_length="255", label=_("Name"), required=True)
+
+    def __init__(self, *args, **kwargs):
+        super(ApplyTemplateForm, self).__init__(*args, **kwargs)
+
+
+    def handle(self, request, data):
+        #import pdb
+        #pdb.set_trace()
+        return True

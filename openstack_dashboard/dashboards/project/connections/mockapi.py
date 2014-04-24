@@ -1,3 +1,4 @@
+import yaml
 import shelve
 from openstack_dashboard.dashboards.project.connections.mockobjects import ReachabilityTestStub
 
@@ -183,3 +184,39 @@ class ReachabilityTestAPI:
 		del c[test_id]
 		c[data.name] = []
 		c.close()
+
+
+
+class NetworkTemplateAPI:
+        """Simple Network Template API"""
+        heatdb = "heatdb"
+        heat_template = "temporaryvariabletoholdexampleheattemplate"
+        h = []
+
+        def __init__(self):
+                self.heatdb = "heatdb"
+                self.h = []
+                self.heat_template = "temporaryvariabletoholdexampleheattemplate"
+
+	def loadHeatTemplate(self):
+		f = open('/opt/stack/horizon/openstack_dashboard/dashboards/project/connections/sample_heat_templates/basic_3tier.yaml')
+		dataMap = yaml.safe_load(f)
+		f.close()
+		h = shelve.open(self.heatdb)
+		h[self.heat_template] = dataMap
+		h.close()
+
+	def getHeatTemplate(self):
+		h = shelve.open(self.heatdb)
+		if(h.has_key(self.heat_template)):
+			template = h[self.heat_template]
+		else:
+			template = []
+		h.close()
+		return template
+
+	def removeHeatTemplate(self):
+		h = shelve.open(self.heatdb)
+		if(h.has_key(self.heat_template)):
+                        del h[self.heat_template]
+		h.close()

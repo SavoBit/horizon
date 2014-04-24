@@ -35,10 +35,13 @@ from openstack_dashboard.utils import filters
 
 from openstack_dashboard.dashboards.project.connections.\
     network_template import forms as project_forms
-from openstack_dashboard.dashboards.project.connections.\
-    network_template import tables as project_tables
 
 class ApplyTemplateView(forms.ModalFormView):
     form_class = project_forms.ApplyTemplateForm
     template_name = 'project/connections/network_template/apply_template.html'
+    success_url = reverse_lazy('horizon:project:connections:index')
+    
+class SelectTemplateView(forms.ModalFormView):
+    form_class = project_forms.SelectTemplateForm
+    template_name = 'project/connections/network_template/select_template.html'
     success_url = reverse_lazy('horizon:project:connections:index')

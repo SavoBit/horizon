@@ -27,4 +27,5 @@ from openstack_dashboard.dashboards.project.connections.\
 
 urlpatterns = patterns('',
     url(r'^apply_template/$', views.ApplyTemplateView.as_view(), name='apply'),
+    url(r'^select_template/$', views.SelectTemplateView.as_view(), name='select'),
 )
