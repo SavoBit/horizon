@@ -40,8 +40,12 @@ class ApplyTemplateView(forms.ModalFormView):
     form_class = project_forms.ApplyTemplateForm
     template_name = 'project/connections/network_template/apply_template.html'
     success_url = reverse_lazy('horizon:project:connections:index')
+
+class TempPageView(forms.ModalFormView):
+    form_class = project_forms.ApplyTemplateForm
+    template_name = 'project/connections/network_template/temp_page.html'
     
 class SelectTemplateView(forms.ModalFormView):
     form_class = project_forms.SelectTemplateForm
     template_name = 'project/connections/network_template/select_template.html'
-    success_url = reverse_lazy('horizon:project:connections:network_template:apply')
+    success_url = reverse_lazy('horizon:project:connections:network_template:temp')

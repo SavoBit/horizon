@@ -26,7 +26,7 @@
     <dt>{% trans "Test Results" %}</dt>
     <dd>{{ reachability_test.status|default:_("None") }}</dd>
     <dt>{% trans "Command Line Output" %}</dt>
-    <dd>{{ reachability_test.comand_line|default:_("None") }}</dd>
+    <dd id="command_prompt">{{ reachability_test.command_line|default:_("None") }}</dd>
   </dl>
 </div>
 
