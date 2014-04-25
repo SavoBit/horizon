@@ -38,6 +38,16 @@ from openstack_dashboard.dashboards.project.connections.mockapi import NetworkTe
 from openstack_dashboard.dashboards.project.connections.mockobjects import ReachabilityTestStub
 
 
+def findDefault(template_list,key):
+	#import pdb
+	#pdb.set_trace()
+	result = ''
+	if template_list.has_key(key):
+		result = template_list[key]
+	#import pdb
+	#pdb.set_trace()
+	return result
+
 class SelectTemplateForm(forms.SelfHandlingForm):
     network_templates = forms.ChoiceField(
         label=_('Default Network Templates'),
@@ -53,22 +63,14 @@ class SelectTemplateForm(forms.SelfHandlingForm):
                 ('tempalte3', _('Tempalte 3'))
         ]
 	self.fields['network_templates'].choices = templates
-	api = NetworkTemplateAPI()
-	template = api.getHeatTemplate()
-	if( len(template) > 1 ):
-		del self.fields['network_templates']
-	for parameter in template['parameters']:
-		#import pdb
-		#pdb.set_trace()
-		self.fields[parameter] = forms.CharField(max_length ="255",label=_(template['parameters'][parameter]['label']),required=True)
 	
 	#import pdb
 	#pdb.set_trace()
 
 
     def handle(self, request, data):
-	import pdb
-	pdb.set_trace()
+	#import pdb
+	#pdb.set_trace()
 	return data
 
 class ApplyTemplateForm(forms.SelfHandlingForm):
@@ -77,6 +79,24 @@ class ApplyTemplateForm(forms.SelfHandlingForm):
 
     def __init__(self, *args, **kwargs):
         super(ApplyTemplateForm, self).__init__(*args, **kwargs)
+	
+	api = NetworkTemplateAPI()
+	api.loadHeatTemplate()
+        template = api.getHeatTemplate()
+        #import pdb
+        #pdb.set_trace()
+        for parameter in template['parameters']:
+                #import pdb
+                #pdb.set_trace()
+                self.fields[parameter] = forms.CharField(max_length ="255",
+                                                        label=_(template['parameters'][parameter]['label']),
+                                                        initial=findDefault(template['parameters'][parameter],'default'),
+                                                        help_text=_(template['parameters'][parameter]['description']),
+                                                        required=True)
+
+        #import pdb
+        #pdb.set_trace()
+
 
 
     def handle(self, request, data):

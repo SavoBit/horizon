@@ -1,3 +1,4 @@
+import os
 import yaml
 import shelve
 from openstack_dashboard.dashboards.project.connections.mockobjects import ReachabilityTestStub
@@ -192,14 +193,18 @@ class NetworkTemplateAPI:
         heatdb = "heatdb"
         heat_template = "temporaryvariabletoholdexampleheattemplate"
         h = []
+	heat_template_file_path = ""
 
         def __init__(self):
                 self.heatdb = "heatdb"
                 self.h = []
                 self.heat_template = "temporaryvariabletoholdexampleheattemplate"
+		self.heat_template_file_path = os.path.abspath(os.path.join(os.path.dirname(__file__),"sample_heat_templates","basic_3tier.yaml"))
 
 	def loadHeatTemplate(self):
-		f = open('/opt/stack/horizon/openstack_dashboard/dashboards/project/connections/sample_heat_templates/basic_3tier.yaml')
+		#import pdb
+		#pdb.set_trace()
+		f = open(self.heat_template_file_path)
 		dataMap = yaml.safe_load(f)
 		f.close()
 		h = shelve.open(self.heatdb)
