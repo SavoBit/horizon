@@ -35,6 +35,7 @@ from openstack_dashboard.dashboards.project.connections.\
     reachability_tests.tables import ReachabilityTestsTable
 from openstack_dashboard.dashboards.project.connections.mockobjects import ReachabilityTestStub
 from openstack_dashboard.dashboards.project.connections.mockapi import ReachabilityTestAPI
+from openstack_dashboard.dashboards.project.connections.mockapi import NetworkTemplateAPI
 
 
 class NetworkTemplateTab(tabs.Tab):
@@ -43,7 +44,11 @@ class NetworkTemplateTab(tabs.Tab):
     template_name = "project/connections/network_template/_template_inactive.html"
    
     def get_context_data(self,request):
-	return None
+	api = NetworkTemplateAPI()
+	template = api.getHeatTemplate()
+	#import pdb
+	#pdb.set_trace()
+	return {"network_template": template}
 
 class ReachabilityTestsTab(tabs.TableTab):
     table_classes = (ReachabilityTestsTable,)

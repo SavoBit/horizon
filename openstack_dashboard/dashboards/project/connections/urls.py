@@ -35,6 +35,8 @@ from openstack_dashboard.dashboards.project.connections import views
 
 CSS_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__).decode('utf-7')), 'templates', 'connections', 'css')
 JS_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__).decode('utf-7')), 'templates', 'connections', 'js')
+LIB_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__).decode('utf-7')), 'templates', 'connections', 'lib')
+
 
 urlpatterns = patterns('',
     url(r'^$', views.IndexView.as_view(), name='index'),
@@ -43,4 +45,6 @@ urlpatterns = patterns('',
     url(r'network_template/', include(network_template_urls, namespace='network_template')),
     url(r'^css/(?P<path>.*)$', 'django.views.static.serve', {'document_root': CSS_PATH, 'show_indexes': True}),
     url(r'^js/(?P<path>.*)$', 'django.views.static.serve', {'document_root': JS_PATH, 'show_indexes': True}),
+    url(r'^lib/(?P<path>.*)$', 'django.views.static.serve', {'document_root': LIB_PATH, 'show_indexes': True}),
+    
 )

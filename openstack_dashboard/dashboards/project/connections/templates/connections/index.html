@@ -17,23 +17,17 @@
   	<div id="info" style="display: none;"></div>
   </div>
 </div>
-<div id="test"></div>
-<div class="led-yellow"></div>
-<div class="led-green"></div>
-
 
 <script src="js/opentip-jquery-excanvas.js"></script>
 
 <script type='text/javascript'>
 $(function(){
-     	//debugger
 	$("#reachability_tests__action_quick_test").html("<i class='fa fa-bolt fa-lg'></i>  Quick Test");
 	$("#apply_network_template_button").html("<i class='fa fa-plus fa-lg'></i>      <b>Apply Network Template</b>");
 	
 	var count = 0;
      	$('#reachability_tests tr').each(function(){
     		$(this).find('td').each(function(){
-			//debugger
 			if(count == 3 && (this.textContent === "PASS" || this.textContent === "FAIL" || this.textContent === "PENDING")){
 				$(this).addClass("status-light");
 				if(this.textContent === "PASS"){
@@ -54,7 +48,6 @@ $(function(){
     		})
 		count = 0;
 	})
-	//debugger
 	
 	$( ".test-pass" ).wrapInner( "<div class='test-general-settings'><div class='test-text'>PASS</div><i class='status-light test-pass-msg fa fa-check fa-3x'></i></div>");
      	$( ".test-pending" ).wrapInner( "<div class='test-general-settings'><div class='test-text'>PENDING</div><i class='status-light test-pending-msg fa fa-question fa-3x'></i></div>");
@@ -73,7 +66,6 @@ function manageStatusLists(){
         	var x = event.clientX, y = event.clientY,
         	elementMouseIsOver = document.elementFromPoint(x, y);
         	if($(elementMouseIsOver).parents("#reachability_tests").length == 0 && $(elementMouseIsOver).hasClass('opentip') == false && $(elementMouseIsOver).parents(".opentip").length == 0){
-			//debugger
         		for(var i = 0; i < Opentip.tips.length; i ++) { Opentip.tips[i].hide(); }
         	}
         });
@@ -100,26 +92,20 @@ function initializeToolTips(tipMenuItems, initialContent){
 }
 
 function hoverOverMenu(hoverMenu){
-	//debugger
 	$(hoverMenu).hover(function(){
-		//debugger
 		var current = this;
 		populateMenu(current);
 		  
 		if($(hoverMenu).length > 0){
 			$(hoverMenu).each(function(){
-				//debugger
 				if($("#info").text().split("-").length > 2){
 					$(this).data("opentips")[0].setContent($("#info").html());
 				}else{
 					$(this).data("opentips")[0].setContent("No data available.");
 				}
 				
-				//debugger
 		})
 		}
-		//debugger
-		//if($(".status-list-msg").
 		$(this).data("opentips")[0].show();
 		
      	},function(){
@@ -129,7 +115,6 @@ function hoverOverMenu(hoverMenu){
 }
 
 function populateMenu(dataObject){
-	//debugger
 	var rowElement = $(dataObject).closest("tr");
 	var rawData = $(rowElement.children()[4]).html();
 	var cleanData = rawData.replace(/[^\w\s,:-]/gi, '').split(",");
@@ -144,11 +129,9 @@ function populateMenu(dataObject){
         var numberOfListItems = cleanData.length;
 
         for( var i =  0 ; i < numberOfListItems ; ++i){
-		//debugger
 		statusMsg = listItemStatus(dataObject);
 		$(listElement).append("<div class=status-list-msg>" + statusMsg + "<a href='{% url 'horizon:project:connections:index' %}reachability_tests/"+testName+"/'>" + cleanData[i] + "</a></div>");
         }
-	//debugger
 	
 }
 
@@ -161,7 +144,6 @@ function listItemStatus(statusListItem){
 		statusMsg = " Failed at ";
 	}else if($(statusListItem).hasClass('test-pending-msg')){
 		randNum = Math.floor((Math.random()*2)+0); 
-		//debugger
 		if(randNum == 0){
 			statusMsg = " Succeeded at ";
 		}else{
@@ -170,37 +152,6 @@ function listItemStatus(statusListItem){
 	}
 	return statusMsg;
 }
-/******
-function addReachabilityTestRow(){
-	var testname = $("#id_name").val();
-	var currentdate = new Date();
-        var datetime = currentdate.getFullYear() + "-"
-                + ("0" + (currentdate.getMonth()+1)).slice(-2)  + "-" 
-                + ("0" + currentdate.getDate()).slice(-2) + " T "  
-                + currentdate.getHours() + ":"  
-                + currentdate.getMinutes() + ":" 
-                + currentdate.getSeconds() + " UTC";
-
-	var rowelement = '<tr class data-display='+testname+' data-object-id="" id="keypairs__row__'+testname+'"><td class="multi_select_column"><input class="table-row-multi-select" name="object_ids" type="checkbox" value="'+testname+'"></td><td class="sortable normal_column">'+testname+'</td><td class="sortable normal_column">-</td><td class="sortable normal_column">-</td><td class="actions_column"><div class="btn-group"><a onclick="deleteReachabilityTestRow()" class="btn btn-small btn-edit" id="keypairs__row_'+testname+'__action_run">Run Test</a><a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#"> More <span class="caret"></span></a><ul class="dropdown-menu row_actions clearfix"><li class="clearfix"><a class="btn btn-small btn-edit" id="keypairs__row_'+testname+'__action_update">Edit Test</a></li></ul></div></td></tr>';
-	
-	$('#reachability_tests').append(rowelement);
-
-
-}
-function deleteReachabilityTestRow(){
-	var testname = "Test";
-	var currentdate = new Date();
-        var datetime = currentdate.getFullYear() + "-"
-                + ("0" + (currentdate.getMonth()+1)).slice(-2)  + "-" 
-                + ("0" + currentdate.getDate()).slice(-2) + " T "  
-                + currentdate.getHours() + ":"  
-                + currentdate.getMinutes() + ":" 
-                + currentdate.getSeconds() + " UTC";
-	document.getElementById("reachability_tests").deleteRow(5);
-	var rowelement = '<tr class data-display='+testname+' data-object-id="" id="keypairs__row__'+testname+'"><td class="multi_select_column"><input class="table-row-multi-select" name="object_ids" type="checkbox" value="'+testname+'"></td><td class="sortable normal_column">'+testname+'</td><td class="sortable normal_column">'+datetime+'</td><td class="sortable normal_column"><font color="green">Pass</font></td><td class="actions_column"><div class="btn-group"><a onclick="deleteReachabilityTestRow()" class="btn btn-small btn-edit" id="keypairs__row_'+testname+'__action_run">Run Test</a><a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#"> More <span class="caret"></span></a><ul class="dropdown-menu row_actions clearfix"><li class="clearfix"><a class="btn btn-small btn-edit" id="keypairs__row_'+testname+'__action_update">Edit Test</a></li></ul></div></td></tr>';
-	$('#reachability_tests').append(rowelement);
-}
-*******/
 </script>
 
 {% endblock %}

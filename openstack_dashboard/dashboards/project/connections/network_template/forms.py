@@ -75,7 +75,6 @@ class SelectTemplateForm(forms.SelfHandlingForm):
 
 class ApplyTemplateForm(forms.SelfHandlingForm):
     
-    name = forms.CharField(max_length="255", label=_("Name"), required=True)
 
     def __init__(self, *args, **kwargs):
         super(ApplyTemplateForm, self).__init__(*args, **kwargs)
