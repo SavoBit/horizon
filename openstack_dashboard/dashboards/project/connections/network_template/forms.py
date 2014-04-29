@@ -35,7 +35,7 @@ from horizon.utils import validators as utils_validators
 from openstack_dashboard import api
 from openstack_dashboard.utils import filters
 from openstack_dashboard.dashboards.project.connections.mockapi import NetworkTemplateAPI
-from openstack_dashboard.dashboards.project.connections.mockobjects import ReachabilityTestStub
+from openstack_dashboard.dashboards.project.connections.mockobjects import NetworkTemplateStub
 
 
 def findDefault(template_list,key):
@@ -69,6 +69,8 @@ class SelectTemplateForm(forms.SelfHandlingForm):
 
 
     def handle(self, request, data):
+	api = NetworkTemplateAPI()
+	api.loadHeatTemplate()
 	#import pdb
 	#pdb.set_trace()
 	return data
@@ -80,7 +82,6 @@ class ApplyTemplateForm(forms.SelfHandlingForm):
         super(ApplyTemplateForm, self).__init__(*args, **kwargs)
 	
 	api = NetworkTemplateAPI()
-	api.loadHeatTemplate()
         template = api.getHeatTemplate()
         #import pdb
         #pdb.set_trace()
@@ -99,6 +100,32 @@ class ApplyTemplateForm(forms.SelfHandlingForm):
 
 
     def handle(self, request, data):
-        #import pdb
-        #pdb.set_trace()
-        return True
+	api = NetworkTemplateAPI()
+	template = api.getHeatTemplate()
+	new_data = {}
+	#import pdb
+	#pdb.set_trace()
+	new_data = template['resources']
+	network_entities = {}
+	network_connections = {}
+	for resource in template['resources']:
+		if(new_data[resource].has_key('properties')):
+			if(new_data[resource]['properties'].has_key('name')):
+				network_entities[resource] = {'properties':{'name':''}}
+				network_entities[resource]['properties']['name'] = data[new_data[resource]['properties']['name']['get_param']].encode('ascii','ignore')
+	
+	for network in network_entities:
+		token = network.split("_")
+		if(token[0] == "out"):
+			if(network_entities.has_key('mid_net')):
+				network_connections[network] = {'destination' : 'mid_net', 'expected_connection' : 'forward'}
+		elif(token[0] == "mid"):
+			if(network_entities.has_key('inner_net')):
+				network_connections[network] = {'destination' : 'inner_net', 'expected_connection' : 'forward'}
+	
+	network_template = NetworkTemplateStub({"network_entities" : network_entities, "network_connections" : network_connections})
+	template['web_map'] = network_template
+	api.updateHeatTemplate(template)
+	#import pdb
+	#pdb.set_trace()
+        return template

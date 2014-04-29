@@ -1,6 +1,8 @@
 {% load i18n sizeformat %}
 {% block main %}
 <link rel="stylesheet" href="css/network-template.css">
+<link rel="stylesheet" href="css/demo-all.css">
+<link rel="stylesheet" href="css/demo.css">
 
 <h3 id="network_page_title" class="network-template-headers">Network Template</h3>
 {% block modal-header %}
@@ -9,9 +11,51 @@
 
 <div id="no_template_message">
 	<h3 id="message_text">No Network Template Applied</h3>
-	<!--<dl>
-    		<dt>{% trans "Description" %}</dt>
-    		<div>{{ network_template.parameters.out_net_name.type|default:_("None") }}</div>
-  	</dl>-->
+    	<div id="network_entities" style="display:none;">{{ network_entities }}</div>
+	<div id="network_connections" style="display:none;">{{ network_connections  }}</div>
+	<div id="main" style="display:none;">
+            <div id="drag-drop-demo" class="demo drag-drop-demo">                       
+                <div id="list"></div>
+            </div>
+        </div>
 </div>
+
+<script type='text/javascript'>
+$(function(){
+        //debugger
+        if($("#network_entities").text() != "{}"){
+                $("#message_text").hide();
+                var network_entities = JSON.parse($("#network_entities").text());
+                var network_connections = JSON.parse($("#network_connections").text());
+                renderNetworkTemplate(network_entities,network_connections);
+        }
+});
+function renderNetworkTemplate(network_entities,network_connections){
+        //debugger
+	var connections = network_connections;
+	var entities = network_entities
+	var count = 1;
+	$.each(entities,function(i,val){
+		//debugger
+		var name = val.properties.name;
+		$("#drag-drop-demo").append('<div class="window" id='+name+'>'+name+'<br/><a href="#" class="cmdLink hide" rel="dragDropWindow'+count+'">toggle connections</a><br/><a href="#" class="cmdLink drag" rel="dragDropWindow'+count+'">net: '+name+'</a><br/><a href="#" class="cmdLink detach" rel="dragDropWindow'+count+'">detach all</a></div>');
+		count++;
+	});
+	//debugger
+        $("#main").show();
+}
+</script>
+
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js'></script>
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js'></script>
+<script type='text/javascript' src='lib/jquery.ui.touch-punch.min.js'></script>
+
+<!-- for demo dropdown. not a jsplumb dependency -->
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+<script type='text/javascript' src='lib/jquery.jsPlumb-1.5.5.js'></script>
+
+<!--  demo code -->
+<script src="js/demo.js"></script>
+
 {% endblock %}

@@ -216,7 +216,7 @@ class NetworkTemplateAPI:
 		if(h.has_key(self.heat_template)):
 			template = h[self.heat_template]
 		else:
-			template = []
+			template = {}
 		h.close()
 		return template
 
@@ -224,4 +224,9 @@ class NetworkTemplateAPI:
 		h = shelve.open(self.heatdb)
 		if(h.has_key(self.heat_template)):
                         del h[self.heat_template]
+		h.close()
+	
+	def updateHeatTemplate(self,updated_template):
+		h = shelve.open(self.heatdb)
+		h[self.heat_template] = updated_template
 		h.close()

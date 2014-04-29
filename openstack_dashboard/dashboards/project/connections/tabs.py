@@ -19,6 +19,8 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+import json
+
 from django.utils.translation import ugettext_lazy as _
 
 from horizon import exceptions
@@ -45,10 +47,19 @@ class NetworkTemplateTab(tabs.Tab):
    
     def get_context_data(self,request):
 	api = NetworkTemplateAPI()
-	template = api.getHeatTemplate()
 	#import pdb
 	#pdb.set_trace()
-	return {"network_template": template}
+	template = api.getHeatTemplate()
+	if(template.has_key('web_map')):
+		entities = json.dumps(template['web_map'].network_entities)
+		connections = json.dumps(template['web_map'].network_connections)
+	else:
+		entities = {}
+		connections = {}
+
+	#import pdb
+	#pdb.set_trace()
+	return {"network_entities": entities, "network_connections": connections}
 
 class ReachabilityTestsTab(tabs.TableTab):
     table_classes = (ReachabilityTestsTable,)
