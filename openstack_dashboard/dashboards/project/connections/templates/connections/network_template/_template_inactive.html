@@ -7,10 +7,11 @@
 <h3 id="network_page_title" class="network-template-headers">Network Template</h3>
 {% block modal-header %}
   <a href="{% url 'horizon:project:connections:network_template:select' %}" id="apply_network_template_button" class="btn btn-small btn-create ajax-modal pull-right"></a>
+  <a href="{% url 'horizon:project:connections:index' %}" id="remove_network_template_button" class="btn btn-small btn-danger btn-delete pull-right"></a>
 {% endblock %}
 
 <div id="no_template_message">
-	<h3 id="message_text">No Network Template Applied</h3>
+	<h3 id="message_text" style="display:none;">No Network Template Applied</h3>
     	<div id="network_entities" style="display:none;">{{ network_entities }}</div>
 	<div id="network_connections" style="display:none;">{{ network_connections  }}</div>
 	<div id="main" style="display:none;">
@@ -23,22 +24,30 @@
 <script type='text/javascript'>
 $(function(){
         //debugger
+	//$("#network_entities").text("{}");
         if($("#network_entities").text() != "{}"){
+		$("#apply_network_template_button").hide();
+		$("#remove_network_template_button").show();
                 $("#message_text").hide();
                 var network_entities = JSON.parse($("#network_entities").text());
                 var network_connections = JSON.parse($("#network_connections").text());
                 renderNetworkTemplate(network_entities,network_connections);
-        }
+        }else{
+		$("#remove_network_template_button").hide();
+		$("#apply_network_template_button").show();
+		$("#message_text").show();
+	}
 });
 function renderNetworkTemplate(network_entities,network_connections){
         //debugger
 	var connections = network_connections;
-	var entities = network_entities
+	var entities = network_entities;
 	var count = 1;
+	//debugger
 	$.each(entities,function(i,val){
 		//debugger
 		var name = val.properties.name;
-		$("#drag-drop-demo").append('<div class="window" id='+name+'>'+name+'<br/><a href="#" class="cmdLink hide" rel="dragDropWindow'+count+'">toggle connections</a><br/><a href="#" class="cmdLink drag" rel="dragDropWindow'+count+'">net: '+name+'</a><br/><a href="#" class="cmdLink detach" rel="dragDropWindow'+count+'">detach all</a></div>');
+		$("#drag-drop-demo").append('<div class="window dragDropWindow'+count+'" id='+i+'>'+name+'<br/><a href="#" class="cmdLink hide" rel="dragDropWindow'+count+'">toggle connections</a><br/><a href="#" class="cmdLink drag" rel="dragDropWindow'+count+'">net: '+name+'</a><br/><a href="#" class="cmdLink detach" rel="dragDropWindow'+count+'">detach all</a></div>');
 		count++;
 	});
 	//debugger
@@ -46,7 +55,6 @@ function renderNetworkTemplate(network_entities,network_connections){
 }
 </script>
 
-<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js'></script>
 <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js'></script>
 <script type='text/javascript' src='lib/jquery.ui.touch-punch.min.js'></script>
 

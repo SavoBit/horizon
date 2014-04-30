@@ -1,8 +1,8 @@
 /** ELEMENT POSITIONS **/
-#dragDropWindow1 { top:76px;left:10%; }
-#dragDropWindow2 { top:148px; right:10%; }
-#dragDropWindow3 { top:340px; left:8%; }
-#dragDropWindow4 { top:416px; right:40%}
+.dragDropWindow1 { position:relative; top:18%; left:10%; }
+.dragDropWindow2 { position:relative; top:18%; left:25%; }
+.dragDropWindow3 { position:relative; top:18%; left:40%; }
+.dragDropWindow4 { position:relative; top:18%; left:55%}
 
 /** ELEMENTS **/
 .drag-drop-demo .window {  

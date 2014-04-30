@@ -16,20 +16,27 @@
 		},
 		connections = [],
 		updateConnections = function(conn, remove) {
-			if (!remove) connections.push(conn);
-			else {
-				var idx = -1;
-				for (var i = 0; i < connections.length; i++) {
-					if (connections[i] == conn) {
-						idx = i; break;
+			var entities = JSON.parse($("#network_entities").text());
+			//Fix duplication issue when moving the connection point and putting it back
+			has_key = $.inArray(conn,connections);
+			if(has_key == -1){
+				if (!remove) connections.push(conn);
+				else {
+					var idx = -1;
+					for (var i = 0; i < connections.length; i++) {
+						if (connections[i] == conn) {
+							idx = i; break;
+						}
 					}
+					if (idx != -1) connections.splice(idx, 1);
 				}
-				if (idx != -1) connections.splice(idx, 1);
 			}
 			if (connections.length > 0) {
+				//debugger
 				var s = "<span><strong>Connectivity Tests</strong></span><br/><br/><table><tr><th>Expected</th><th>Source</th><th>Dest</th></tr>";
 				for (var j = 0; j < connections.length; j++) {
-					s = s + "<tr><td>" + connections[j].scope + "</td>" + "<td>" + connections[j].sourceId + "</td><td>" + connections[j].targetId + "</td></tr>";
+					//debugger
+					s = s + "<tr><td>" + connections[j].scope + "</td>" + "<td>" + entities[connections[j].sourceId].properties.name + "</td><td>" + entities[connections[j].targetId].properties.name + "</td></tr>";
 				}
 				showConnectionInfo(s);
 			} else 
@@ -219,7 +226,27 @@
 					e.stopPropagation();
 					e.preventDefault();
 				});
+				//debugger
+				var network_connections = JSON.parse($("#network_connections").text());
+				$.each(network_connections,function(i,val){
+					//debugger
+					instance.connect({
+						paintStyle:{ 
+							strokeStyle:colorGreen, 
+							lineWidth:2,
+							outlineColor:"white",
+							outlineWidth:0.1
+					 	},
+						connector: ["Bezier", { curviness:63 } ],
+						endpoint:["Dot", { radius:11 }],
+						EndpointStyle : { fillStyle: colorGreen  },
+						anchor:"Top",
+						source:i,
+                                        	target:val.destination,
+                                        	scope:val.expected_connection
+                        		});
+				});
 			});
-			
+		
 	});	
 })();
