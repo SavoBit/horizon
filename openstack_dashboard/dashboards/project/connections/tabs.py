@@ -43,7 +43,7 @@ from openstack_dashboard.dashboards.project.connections.mockapi import NetworkTe
 class NetworkTemplateTab(tabs.Tab):
     name = _("Network Template")
     slug = "network_template_tab"
-    template_name = "project/connections/network_template/_template_inactive.html"
+    template_name = "project/connections/network_template/_template_home.html"
    
     def get_context_data(self,request):
 	api = NetworkTemplateAPI()
@@ -85,11 +85,6 @@ class TopTalkersTab(tabs.TableTab):
 
     def get_toptalkers_data(self):
         services = []
-        for i, service in enumerate(self.request.user.service_catalog):
-            service['id'] = i
-            services.append(
-                keystone.Service(service, self.request.user.services_region))
-
         return services
 
 

@@ -28,7 +28,9 @@
     <dt>{% trans "Test Results" %}</dt>
     <dd>{{ quick_test.status|default:_("None") }}</dd>
     <dt>{% trans "Command Line Output" %}</dt>
-    <dd>{{ quick_test.comand_line|default:_("None") }}</dd>
+    <div class="command-prompt-background">
+        <ul class="command-prompt-text"></ul>
+    </div>
   </dl>
 </div>
 

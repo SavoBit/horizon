@@ -7,7 +7,7 @@
 <h3 id="network_page_title" class="network-template-headers">Network Template</h3>
 {% block modal-header %}
   <a href="{% url 'horizon:project:connections:network_template:select' %}" id="apply_network_template_button" class="btn btn-small btn-create ajax-modal pull-right"></a>
-  <a href="{% url 'horizon:project:connections:index' %}" id="remove_network_template_button" class="btn btn-small btn-danger btn-delete pull-right"></a>
+  <a href="{% url 'horizon:project:connections:network_template:remove' %}" id="remove_network_template_button" class="btn btn-small btn-danger ajax-modal btn-delete pull-right"></a>
 {% endblock %}
 
 <div id="no_template_message">

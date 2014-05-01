@@ -75,6 +75,22 @@ class SelectTemplateForm(forms.SelfHandlingForm):
 	#pdb.set_trace()
 	return data
 
+class RemoveTemplateForm(forms.SelfHandlingForm):
+
+    def __init__(self, *args, **kwargs):
+        super(RemoveTemplateForm, self).__init__(*args, **kwargs)
+        #import pdb
+        #pdb.set_trace()
+
+
+    def handle(self, request, data):
+        api = NetworkTemplateAPI()
+        api.removeHeatTemplate()
+        #import pdb
+        #pdb.set_trace()
+        return True
+
+
 class ApplyTemplateForm(forms.SelfHandlingForm):
     
 

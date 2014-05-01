@@ -49,3 +49,8 @@ class SelectTemplateView(forms.ModalFormView):
     form_class = project_forms.SelectTemplateForm
     template_name = 'project/connections/network_template/select_template.html'
     success_url = reverse_lazy('horizon:project:connections:network_template:temp')
+
+class RemoveTemplateView(forms.ModalFormView):
+    form_class = project_forms.RemoveTemplateForm
+    template_name = 'project/connections/network_template/remove_template.html'
+    success_url = reverse_lazy('horizon:project:connections:index')

@@ -18,7 +18,7 @@
 		updateConnections = function(conn, remove) {
 			var entities = JSON.parse($("#network_entities").text());
 			//Fix duplication issue when moving the connection point and putting it back
-			has_key = $.inArray(conn,connections);
+			var has_key = $.inArray(conn,connections);
 			if(has_key == -1){
 				if (!remove) connections.push(conn);
 				else {
@@ -31,6 +31,8 @@
 					if (idx != -1) connections.splice(idx, 1);
 				}
 			}
+			//Disabling the view of this box but leaving code in case of reuse.
+			connections = [];
 			if (connections.length > 0) {
 				//debugger
 				var s = "<span><strong>Connectivity Tests</strong></span><br/><br/><table><tr><th>Expected</th><th>Source</th><th>Dest</th></tr>";
