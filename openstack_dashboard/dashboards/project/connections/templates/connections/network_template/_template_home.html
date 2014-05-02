@@ -51,7 +51,7 @@ function renderNetworkTemplate(network_entities,network_connections){
 	$.each(entities,function(i,val){
 		var name = val.properties.name;
 
-		$("#drag-drop-demo").append('<div class="window dragDropWindow'+count+'" id='+i+'>'+name+'<br/><a href="#" class="cmdLink hide" rel="dragDropWindow'+count+'">toggle connections</a><br/><a href="#" class="cmdLink drag" rel="dragDropWindow'+count+'">net: '+name+'</a><br/><a href="#" class="cmdLink detach" rel="dragDropWindow'+count+'">detach all</a></div>');
+		$("#drag-drop-demo").append('<div class="window dragDropWindow'+count+'" id='+i+'>'+name+'<br/><a href="#" class="cmdLink hide" rel="dragDropWindow'+count+'">toggle connections</a><br/><a href="#" class="cmdLink drag" rel="dragDropWindow'+count+'">net: '+name+'</a></div>');
 		
 		count++;
 	});
