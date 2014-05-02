@@ -20,7 +20,7 @@
 #    under the License.
 
 """
-Views for Instances and Volumes.
+Views for Connections tab.
 """
 
 from horizon import tabs

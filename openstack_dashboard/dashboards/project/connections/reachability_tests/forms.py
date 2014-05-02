@@ -151,12 +151,11 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
             cleaned_data[key] = value
             self.errors.pop(key, None)
 	
-	#name = cleaned_data.get("name")
-	#update_cleaned_data('name',name)
         connection_source_type = cleaned_data.get('conection_source_type')
 	connection_destination_type = cleaned_data.get('connection_destination_type')
 	expected_connection = cleaned_data.get('expected_connection')	
 
+	#Validation to check that default isn't selected.
 	if connection_source_type == 'default':
 		msg = _('A connection source type must be selected.')
 		raise ValidationError(msg)
@@ -166,9 +165,6 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
 	if expected_connection == 'default':
 		msg = _('A expected connection result must be selected.')
                 raise ValidationError(msg)
-
-	#import pdb
-	#pdb.set_trace()
 
 	return cleaned_data
 
@@ -202,6 +198,7 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
 			'connection_destination' : dest,
 			'expected_connection' : expected}
 
+	#TODO: Replace with API call to create a test.
 	test = ReachabilityTestStub(new_test_data)
         messages.success(request, _('Successfully created reachability test: %s') % data['name'])
         api = ReachabilityTestAPI()
@@ -210,11 +207,6 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
         return test
 
 class RunQuickTestForm(forms.SelfHandlingForm):
-
-    #name = forms.CharField(max_length="255",
-    #                       label=_("Name"),
-    #                       required=True)
-
     connection_source_type = forms.ChoiceField(
         label=_('Connection Source Type'),
 	required=True,
@@ -319,12 +311,11 @@ class RunQuickTestForm(forms.SelfHandlingForm):
             cleaned_data[key] = value
             self.errors.pop(key, None)
 	
-	#name = cleaned_data.get("name")
-	#update_cleaned_data('name',name)
         connection_source_type = cleaned_data.get('conection_source_type')
 	connection_destination_type = cleaned_data.get('connection_destination_type')
 	expected_connection = cleaned_data.get('expected_connection')	
-
+	
+	#Validation to check if that selection isn't default.
 	if connection_source_type == 'default':
 		msg = _('A connection source type must be selected.')
 		raise ValidationError(msg)
@@ -334,9 +325,6 @@ class RunQuickTestForm(forms.SelfHandlingForm):
 	if expected_connection == 'default':
 		msg = _('A expected connection result must be selected.')
                 raise ValidationError(msg)
-
-	#import pdb
-	#pdb.set_trace()
 
 	return cleaned_data
 
@@ -372,19 +360,20 @@ class RunQuickTestForm(forms.SelfHandlingForm):
                         'connection_destination' : dest,
                         'expected_connection' : expected}
 
+	#TODO: Replace with API call to run a quick/troubleshoot test.
         test = ReachabilityTestStub(new_test_data) 
         api = ReachabilityTestAPI()
         api.addQuickTest(test)
 	api.runQuickTest()
 	test = api.getQuickTest()
 	messages.success(request, _('Successfully ran quick test.'))
-        #import pdb
-        #pdb.set_trace()
+
         return test
 
 
 class UpdateForm(forms.SelfHandlingForm):
     reachability_test_id = forms.CharField(widget=forms.HiddenInput())
+
     name = forms.CharField(max_length="255",
                            label=_("Name"),
                            required=True)
@@ -493,12 +482,11 @@ class UpdateForm(forms.SelfHandlingForm):
             cleaned_data[key] = value
             self.errors.pop(key, None)
 	
-	#name = cleaned_data.get("name")
-	#update_cleaned_data('name',name)
         connection_source_type = cleaned_data.get('conection_source_type')
 	connection_destination_type = cleaned_data.get('connection_destination_type')
 	expected_connection = cleaned_data.get('expected_connection')	
 
+	#Validation to make sure the user make a selection.
 	if connection_source_type == 'default':
 		msg = _('A connection source type must be selected.')
 		raise ValidationError(msg)
@@ -509,13 +497,9 @@ class UpdateForm(forms.SelfHandlingForm):
 		msg = _('A expected connection result must be selected.')
                 raise ValidationError(msg)
 
-	#import pdb
-	#pdb.set_trace()
-
 	return cleaned_data
 
     def handle(self, request, data):
-	
 	if data['connection_source_type'] == 'instance':
                 source = data['instance_source'].encode('ascii','ignore')
                 source_type = data['connection_source_type'].encode('ascii','ignore')
@@ -544,15 +528,13 @@ class UpdateForm(forms.SelfHandlingForm):
                         'connection_destination_type' : dest_type,
                         'connection_destination' : dest,
                         'expected_connection' : expected}
-        
+       
+	#TODO: Replace with API call to update an existing test with new data. 
 	test = ReachabilityTestStub(new_test_data)
         api = ReachabilityTestAPI()
-	#import pdb
-	#pdb.set_trace()
         api.updateReachabilityTest(data['reachability_test_id'].encode('ascii','ignore'),test)
-        #import pdb
-        #pdb.set_trace()
         messages.success(request, _('Successfully updated reachability test.'))
+
         return test
 
 
@@ -574,6 +556,7 @@ class SaveQuickTestForm(forms.SelfHandlingForm):
         return cleaned_data
 
     def handle(self, request, data):
+	#TODO: Replace with API call to save a quick/troubleshoot test
 	api = ReachabilityTestAPI()
         test = api.saveQuickTest(data['name'].encode('ascii','ignore'))
         messages.success(request, _('Successfully saved quick test: %s') % data['name'])

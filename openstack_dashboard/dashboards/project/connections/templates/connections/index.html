@@ -22,11 +22,14 @@
 
 <script type='text/javascript'>
 $(function(){
+	//added Font Awesome icons to the buttons.
 	$("#reachability_tests__action_quick_test").html("<i class='fa fa-bolt fa-lg'></i>  Quick Test");
 	$("#apply_network_template_button").html("<i class='fa fa-plus fa-lg'></i>      <b>Apply Network Template</b>");
 	$("#remove_network_template_button").html("<i class='fa fa-trash-o fa-lg'></i>      <b>Remove Network Template</b>");
 	
 	var count = 0;
+
+	//Add classes to the table elements to use to generate the status lights.
      	$('#reachability_tests tr').each(function(){
     		$(this).find('td').each(function(){
 			if(count == 3 && (this.textContent === "PASS" || this.textContent === "FAIL" || this.textContent === "PENDING")){
@@ -50,18 +53,28 @@ $(function(){
 		count = 0;
 	})
 	
+	//Added html containers to hold the Font Awesome icons.
 	$( ".test-pass" ).wrapInner( "<div class='test-general-settings'><div class='test-text'>PASS</div><i class='status-light test-pass-msg fa fa-check fa-3x'></i></div>");
      	$( ".test-pending" ).wrapInner( "<div class='test-general-settings'><div class='test-text'>PENDING</div><i class='status-light test-pending-msg fa fa-question fa-3x'></i></div>");
 	$( ".test-fail" ).wrapInner( "<div class='test-general-settings'><div class='test-text'>FAIL</div><i class='status-light test-fail-msg fa fa-times fa-3x'></i></div>");
+
+	//Create a Open Tip object for the icons and bind their apperance
+	//to hover over event.
      	initializeToolTips('.test-pass-msg','pass');
         initializeToolTips('.test-pending-msg','pending');
         initializeToolTips('.test-fail-msg','fail');
 	hoverOverMenu('.test-pass-msg');
      	hoverOverMenu('.test-pending-msg');
      	hoverOverMenu('.test-fail-msg');
+
+	//Manange status list.
 	manageStatusLists();
 });
 
+/**
+*  Function handles the hiding of Open tip objects if the user goes outside the 
+*  table or to a different page.
+**/
 function manageStatusLists(){
 	$(document).mousemove(function(event) {
         	var x = event.clientX, y = event.clientY,
@@ -73,6 +86,10 @@ function manageStatusLists(){
 
 }
 
+/**
+*  Initialize an Open Tip objects for every item in the list passed on to 
+*  tipMenuItems.
+**/
 function initializeToolTips(tipMenuItems, initialContent){
 	Opentip.styles.runListStyle = {
 	  // Make it look like the alert style. If you omit this, it will default to "standard"
@@ -92,6 +109,10 @@ function initializeToolTips(tipMenuItems, initialContent){
         }
 }
 
+/**
+*  Add the contnet of the list of runs to the Open Tip objet that is hover over and 
+*  display it.
+**/
 function hoverOverMenu(hoverMenu){
 	$(hoverMenu).hover(function(){
 		var current = this;
@@ -115,6 +136,10 @@ function hoverOverMenu(hoverMenu){
 
 }
 
+/**
+* Populate the menu to be added to the Open Tip object based on the row 
+* and column. The data is acquired from the tables' hidden column.
+**/
 function populateMenu(dataObject){
 	var rowElement = $(dataObject).closest("tr");
 	var rawData = $(rowElement.children()[4]).html();
@@ -136,6 +161,9 @@ function populateMenu(dataObject){
 	
 }
 
+/**
+* Add message to the Open Tip list to go in fron of the time stamp. 
+**/
 function listItemStatus(statusListItem){
 	var statusMsg = '';
 	var randNum = 0;

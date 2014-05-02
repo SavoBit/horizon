@@ -34,10 +34,8 @@
 			//Disabling the view of this box but leaving code in case of reuse.
 			connections = [];
 			if (connections.length > 0) {
-				//debugger
 				var s = "<span><strong>Connectivity Tests</strong></span><br/><br/><table><tr><th>Expected</th><th>Source</th><th>Dest</th></tr>";
 				for (var j = 0; j < connections.length; j++) {
-					//debugger
 					s = s + "<tr><td>" + connections[j].scope + "</td>" + "<td>" + entities[connections[j].sourceId].properties.name + "</td><td>" + entities[connections[j].targetId].properties.name + "</td></tr>";
 				}
 				showConnectionInfo(s);
@@ -228,10 +226,11 @@
 					e.stopPropagation();
 					e.preventDefault();
 				});
-				//debugger
+				
+				//Add the connections between the networks based on
+				//info passed on from the template.
 				var network_connections = JSON.parse($("#network_connections").text());
 				$.each(network_connections,function(i,val){
-					//debugger
 					instance.connect({
 						paintStyle:{ 
 							strokeStyle:colorGreen, 

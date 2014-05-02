@@ -37,15 +37,15 @@ from openstack_dashboard.utils import filters
 from openstack_dashboard.dashboards.project.connections.mockapi import NetworkTemplateAPI
 from openstack_dashboard.dashboards.project.connections.mockobjects import NetworkTemplateStub
 
-
+"""Finds if a key exist within a dictionary. Returns empty
+   string if not found.
+   return: String"""
 def findDefault(template_list,key):
-	#import pdb
-	#pdb.set_trace()
 	result = ''
+
 	if template_list.has_key(key):
 		result = template_list[key]
-	#import pdb
-	#pdb.set_trace()
+
 	return result
 
 class SelectTemplateForm(forms.SelfHandlingForm):
@@ -58,78 +58,87 @@ class SelectTemplateForm(forms.SelfHandlingForm):
         super(SelectTemplateForm, self).__init__(*args, **kwargs)
         templates=[
                 ('default', _('--- Select Network Template ---')),
-                ('template1', _('Template 1')),
-                ('template2', _('Template 2')),
-                ('tempalte3', _('Tempalte 3'))
+                ('template1', _('Template 1'))
         ]
 	self.fields['network_templates'].choices = templates
 	
-	#import pdb
-	#pdb.set_trace()
+    def clean(self):
+        cleaned_data = super(SelectTemplateForm, self).clean()
 
+        def update_cleaned_data(key, value):
+            cleaned_data[key] = value
+            self.errors.pop(key, None)
 
+        network_template = cleaned_data.get('network_templates')
+
+        if network_template == 'default':
+                msg = _('A template must be selected.')
+                raise ValidationError(msg)
+
+        return cleaned_data
+    
     def handle(self, request, data):
+	#TODO: Replace the following lines with your API call to load templates.
 	api = NetworkTemplateAPI()
 	api.loadHeatTemplate()
-	#import pdb
-	#pdb.set_trace()
+
 	return data
+
 
 class RemoveTemplateForm(forms.SelfHandlingForm):
 
     def __init__(self, *args, **kwargs):
         super(RemoveTemplateForm, self).__init__(*args, **kwargs)
-        #import pdb
-        #pdb.set_trace()
-
 
     def handle(self, request, data):
+	#TODO: Replace the following with your API call to remove template.
         api = NetworkTemplateAPI()
         api.removeHeatTemplate()
-        #import pdb
-        #pdb.set_trace()
+
         return True
 
 
 class ApplyTemplateForm(forms.SelfHandlingForm):
     
-
     def __init__(self, *args, **kwargs):
         super(ApplyTemplateForm, self).__init__(*args, **kwargs)
 	
+	#TODO: Replace with your API call to load the selected template.
 	api = NetworkTemplateAPI()
         template = api.getHeatTemplate()
-        #import pdb
-        #pdb.set_trace()
-        for parameter in template['parameters']:
-                #import pdb
-                #pdb.set_trace()
+
+	#Sorts the parameters in the template.
+	parameters = template['parameters'].keys()
+	parameters.sort()
+	parameters.reverse()
+
+	#Populates the form dynamically with information from the template.
+        for parameter in parameters:
                 self.fields[parameter] = forms.CharField(max_length ="255",
                                                         label=_(template['parameters'][parameter]['label']),
                                                         initial=findDefault(template['parameters'][parameter],'default'),
                                                         help_text=_(template['parameters'][parameter]['description']),
                                                         required=True)
 
-        #import pdb
-        #pdb.set_trace()
-
-
-
     def handle(self, request, data):
+	#TODO: Replace with your own API call to fetch the current template.
 	api = NetworkTemplateAPI()
 	template = api.getHeatTemplate()
+
 	new_data = {}
-	#import pdb
-	#pdb.set_trace()
 	new_data = template['resources']
 	network_entities = {}
 	network_connections = {}
+
+	#Fetches the data entered in the form and populates a dictionary based of it and of the networks available.
 	for resource in template['resources']:
 		if(new_data[resource].has_key('properties')):
 			if(new_data[resource]['properties'].has_key('name')):
 				network_entities[resource] = {'properties':{'name':''}}
 				network_entities[resource]['properties']['name'] = data[new_data[resource]['properties']['name']['get_param']].encode('ascii','ignore')
 	
+	#Fetches information from the template and makes a connections mapping. 
+	#TODO: The mapping is based of name. Change if name changes or using a different way to represent connecitons in the template.
 	for network in network_entities:
 		token = network.split("_")
 		if(token[0] == "out"):
@@ -139,9 +148,9 @@ class ApplyTemplateForm(forms.SelfHandlingForm):
 			if(network_entities.has_key('inner_net')):
 				network_connections[network] = {'destination' : 'inner_net', 'expected_connection' : 'forward'}
 	
+	#Create new object to hold the to dictionaries.
 	network_template = NetworkTemplateStub({"network_entities" : network_entities, "network_connections" : network_connections})
 	template['web_map'] = network_template
 	api.updateHeatTemplate(template)
-	#import pdb
-	#pdb.set_trace()
+
         return template

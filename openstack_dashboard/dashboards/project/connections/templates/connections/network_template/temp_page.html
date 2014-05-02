@@ -8,13 +8,15 @@
 
 {% block main %}
 <a id="temp" href="{% url 'horizon:project:connections:network_template:apply' %}" style="display:none;" class="ajax-modal">Temp</a>
+
 <script type='text/javascript'>
+/**
+*  Function to fix issue with transitioning from one dialog window to another after the form is submitted.
+**/
 $(function(){
-        //debugger
 	window.setTimeout("delayClick()",50);
 });
 function delayClick(){
-	//debugger
 	$("#temp").trigger('click');
 }
 </script>

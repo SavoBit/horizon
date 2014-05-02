@@ -46,10 +46,11 @@ class NetworkTemplateTab(tabs.Tab):
     template_name = "project/connections/network_template/_template_home.html"
    
     def get_context_data(self,request):
+	#TODO: Replace with API call to get the current template applied.
+	#This will be used to render the page.
 	api = NetworkTemplateAPI()
-	#import pdb
-	#pdb.set_trace()
 	template = api.getHeatTemplate()
+
 	if(template.has_key('web_map')):
 		entities = json.dumps(template['web_map'].network_entities)
 		connections = json.dumps(template['web_map'].network_connections)
@@ -57,9 +58,8 @@ class NetworkTemplateTab(tabs.Tab):
 		entities = {}
 		connections = {}
 
-	#import pdb
-	#pdb.set_trace()
 	return {"network_entities": entities, "network_connections": connections}
+
 
 class ReachabilityTestsTab(tabs.TableTab):
     table_classes = (ReachabilityTestsTable,)
@@ -69,12 +69,15 @@ class ReachabilityTestsTab(tabs.TableTab):
 
     def get_reachability_tests_data(self):
         try:
+	    #TODO: Replace with API call to get the list of objects to add
+	    #to the table.
 	    api = ReachabilityTestAPI()
 	    reachability_tests = api.listReachabilityTest()
         except Exception:
             reachability_tests = []
             exceptions.handle(self.request,
                               _('Unable to retrieve reachability test list.'))
+
         return reachability_tests
 
 class TopTalkersTab(tabs.TableTab):
@@ -84,6 +87,7 @@ class TopTalkersTab(tabs.TableTab):
     template_name = "horizon/common/_detail_table.html"
 
     def get_toptalkers_data(self):
+	#TODO: Add an API call to get the data to display for Top Talkers table.
         services = []
         return services
 

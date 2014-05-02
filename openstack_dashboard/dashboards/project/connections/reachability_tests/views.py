@@ -19,7 +19,7 @@
 #    under the License.
 
 """
-Views for managing keypairs.
+Views for managing reachability test.
 """
 from django.core.urlresolvers import reverse
 from django.core.urlresolvers import reverse_lazy
@@ -47,10 +47,12 @@ class CreateView(forms.ModalFormView):
     template_name = 'project/connections/reachability_tests/create.html'
     success_url = reverse_lazy("horizon:project:connections:index")
 
+
 class RunQuickTestView(forms.ModalFormView):
     form_class = project_forms.RunQuickTestForm
     template_name = 'project/connections/reachability_tests/quick_test.html'
     success_url = reverse_lazy("horizon:project:connections:reachability_tests:quick")
+
 
 class UpdateView(forms.ModalFormView):
     form_class = project_forms.UpdateForm
@@ -60,8 +62,8 @@ class UpdateView(forms.ModalFormView):
     @memoized.memoized_method
     def get_object(self):
         try:
-	    #import pdb
-	    #pdb.set_trace()
+	    #TODO: Replace with API call to get the existing data of the reachability test you want to update.
+	    #The form will be populated with this information.
 	    api = ReachabilityTestAPI()
             return api.getReachabilityTest(self.kwargs['reachability_test_id'].encode('ascii','ignore'))
         except Exception:
@@ -77,8 +79,6 @@ class UpdateView(forms.ModalFormView):
     def get_initial(self):
         reachability_test = self.get_object()
         properties = getattr(reachability_test, 'properties', {})
-        #import pdb
-	#pdb.set_trace()
 	
 	connection_source = source = reachability_test.connection_source_type + '_source'
 	connection_destination  = reachability_test.connection_destination_type + '_destination'
@@ -89,6 +89,7 @@ class UpdateView(forms.ModalFormView):
 		connection_destination : reachability_test.connection_destination,
                 'name': reachability_test.name,
 		'expected_connection' : reachability_test.expected_connection}
+
 
 class DetailView(tabs.TabView):
     tab_group_class = project_tabs.ReachabilityTestDetailTabs
@@ -102,8 +103,7 @@ class DetailView(tabs.TabView):
     @memoized.memoized_method
     def get_data(self):
         try:
-	    #import pdb
-	    #pdb.set_trace()
+	    #TODO: Replace with API call to get data to display in the details page.
 	    api = ReachabilityTestAPI()
             return api.getReachabilityTest(self.kwargs['reachability_test_id'].encode('ascii','ignore'))
         except Exception:
@@ -116,6 +116,7 @@ class DetailView(tabs.TabView):
         reachability_test = self.get_data()
         return self.tab_group_class(request, reachability_test=reachability_test, **kwargs)
 
+
 class QuickDetailView(tabs.TabView):
     tab_group_class = project_tabs.QuickTestDetailTabs
     template_name = 'project/connections/reachability_tests/quick_detail.html'
@@ -123,15 +124,13 @@ class QuickDetailView(tabs.TabView):
     def get_context_data(self, **kwargs):
         context = super(QuickDetailView, self).get_context_data(**kwargs)
         context["quick_test"] = self.get_data()
-	#import pdb
-	#pdb.set_trace()
+
         return context
 
     @memoized.memoized_method
     def get_data(self):
         try:
-	    #import pdb
-	    #pdb.set_trace()
+	    #TODO: Replace with API call to get data to display in the quick test results page.
             api = ReachabilityTestAPI()
             return  api.getQuickTest()
         except Exception:
@@ -141,8 +140,6 @@ class QuickDetailView(tabs.TabView):
                               redirect=url)
 
     def get_tabs(self, request, *args, **kwargs):
-	#import pdb
-	#pdb.set_trace()
         quick_test = self.get_data()
         return self.tab_group_class(request, quick_test=quick_test, **kwargs)
 

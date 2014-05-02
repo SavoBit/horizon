@@ -20,14 +20,14 @@ from django.utils.translation import ugettext_lazy as _
 from horizon import tabs
 
 
+"""Class to handle the data population of the test details views."""
+
 class DetailsTab(tabs.Tab):
     name = _("Details")
     slug = "details"
     template_name = "project/connections/reachability_tests/_detail_overview.html"
 
     def get_context_data(self, request):
-	#import pdb
-	#pdb.set_trace()
         reachability_test = self.tab_group.kwargs['reachability_test']
         return {"reachability_test": reachability_test}
 
@@ -36,14 +36,13 @@ class ReachabilityTestDetailTabs(tabs.TabGroup):
     slug = "reachability_test_details"
     tabs = (DetailsTab,)
 
+
 class QuickDetailsTab(tabs.Tab):
     name = _("Quick Test Results")
     slug = "quick_details"
     template_name = "project/connections/reachability_tests/_quick_detail_overview.html"
 
     def get_context_data(self, request):
-        #import pdb
-        #pdb.set_trace()
         quick_test = self.tab_group.kwargs['quick_test']
         return {"quick_test": quick_test}
 

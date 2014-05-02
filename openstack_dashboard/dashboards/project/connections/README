@@ -1,0 +1,9 @@
+Connections Panel - UI designed for Big Switch Networks using html, javascript, python and django.
+
+To run the Network Template's apply network template functionality, 
+you must first install PyYAML-3.11. This was the parser used to get 
+the data from the sample heat template given. A copy of the 
+installation package has been included with this panel. Make sure 
+to look over the README in the installation folder for the parser.
+
+After the PyYAML installation, everything should work out of the box.

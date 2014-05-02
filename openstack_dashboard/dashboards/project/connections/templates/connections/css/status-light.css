@@ -1,8 +1,11 @@
+/** FORMAT FOR STATUS LIGHT/TEXT CONTAINER  **/
 .test-general-settings{
     width:50px;
     height:25px;
     margin:1px auto;
 }
+
+/** POSITION OF STATUS TEXT **/
 .test-text {
     margin: 1px auto;
     position:relative;
@@ -10,6 +13,8 @@
     width: 40px;
     height: 40px;
 }
+
+/** FAIL STATUS LIGHT **/
 .test-fail-msg {
     margin: 1px auto;
     position:relative;
@@ -21,10 +26,12 @@
     border-radius: 50%;
     color: #da4e49;
 }
+
 .test-fail-msg:hover{
     color: #D47875;
 }
 
+/** PENDING STATUS LIGHT **/
 .test-pending-msg {
     margin: 1px auto;
     position:relative;
@@ -40,6 +47,7 @@
     color: #D8D085;
 }
 
+/** PASS STATUS LIGHT**/
 .test-pass-msg {
     margin: 1px auto;
     position:relative;

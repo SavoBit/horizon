@@ -18,12 +18,13 @@
 .dropdown { 
   display:inline;
 }
-
+/**
 .dropdown-menu>li>a {
   width:80%;
   text-transform: uppercase;
   font-size:12px;
 }
+**/
 
 /** FB **/
 #like {

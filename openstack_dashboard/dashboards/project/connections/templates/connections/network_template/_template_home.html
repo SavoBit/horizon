@@ -22,9 +22,10 @@
 </div>
 
 <script type='text/javascript'>
+/**
+*  Function to get the data needed to render the network template.
+**/
 $(function(){
-        //debugger
-	//$("#network_entities").text("{}");
         if($("#network_entities").text() != "{}"){
 		$("#apply_network_template_button").hide();
 		$("#remove_network_template_button").show();
@@ -38,19 +39,23 @@ $(function(){
 		$("#message_text").show();
 	}
 });
+
+/**
+*  Function to add the html elements needed based on the network template.
+**/
 function renderNetworkTemplate(network_entities,network_connections){
-        //debugger
 	var connections = network_connections;
 	var entities = network_entities;
 	var count = 1;
-	//debugger
+
 	$.each(entities,function(i,val){
-		//debugger
 		var name = val.properties.name;
+
 		$("#drag-drop-demo").append('<div class="window dragDropWindow'+count+'" id='+i+'>'+name+'<br/><a href="#" class="cmdLink hide" rel="dragDropWindow'+count+'">toggle connections</a><br/><a href="#" class="cmdLink drag" rel="dragDropWindow'+count+'">net: '+name+'</a><br/><a href="#" class="cmdLink detach" rel="dragDropWindow'+count+'">detach all</a></div>');
+		
 		count++;
 	});
-	//debugger
+
         $("#main").show();
 }
 </script>
