@@ -3,10 +3,13 @@
 {% block title %}{% trans "Connections" %}{% endblock %}
 
 {% block page_header %}
-  {% include "horizon/common/_page_header.html" with title=_("Connections") %}
+<div class="page-header-container">
+  {% include "horizon/common/_page_header.html" with title=_("<img class='big-switch-logo' src='css/logo.png'/><span class='page-header-text'>Connections</span>") %}
+</div>
 {% endblock page_header %}
 
 {% block main %}
+<link rel="stylesheet" href="css/panel-settings.css">
 <link rel="stylesheet" href="css/status-light.css">
 <link rel="stylesheet" href="css/opentip.css">
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
@@ -25,7 +28,7 @@ $(function(){
 	//added Font Awesome icons to the buttons.
 	$("#reachability_tests__action_quick_test").html("<i class='fa fa-bolt fa-lg'></i>  Quick Test");
 	$("#apply_network_template_button").html("<i class='fa fa-plus fa-lg'></i>      <b>Apply Network Template</b>");
-	$("#remove_network_template_button").html("<i class='fa fa-trash-o fa-lg'></i>      <b>Remove Network Template</b>");
+	$("#remove_network_instance_button").html("<i class='fa fa-trash-o fa-lg'></i>      <b>Remove Network Instance</b>");
 	
 	var count = 0;
 

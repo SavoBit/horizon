@@ -7,7 +7,7 @@
 <h3 id="network_page_title" class="network-template-headers">Network Template</h3>
 {% block modal-header %}
   <a href="{% url 'horizon:project:connections:network_template:select' %}" id="apply_network_template_button" class="btn btn-small btn-create ajax-modal pull-right"></a>
-  <a href="{% url 'horizon:project:connections:network_template:remove' %}" id="remove_network_template_button" class="btn btn-small btn-danger ajax-modal btn-delete pull-right"></a>
+  <a href="{% url 'horizon:project:connections:network_template:remove' %}" id="remove_network_instance_button" class="btn btn-small btn-danger ajax-modal btn-delete pull-right"></a>
 {% endblock %}
 
 <div id="no_template_message">
@@ -27,14 +27,15 @@
 **/
 $(function(){
         if($("#network_entities").text() != "{}"){
+		$("#network_page_title").html("Network Instance");
 		$("#apply_network_template_button").hide();
-		$("#remove_network_template_button").show();
+		$("#remove_network_instance_button").show();
                 $("#message_text").hide();
                 var network_entities = JSON.parse($("#network_entities").text());
                 var network_connections = JSON.parse($("#network_connections").text());
                 renderNetworkTemplate(network_entities,network_connections);
         }else{
-		$("#remove_network_template_button").hide();
+		$("#remove_network_instance_button").hide();
 		$("#apply_network_template_button").show();
 		$("#message_text").show();
 	}
