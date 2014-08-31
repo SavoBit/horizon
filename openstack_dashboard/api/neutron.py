@@ -121,8 +121,8 @@ class Router(NeutronAPIDictWrapper):
     """Wrapper for neutron routers."""
 
     def __init__(self, apiresource):
-        # apiresource['admin_state'] = \
-        #    'UP' if apiresource['admin_state_up'] else 'DOWN'
+        apiresource['admin_state'] = \
+            'UP' if apiresource['admin_state_up'] else 'DOWN'
         super(Router, self).__init__(apiresource)
 
 
@@ -426,6 +426,10 @@ class FloatingIpManager(network_base.FloatingIpManager):
         # we need to check whether such VIF is only one for an instance
         # to enable simple association support.
         return False
+
+    def is_supported(self):
+        network_config = getattr(settings, 'OPENSTACK_NEUTRON_NETWORK', {})
+        return network_config.get('enable_router', True)
 
 
 def get_ipver_str(ip_version):
@@ -784,8 +788,11 @@ def servers_update_addresses(request, servers):
     try:
         ports = port_list(request,
                           device_id=[instance.id for instance in servers])
-        floating_ips = FloatingIpManager(request).list(
-            port_id=[port.id for port in ports])
+        fips = FloatingIpManager(request)
+        if fips.is_supported():
+            floating_ips = fips.list(port_id=[port.id for port in ports])
+        else:
+            floating_ips = []
         networks = network_list(request,
                                 id=[port.network_id for port in ports])
     except Exception:
@@ -911,9 +918,11 @@ def get_dvr_permission(request, operation):
     if not network_config.get('enable_distributed_router', False):
         return False
     policy_check = getattr(settings, "POLICY_CHECK_FUNCTION", None)
-    if operation not in ("get", "create"):
+    allowed_operations = ("get", "create", "update")
+    if operation not in allowed_operations:
         raise ValueError(_("The 'operation' parameter for get_dvr_permission "
-                           "is invalid. It should be 'get' or 'create'."))
+                           "is invalid. It should be one of %s")
+                         % ' '.join(allowed_operations))
     role = (("network", "%s_router:distributed" % operation),)
     if policy_check:
         has_permission = policy.check(role, request)
