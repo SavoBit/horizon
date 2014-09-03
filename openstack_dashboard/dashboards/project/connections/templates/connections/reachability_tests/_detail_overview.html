@@ -21,7 +21,7 @@
   <dl>
     <dt>{% trans "Time Stamp" %}</dt>
     <dd>{{ reachability_test.last_run|default:_("None") }}</dd>
-    <dt>{% trans "Expected Connection" %}</dt>
+    <dt>{% trans "Expected Result" %}</dt>
     <dd>{{ reachability_test.expected_connection|default:_("None") }}</dd>
     <dt>{% trans "Test Results" %}</dt>
     <dd>{{ reachability_test.status|default:_("None") }}</dd>

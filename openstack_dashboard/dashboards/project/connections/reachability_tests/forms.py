@@ -37,9 +37,18 @@ from openstack_dashboard import api
 from openstack_dashboard.dashboards.project.connections.mockobjects import ReachabilityTestStub
 from openstack_dashboard.dashboards.project.connections.mockapi import ReachabilityTestAPI
 
-
-
 NEW_LINES = re.compile(r"\r|\n")
+EXPECTATION_CHOICES = [('default',_('--- Select Result ---')),\
+                       ('reached destination', _('reached destination')),\
+                       ('dropped by route', _('dropped by route')),\
+                       ('dropped by policy', _('dropped by policy')),
+                       ('dropped due to private segment', _('dropped due to private segment')),
+                       ('packet in', _('packet in')),
+                       ('forwared', _('forwared')),
+                       ('dropped', _('dropped')),
+                       ('multiple sources', _('multiple sources')),
+                       ('unsupported', _('unsupported')),\
+                       ('invalid input', _('invalid input'))]
 
 class CreateReachabilityTest(forms.SelfHandlingForm):
     name = forms.CharField(max_length="255",
@@ -97,9 +106,7 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
     expected_connection = forms.ChoiceField(
         label=_('Expected Connection Results'),
         required=True,
-        choices=[('default',_('--- Select Result ---')),
-                ('forward', _('Forward')),
-                ('drop', _('Drop'))],
+        choices=EXPECTATION_CHOICES,
         widget=forms.Select(attrs={
                 'class': 'switchable',
                 'data-slug': 'expected_connection'}))
@@ -198,9 +205,7 @@ class RunQuickTestForm(forms.SelfHandlingForm):
     expected_connection = forms.ChoiceField(
         label=_('Expected Connection Results'),
         required=True,
-        choices=[('default',_('--- Select Result ---')),
-                ('forward', _('Forward')),
-                ('drop', _('Drop'))],
+        choices=EXPECTATION_CHOICES,
         widget=forms.Select(attrs={
                 'class': 'switchable',
                 'data-slug': 'expected_connection'}))
@@ -308,9 +313,7 @@ class UpdateForm(forms.SelfHandlingForm):
     expected_connection = forms.ChoiceField(
         label=_('Expected Connection Results'),
         required=True,
-        choices=[('default',_('--- Select Result ---')),
-                ('forward', _('Forward')),
-                ('drop', _('Drop'))],
+        choices=EXPECTATION_CHOICES,
         widget=forms.Select(attrs={
                 'class': 'switchable',
                 'data-slug': 'expected_connection'}))
