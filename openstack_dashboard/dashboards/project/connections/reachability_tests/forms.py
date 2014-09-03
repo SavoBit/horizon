@@ -46,73 +46,53 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
                            label=_("Name"),
                            required=True)
 
-    connection_source_type = forms.ChoiceField(
-        label=_('Connection Source Type'),
-	required=True,
-        widget=forms.Select(attrs={
-                'class': 'switchable',
-                'data-slug': 'connection_source_type'
-	})
-    )
+    tenant_source = forms.CharField(max_length="255",
+                          label=_("Sepecify source tenant"),
+                          required=True,
+                          initial="",
+                          widget=forms.TextInput(
+                              attrs={'class': 'switched',
+                                     'data-connection_source-tenant': _('Specify source tenant')}))
 
-    instance_source = forms.ChoiceField(
-	label=_('Use instance as source'),
-	required=True,
-	widget=forms.Select(attrs={
-		'class': 'switched',
-		'data-switch-on': 'connection_source_type',
-		'data-connection_source_type-instance': _('Use instance as source')}))
+    segment_source = forms.CharField(max_length="255",
+                          label=_("Sepecify source segment"),
+                          required=True,
+                          initial="",
+                          widget=forms.TextInput(
+                              attrs={'class': 'switched',
+                                     'data-connection_source-segment': _('Specify source segment')}))
 
     ip_source = forms.CharField(max_length="255",
 			  label=_("Use ip address as source"),
                           required=True,
-                          initial="0.0.0.0/0",
+                          initial="0.0.0.0",
                           widget=forms.TextInput(
                               attrs={'class': 'switched',
-                                     'data-switch-on': 'connection_source_type',
-                                     'data-connection_source_type-ip': _('Use IP address as source')}))
+                                     'data-connection_source_type-ip': _('Specify source IP address')}))
 
-    mac_source = forms.CharField(max_length="255",
-                           label=_("Use mac address as source"),
-			   initial="MAC Address",
-                           required=True,
-			   widget=forms.TextInput(attrs={
-            			'class': 'switched',
-            			'data-switch-on': 'connection_source_type',
-            			'data-connection_source_type-mac': _('Use MAC address as source')}))
+    tenant_destination = forms.CharField(max_length="255",
+                          label=_("Sepecify destination tenant"),
+                          required=True,
+                          initial="",
+                          widget=forms.TextInput(
+                              attrs={'class': 'switched',
+                                     'data-connection_destination-tenant': _('Specify destination tenant')}))
 
-    connection_destination_type = forms.ChoiceField(
-        label=_('Connection Destination Type'),
-        required=True,
-        widget=forms.Select(attrs={
-                'class': 'switchable',
-                'data-slug': 'connection_destination_type'}))
-
-    instance_destination = forms.ChoiceField(
-        label=_('Use instance as destination'),
-        required=True,
-        widget=forms.Select(attrs={
-                'class': 'switched',
-		'data-switch-on': 'connection_destination_type',
-                'data-connection_destination_type-instance': _('Use instance as destination')}))
+    segment_destination = forms.CharField(max_length="255",
+                          label=_("Sepecify destination segment"),
+                          required=True,
+                          initial="",
+                          widget=forms.TextInput(
+                              attrs={'class': 'switched',
+                                     'data-connection_destination-segment': _('Specify destination segment')}))
 
     ip_destination = forms.CharField(max_length="255",
 			  label=_("Use ip address as destination"),
                           required=True,
-                          initial="0.0.0.0/0",
+                          initial="0.0.0.0",
                           widget=forms.TextInput(
                               attrs={'class': 'switched',
-                                     'data-switch-on': 'connection_destination_type',
-                                     'data-connection_destination_type-ip': _('Use IP address as destination')}))
-
-    mac_destination = forms.CharField(max_length="255",
-                           label=_("Use mac address as destination"),
-			   initial="MAC Address",
-                           required=True,
-                           widget=forms.TextInput(attrs={
-                                'class': 'switched',
-                                'data-switch-on': 'connection_destination_type',
-                                'data-connection_destination_type-mac': _('Use MAC address as destination')}))
+                                     'data-connection_destination_type-ip': _('Specify destination IP address')}))
 
     expected_connection = forms.ChoiceField(
         label=_('Expected Connection Results'),
@@ -126,23 +106,7 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
 
     def __init__(self, *args, **kwargs):
         super(CreateReachabilityTest, self).__init__(*args, **kwargs)
-   	connection_type=[
-		('default', _('--- Select Source Type ---')),
-                ('instance', _('Instance')),
-                ('ip', _('IP Address')),
-                ('mac', _('MAC Address'))
-        ]
-	instance_list = [
-		('default',_('--- Select Instance ---')),
-                ('vm1', _('VM 1')),
-                ('vm2', _('VM 2'))
-	]
-	self.fields['connection_source_type'].choices = connection_type
-	connection_type[0] = ('default', _('--- Select Destination Type ---'))
-	self.fields['connection_destination_type'].choices = connection_type
-	self.fields['instance_source'].choices = instance_list
-	self.fields['instance_destination'].choices = instance_list
-	 
+
     def clean(self):
         cleaned_data = super(CreateReachabilityTest, self).clean()
 
@@ -150,17 +114,8 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
             cleaned_data[key] = value
             self.errors.pop(key, None)
 	
-        connection_source_type = cleaned_data.get('conection_source_type')
-	connection_destination_type = cleaned_data.get('connection_destination_type')
 	expected_connection = cleaned_data.get('expected_connection')	
 
-	#Validation to check that default isn't selected.
-	if connection_source_type == 'default':
-		msg = _('A connection source type must be selected.')
-		raise ValidationError(msg)
-	if connection_destination_type == 'default':
-		msg = _('A connection destination type must be selected.')
-                raise ValidationError(msg)
 	if expected_connection == 'default':
 		msg = _('A expected connection result must be selected.')
                 raise ValidationError(msg)
@@ -168,32 +123,17 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
 	return cleaned_data
 
     def handle(self, request, data):
-	if data['connection_source_type'] == 'instance':
-		source = data['instance_source'].encode('ascii','ignore')
-		source_type = data['connection_source_type'].encode('ascii','ignore')
-	elif data['connection_source_type'] == 'ip':
-                source = data['ip_source'].encode('ascii','ignore')
-		source_type = data['connection_source_type'].encode('ascii','ignore')
-	elif data['connection_source_type'] == 'mac':
-                source = data['mac_source'].encode('ascii','ignore')
-		source_type = data['connection_source_type'].encode('ascii','ignore')
-
-	if data['connection_destination_type'] == 'instance':
-                dest = data['instance_destination'].encode('ascii','ignore')
-		dest_type = data['connection_destination_type'].encode('ascii','ignore')
-        elif data['connection_destination_type'] == 'ip':
-                dest = data['ip_destination'].encode('ascii','ignore')
-		dest_type = data['connection_destination_type'].encode('ascii','ignore')
-        elif data['connection_destination_type'] == 'mac':
-                dest = data['mac_destination'].encode('ascii','ignore')
-		dest_type = data['connection_destination_type'].encode('ascii','ignore')
-
+        source = {}
+        source['tenant'] = data['tenant_source'].encode('ascii')
+        source['segment'] = data['segment_source'].encode('ascii')
+        source['ip'] = data['ip_source'].encode('ascii','ignore')
+        dest = {}
+        dest['tenant'] = data['tenant_destination'].encode('ascii')
+        dest['segment'] = data['segment_destination'].encode('ascii')
+        dest['ip'] = data['ip_destination'].encode('ascii','ignore')
 	expected = data['expected_connection'].encode('ascii','ignore')
-
 	new_test_data = {'name' : data['name'].encode('ascii','ignore'),
-			'connection_source_type' : source_type,
 			'connection_source' : source,
-			'connection_destination_type' : dest_type,
 			'connection_destination' : dest,
 			'expected_connection' : expected}
 
@@ -206,73 +146,54 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
         return test
 
 class RunQuickTestForm(forms.SelfHandlingForm):
-    connection_source_type = forms.ChoiceField(
-        label=_('Connection Source Type'),
-	required=True,
-        widget=forms.Select(attrs={
-                'class': 'switchable',
-                'data-slug': 'connection_source_type'
-	})
-    )
 
-    instance_source = forms.ChoiceField(
-	label=_('Use instance as source'),
-	required=True,
-	widget=forms.Select(attrs={
-		'class': 'switched',
-		'data-switch-on': 'connection_source_type',
-		'data-connection_source_type-instance': _('Use instance as source')}))
+    tenant_source = forms.CharField(max_length="255",
+                          label=_("Sepecify source tenant"),
+                          required=True,
+                          initial="",
+                          widget=forms.TextInput(
+                              attrs={'class': 'switched',
+                                     'data-connection_source-tenant': _('Specify source tenant')}))
+
+    segment_source = forms.CharField(max_length="255",
+                          label=_("Sepecify source segment"),
+                          required=True,
+                          initial="",
+                          widget=forms.TextInput(
+                              attrs={'class': 'switched',
+                                     'data-connection_source-segment': _('Specify source segment')}))
 
     ip_source = forms.CharField(max_length="255",
-			  label=_("Use ip address as source"),
+                          label=_("Use ip address as source"),
                           required=True,
-                          initial="0.0.0.0/0",
+                          initial="0.0.0.0",
                           widget=forms.TextInput(
                               attrs={'class': 'switched',
-                                     'data-switch-on': 'connection_source_type',
-                                     'data-connection_source_type-ip': _('Use IP address as source')}))
+                                     'data-connection_source_type-ip': _('Specify source IP address')}))
 
-    mac_source = forms.CharField(max_length="255",
-                           label=_("Use mac address as source"),
-			   initial="MAC Address",
-                           required=True,
-			   widget=forms.TextInput(attrs={
-            			'class': 'switched',
-            			'data-switch-on': 'connection_source_type',
-            			'data-connection_source_type-mac': _('Use MAC address as source')}))
+    tenant_destination = forms.CharField(max_length="255",
+                          label=_("Sepecify destination tenant"),
+                          required=True,
+                          initial="",
+                          widget=forms.TextInput(
+                              attrs={'class': 'switched',
+                                     'data-connection_destination-tenant': _('Specify destination tenant')}))
 
-    connection_destination_type = forms.ChoiceField(
-        label=_('Connection Destination Type'),
-        required=True,
-        widget=forms.Select(attrs={
-                'class': 'switchable',
-                'data-slug': 'connection_destination_type'}))
-
-    instance_destination = forms.ChoiceField(
-        label=_('Use instance as destination'),
-        required=True,
-        widget=forms.Select(attrs={
-                'class': 'switched',
-		'data-switch-on': 'connection_destination_type',
-                'data-connection_destination_type-instance': _('Use instance as destination')}))
+    segment_destination = forms.CharField(max_length="255",
+                          label=_("Sepecify destination segment"),
+                          required=True,
+                          initial="",
+                          widget=forms.TextInput(
+                              attrs={'class': 'switched',
+                                     'data-connection_destination-segment': _('Specify destination segment')}))
 
     ip_destination = forms.CharField(max_length="255",
-			  label=_("Use ip address as destination"),
+                          label=_("Use ip address as destination"),
                           required=True,
-                          initial="0.0.0.0/0",
+                          initial="0.0.0.0",
                           widget=forms.TextInput(
                               attrs={'class': 'switched',
-                                     'data-switch-on': 'connection_destination_type',
-                                     'data-connection_destination_type-ip': _('Use IP address as destination')}))
-
-    mac_destination = forms.CharField(max_length="255",
-                           label=_("Use mac address as destination"),
-			   initial="MAC Address",
-                           required=True,
-                           widget=forms.TextInput(attrs={
-                                'class': 'switched',
-                                'data-switch-on': 'connection_destination_type',
-                                'data-connection_destination_type-mac': _('Use MAC address as destination')}))
+                                     'data-connection_destination_type-ip': _('Specify destination IP address')}))
 
     expected_connection = forms.ChoiceField(
         label=_('Expected Connection Results'),
@@ -286,23 +207,7 @@ class RunQuickTestForm(forms.SelfHandlingForm):
 
     def __init__(self, *args, **kwargs):
         super(RunQuickTestForm, self).__init__(*args, **kwargs)
-   	connection_type=[
-		('default', _('--- Select Source Type ---')),
-                ('instance', _('Instance')),
-                ('ip', _('IP Address')),
-                ('mac', _('MAC Address'))
-        ]
-	instance_list = [
-		('default',_('--- Select Instance ---')),
-                ('vm1', _('VM 1')),
-                ('vm2', _('VM 2'))
-	]
-	self.fields['connection_source_type'].choices = connection_type
-	connection_type[0] = ('default', _('--- Select Destination Type ---'))
-	self.fields['connection_destination_type'].choices = connection_type
-	self.fields['instance_source'].choices = instance_list
-	self.fields['instance_destination'].choices = instance_list
-	 
+
     def clean(self):
         cleaned_data = super(RunQuickTestForm, self).clean()
 
@@ -310,17 +215,8 @@ class RunQuickTestForm(forms.SelfHandlingForm):
             cleaned_data[key] = value
             self.errors.pop(key, None)
 	
-        connection_source_type = cleaned_data.get('conection_source_type')
-	connection_destination_type = cleaned_data.get('connection_destination_type')
 	expected_connection = cleaned_data.get('expected_connection')	
 	
-	#Validation to check if that selection isn't default.
-	if connection_source_type == 'default':
-		msg = _('A connection source type must be selected.')
-		raise ValidationError(msg)
-	if connection_destination_type == 'default':
-		msg = _('A connection destination type must be selected.')
-                raise ValidationError(msg)
 	if expected_connection == 'default':
 		msg = _('A expected connection result must be selected.')
                 raise ValidationError(msg)
@@ -329,33 +225,17 @@ class RunQuickTestForm(forms.SelfHandlingForm):
 
 
     def handle(self, request, data):
-
-	if data['connection_source_type'] == 'instance':
-                source = data['instance_source'].encode('ascii','ignore')
-                source_type = data['connection_source_type'].encode('ascii','ignore')
-        elif data['connection_source_type'] == 'ip':
-                source = data['ip_source'].encode('ascii','ignore')
-                source_type = data['connection_source_type'].encode('ascii','ignore')
-        elif data['connection_source_type'] == 'mac':
-                source = data['mac_source'].encode('ascii','ignore')
-                source_type = data['connection_source_type'].encode('ascii','ignore')
-
-        if data['connection_destination_type'] == 'instance':
-                dest = data['instance_destination'].encode('ascii','ignore')
-                dest_type = data['connection_destination_type'].encode('ascii','ignore')
-        elif data['connection_destination_type'] == 'ip':
-                dest = data['ip_destination'].encode('ascii','ignore')
-                dest_type = data['connection_destination_type'].encode('ascii','ignore')
-        elif data['connection_destination_type'] == 'mac':
-                dest = data['mac_destination'].encode('ascii','ignore')
-                dest_type = data['connection_destination_type'].encode('ascii','ignore')
-
+        source = {}
+        source['tenant'] = data['tenant_source'].encode('ascii')
+        source['segment'] = data['segment_source'].encode('ascii')
+        source['ip'] = data['ip_source'].encode('ascii','ignore')
+        dest = {}
+        dest['tenant'] = data['tenant_destination'].encode('ascii')
+        dest['segment'] = data['segment_destination'].encode('ascii')
+        dest['ip'] = data['ip_destination'].encode('ascii','ignore')
 	expected = data['expected_connection'].encode('ascii','ignore')
-
         new_test_data = {'name' : 'quick test',
-                        'connection_source_type' : source_type,
                         'connection_source' : source,
-                        'connection_destination_type' : dest_type,
                         'connection_destination' : dest,
                         'expected_connection' : expected}
 
@@ -377,73 +257,53 @@ class UpdateForm(forms.SelfHandlingForm):
                            label=_("Name"),
                            required=True)
 
-    connection_source_type = forms.ChoiceField(
-        label=_('Connection Source Type'),
-	required=True,
-        widget=forms.Select(attrs={
-                'class': 'switchable',
-                'data-slug': 'connection_source_type'
-	})
-    )
+    tenant_source = forms.CharField(max_length="255",
+                          label=_("Sepecify source tenant"),
+                          required=True,
+                          initial="",
+                          widget=forms.TextInput(
+                              attrs={'class': 'switched',
+                                     'data-connection_source-tenant': _('Specify source tenant')}))
 
-    instance_source = forms.ChoiceField(
-	label=_('Use instance as source'),
-	required=True,
-	widget=forms.Select(attrs={
-		'class': 'switched',
-		'data-switch-on': 'connection_source_type',
-		'data-connection_source_type-instance': _('Use instance as source')}))
+    segment_source = forms.CharField(max_length="255",
+                          label=_("Sepecify source segment"),
+                          required=True,
+                          initial="",
+                          widget=forms.TextInput(
+                              attrs={'class': 'switched',
+                                     'data-connection_source-segment': _('Specify source segment')}))
 
     ip_source = forms.CharField(max_length="255",
-			  label=_("Use ip address as source"),
+                          label=_("Use ip address as source"),
                           required=True,
-                          initial="0.0.0.0/0",
+                          initial="0.0.0.0",
                           widget=forms.TextInput(
                               attrs={'class': 'switched',
-                                     'data-switch-on': 'connection_source_type',
-                                     'data-connection_source_type-ip': _('Use IP address as source')}))
+                                     'data-connection_source_type-ip': _('Specify source IP address')}))
 
-    mac_source = forms.CharField(max_length="255",
-                           label=_("Use mac address as source"),
-			   initial="MAC Address",
-                           required=True,
-			   widget=forms.TextInput(attrs={
-            			'class': 'switched',
-            			'data-switch-on': 'connection_source_type',
-            			'data-connection_source_type-mac': _('Use MAC address as source')}))
+    tenant_destination = forms.CharField(max_length="255",
+                          label=_("Sepecify destination tenant"),
+                          required=True,
+                          initial="",
+                          widget=forms.TextInput(
+                              attrs={'class': 'switched',
+                                     'data-connection_destination-tenant': _('Specify destination tenant')}))
 
-    connection_destination_type = forms.ChoiceField(
-        label=_('Connection Destination Type'),
-        required=True,
-        widget=forms.Select(attrs={
-                'class': 'switchable',
-                'data-slug': 'connection_destination_type'}))
-
-    instance_destination = forms.ChoiceField(
-        label=_('Use instance as destination'),
-        required=True,
-        widget=forms.Select(attrs={
-                'class': 'switched',
-		'data-switch-on': 'connection_destination_type',
-                'data-connection_destination_type-instance': _('Use instance as destination')}))
+    segment_destination = forms.CharField(max_length="255",
+                          label=_("Sepecify destination segment"),
+                          required=True,
+                          initial="",
+                          widget=forms.TextInput(
+                              attrs={'class': 'switched',
+                                     'data-connection_destination-segment': _('Specify destination segment')}))
 
     ip_destination = forms.CharField(max_length="255",
-			  label=_("Use ip address as destination"),
+                          label=_("Use ip address as destination"),
                           required=True,
-                          initial="0.0.0.0/0",
+                          initial="0.0.0.0",
                           widget=forms.TextInput(
                               attrs={'class': 'switched',
-                                     'data-switch-on': 'connection_destination_type',
-                                     'data-connection_destination_type-ip': _('Use IP address as destination')}))
-
-    mac_destination = forms.CharField(max_length="255",
-                           label=_("Use mac address as destination"),
-			   initial="MAC Address",
-                           required=True,
-                           widget=forms.TextInput(attrs={
-                                'class': 'switched',
-                                'data-switch-on': 'connection_destination_type',
-                                'data-connection_destination_type-mac': _('Use MAC address as destination')}))
+                                     'data-connection_destination_type-ip': _('Specify destination IP address')}))
 
     expected_connection = forms.ChoiceField(
         label=_('Expected Connection Results'),
@@ -457,23 +317,7 @@ class UpdateForm(forms.SelfHandlingForm):
 
     def __init__(self, *args, **kwargs):
         super(UpdateForm, self).__init__(*args, **kwargs)
-   	connection_type=[
-		('default', _('--- Select Source Type ---')),
-                ('instance', _('Instance')),
-                ('ip', _('IP Address')),
-                ('mac', _('MAC Address'))
-        ]
-	instance_list = [
-		('default',_('--- Select Instance ---')),
-                ('vm1', _('VM 1')),
-                ('vm2', _('VM 2'))
-	]
-	self.fields['connection_source_type'].choices = connection_type
-	connection_type[0] = ('default', _('--- Select Destination Type ---'))
-	self.fields['connection_destination_type'].choices = connection_type
-	self.fields['instance_source'].choices = instance_list
-	self.fields['instance_destination'].choices = instance_list
-	 
+
     def clean(self):
         cleaned_data = super(UpdateForm, self).clean()
 
@@ -481,17 +325,7 @@ class UpdateForm(forms.SelfHandlingForm):
             cleaned_data[key] = value
             self.errors.pop(key, None)
 	
-        connection_source_type = cleaned_data.get('conection_source_type')
-	connection_destination_type = cleaned_data.get('connection_destination_type')
 	expected_connection = cleaned_data.get('expected_connection')	
-
-	#Validation to make sure the user make a selection.
-	if connection_source_type == 'default':
-		msg = _('A connection source type must be selected.')
-		raise ValidationError(msg)
-	if connection_destination_type == 'default':
-		msg = _('A connection destination type must be selected.')
-                raise ValidationError(msg)
 	if expected_connection == 'default':
 		msg = _('A expected connection result must be selected.')
                 raise ValidationError(msg)
@@ -499,32 +333,17 @@ class UpdateForm(forms.SelfHandlingForm):
 	return cleaned_data
 
     def handle(self, request, data):
-	if data['connection_source_type'] == 'instance':
-                source = data['instance_source'].encode('ascii','ignore')
-                source_type = data['connection_source_type'].encode('ascii','ignore')
-        elif data['connection_source_type'] == 'ip':
-                source = data['ip_source'].encode('ascii','ignore')
-                source_type = data['connection_source_type'].encode('ascii','ignore')
-        elif data['connection_source_type'] == 'mac':
-                source = data['mac_source'].encode('ascii','ignore')
-                source_type = data['connection_source_type'].encode('ascii','ignore')
-
-        if data['connection_destination_type'] == 'instance':
-                dest = data['instance_destination'].encode('ascii','ignore')
-                dest_type = data['connection_destination_type'].encode('ascii','ignore')
-        elif data['connection_destination_type'] == 'ip':
-                dest = data['ip_destination'].encode('ascii','ignore')
-                dest_type = data['connection_destination_type'].encode('ascii','ignore')
-        elif data['connection_destination_type'] == 'mac':
-                dest = data['mac_destination'].encode('ascii','ignore')
-                dest_type = data['connection_destination_type'].encode('ascii','ignore')	
-
+        source = {}
+        source['tenant'] = data['tenant_source'].encode('ascii')
+        source['segment'] = data['segment_source'].encode('ascii')
+        source['ip'] = data['ip_source'].encode('ascii','ignore')
+        dest = {}
+        dest['tenant'] = data['tenant_destination'].encode('ascii')
+        dest['segment'] = data['segment_destination'].encode('ascii')
+        dest['ip'] = data['ip_destination'].encode('ascii','ignore')
 	expected = data['expected_connection'].encode('ascii','ignore')
-
 	new_test_data = {'name' : data['name'].encode('ascii','ignore'),
-                        'connection_source_type' : source_type,
                         'connection_source' : source,
-                        'connection_destination_type' : dest_type,
                         'connection_destination' : dest,
                         'expected_connection' : expected}
        
