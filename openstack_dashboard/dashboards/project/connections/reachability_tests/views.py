@@ -45,6 +45,8 @@ from openstack_dashboard.dashboards.project.connections.reachability_tests.reach
     import ReachabilityTest, ReachabilityTestResult, ReachabilityQuickTest, ReachabilityQuickTestResult
 from openstack_dashboard.dashboards.project.connections.reachability_tests.const import tenant_id, Session
 
+LJUST_WIDTH = 50
+
 class ReachabilityTestData():
     '''
     convert to this format for display purpose 
@@ -67,7 +69,11 @@ class ReachabilityTestData():
             self.expected_connection = test.expected_result
         if result:
             self.last_run = result.test_time
-            self.command_line = "-"
+            l = []
+            l.append("{0:20} {1:20} {2:50}".format("Path Index", "Hop Index","Hop"))
+            for hop in result.detail:
+                l.append("{0:20} {1:20} {2:50}".format(hop["path-index"], hop["hop-index"], hop["hop-name"]))
+            self.command_line = '\n'.join(l)
 
 class CreateView(forms.ModalFormView):
     form_class = project_forms.CreateReachabilityTest
