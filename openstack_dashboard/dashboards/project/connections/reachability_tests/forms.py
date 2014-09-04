@@ -218,9 +218,6 @@ class RunQuickTestForm(forms.SelfHandlingForm):
                 'class': 'switchable',
                 'data-slug': 'expected_connection'}))
 
-    def __init__(self, *args, **kwargs):
-        super(RunQuickTestForm, self).__init__(*args, **kwargs)
-
     def clean(self):
         cleaned_data = super(RunQuickTestForm, self).clean()
 
