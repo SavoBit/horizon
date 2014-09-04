@@ -43,6 +43,20 @@ class ReachabilityTest(model_base.BASEV2):
                                      "dropped due to private segment", "packet in", "forwared", "dropped", "multiple sources", \
                                      "unsupported", "invalid input", name="expected_result"), nullable=False)
 
+    def get_connection_source(self):
+        source = {}
+        source['tenent'] = self.src_tenant_id
+        source['segment'] = self.src_segment_id
+        source['ip'] = self.src_ip
+        return source
+
+    def get_connection_destination(self):
+        destination = {}
+        destination['tenent'] = self.dst_tenant_id
+        destination['segment'] = self.dst_segment_id
+        destination['ip'] = self.dst_ip
+        return destination
+
 class ReachabilityTestResult(model_base.BASEV2):
     '''
     A table to store the results of user configured reachability tests.
@@ -77,6 +91,20 @@ class ReachabilityQuickTest(model_base.BASEV2):
                                      "dropped due to private segment", "packet in", "forwared", "dropped", "multiple sources", \
                                      "unsupported", "invalid input", name="expected_result"), nullable=False)
 
+    def get_connection_source(self):
+        source = {}
+        source['tenent'] = self.src_tenant_id
+        source['segment'] = self.src_segment_id
+        source['ip'] = self.src_ip
+        return source
+
+    def get_connection_destination(self):
+        destination = {}
+        destination['tenent'] = self.dst_tenant_id
+        destination['segment'] = self.dst_segment_id
+        destination['ip'] = self.dst_ip
+        return destination
+
 class ReachabilityQuickTestResult(model_base.BASEV2):
     '''
     A table to store the results of user configured quick tests.
@@ -86,7 +114,7 @@ class ReachabilityQuickTestResult(model_base.BASEV2):
     test_primary_key = sa.Column(Integer, ForeignKey('reachabilityquicktest.id'), nullable=False)
     tenant_id = sa.Column(sa.String(64), primary_key=False, nullable=False)
     test_time = sa.Column(TIMESTAMP(timezone=True), primary_key=False, nullable=False, default=func.now())
-    test_result = sa.Column(Enum("PASS", "FAIL", "PENDING"), nullable=False)
+    test_result = sa.Column(Enum("pass", "fail", "pending"), nullable=False)
     detail = sa.Column(JSONEncodedDict(255), nullable=True)
 
     reachabilitytest = relationship("ReachabilityQuickTest", backref=backref('reachabilityquicktestresult',\

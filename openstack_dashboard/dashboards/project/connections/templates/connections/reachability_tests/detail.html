@@ -4,7 +4,7 @@
 {% block title %}{% trans "Reachability Test Details"%}{% endblock %}
 
 {% block page_header %}
-  {% include "horizon/common/_page_header.html" with title=_("Reachability Test Details: ")|add:reachability_test.test_id|default:_("Reachability Test Details:") %}
+  {% include "horizon/common/_page_header.html" with title=_("Reachability Test Details: ")|add:reachability_test.name|default:_("Reachability Test Details:") %}
 <style>
 .command-prompt-background {
   background-color: black;

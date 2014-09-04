@@ -21,6 +21,7 @@
 """
 Views for managing reachability test.
 """
+import json
 from django.core.urlresolvers import reverse
 from django.core.urlresolvers import reverse_lazy
 from django import http
@@ -43,6 +44,29 @@ from openstack_dashboard.dashboards.project.connections.reachability_tests.reach
 from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_db \
     import ReachabilityTest, ReachabilityTestResult, ReachabilityQuickTest, ReachabilityQuickTestResult, tenant_id, Session
 
+class ReachabilityTestData():
+    '''
+    convert to this format for display purpose 
+    '''
+    name = ''
+    connection_source = ''
+    connection_destination = ''
+    expected_connection = ''
+    command_line = ''
+    last_run = ''
+    status = ''
+
+    def __init__(self, test, result):
+        if test:
+            if hasattr(test, 'test_id'):
+                self.name = test.test_id
+            self.status = result.test_result
+            self.connection_source = json.dumps(test.get_connection_source())
+            self.connection_destination = json.dumps(test.get_connection_destination())
+            self.expected_connection = test.expected_result
+        if result:
+            self.last_run = result.test_time
+            self.command_line = "-"
 
 class CreateView(forms.ModalFormView):
     form_class = project_forms.CreateReachabilityTest
@@ -63,11 +87,14 @@ class UpdateView(forms.ModalFormView):
 
     @memoized.memoized_method
     def get_object(self):
-        test = None
+        test_data = None
+        test_id = self.kwargs['reachability_test_id'].encode('ascii','ignore')
         try:
 	    api = ReachabilityTestAPI()
             session = Session()
-            test = api.getReachabilityTest(tenant_id, self.kwargs['reachability_test_id'].encode('ascii','ignore'), session)
+            test = api.getReachabilityTest(tenant_id, test_id, session)
+            result = api.getLastReachabilityTestResult(tenant_id, test_id, session)
+            test_data = ReachabilityTestData(test, result)
             session.commit()
         except Exception:
             session.rollback()
@@ -76,7 +103,7 @@ class UpdateView(forms.ModalFormView):
             exceptions.handle(self.request, msg, redirect=url)
         finally:
             session.close()
-        return test
+        return test_data
 
     def get_context_data(self, **kwargs):
         context = super(UpdateView, self).get_context_data(**kwargs)
@@ -105,11 +132,14 @@ class DetailView(tabs.TabView):
 
     @memoized.memoized_method
     def get_data(self):
-        test = None
+        test_data = None
+        test_id = self.kwargs['reachability_test_id'].encode('ascii','ignore')
         try:
             api = ReachabilityTestAPI()
             session = Session()
-            test = api.getReachabilityTest(tenant_id, self.kwargs['reachability_test_id'].encode('ascii','ignore'), session)
+            test = api.getReachabilityTest(tenant_id, test_id, session)
+            result = api.getLastReachabilityTestResult(tenant_id, test_id, session)
+            test_data = ReachabilityTestData(test, result)
             session.commit()
         except Exception:
             session.rollback()
@@ -119,7 +149,7 @@ class DetailView(tabs.TabView):
                               redirect=url)
         finally:
             session.close()
-        return test
+        return test_data
 
     def get_tabs(self, request, *args, **kwargs):
         reachability_test = self.get_data()
@@ -138,11 +168,13 @@ class QuickDetailView(tabs.TabView):
 
     @memoized.memoized_method
     def get_data(self):
-        test = None
+        test_data = None
         try:
             api = ReachabilityTestAPI()
             session = Session()
             test = api. getQuickTest(tenant_id, session)
+            result = api.getLastReachabilityQuickTestResult(tenant_id, session)
+            test_data = ReachabilityTestData(test, result)
             session.commit()
         except Exception:
             session.rollback()
@@ -152,7 +184,7 @@ class QuickDetailView(tabs.TabView):
                               redirect=url)
         finally:
             session.close()
-        return test
+        return test_data
 
     def get_tabs(self, request, *args, **kwargs):
         quick_test = self.get_data()
