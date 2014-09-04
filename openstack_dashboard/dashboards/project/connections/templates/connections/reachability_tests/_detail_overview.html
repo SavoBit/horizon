@@ -7,7 +7,7 @@
   <hr class="header_rule">
   <dl>
     <dt>{% trans "Name" %}</dt>
-    <dd>{{ reachability_test.name|default:_("None") }}</dd>
+    <dd>{{ reachability_test.test_id|default:_("None") }}</dd>
     <dt>{% trans "Connection Source" %}</dt>
     <dd>{{ reachability_test.connection_source|default:_("None") }}</dd>
     <dt>{% trans "Connection Destination" %}</dt>

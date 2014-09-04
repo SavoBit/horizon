@@ -94,17 +94,44 @@ class UpdateTest(tables.LinkAction):
     url = "horizon:project:connections:reachability_tests:update"
     classes = ("ajax-modal", "btn-edit")
 
-
 def get_last_run(test):
-    return getattr(test, "last_run", None) or test.last_run
+    api = ReachabilityTestAPI()
+    session = Session()
+    timestamp = None
+    try:
+        last_result = api.getLastReachabilityTestResult(test.tenant_id, test.test_id, session)
+        if last_result:
+            timestamp = last_result.test_time
+        session.commit()
+    except:
+        session.rollback()
+        raise
+    finally:
+        session.close()
+    return timestamp
 
+def get_status(test):
+    api = ReachabilityTestAPI()
+    session = Session()
+    status = ''
+    try:
+        last_result = api.getLastReachabilityTestResult(test.tenant_id, test.test_id, session)
+        if last_result:
+            status = last_result.test_result
+        session.commit()
+    except:
+        session.rollback()
+        raise
+    finally:
+        session.close()
+    return status
 
 def get_run_list(test):
     api = ReachabilityTestAPI()
     session = Session()
     run_list = None
     try:
-        run_list = api.listReachabilityTestResults(tenant_id, test.name, session)
+        run_list = api.listReachabilityTestResults(test.tenant_id, test.test_id, session)
         session.commit()
     except:
         session.rollback()
@@ -122,18 +149,18 @@ STATUS_DISPLAY_CHOICES = (
     ('', _("-")),
 )
 
+STATUS_CHOICES = (
+        ("pass", True),
+        ("-", None),
+        ('', None),
+        ("pending", None),
+        ("fail", False),
+    )
 
 class ReachabilityTestsTable(tables.DataTable):
-    STATUS_CHOICES = (
-	("pass", True),
-	("-", None),
-	('', None),
-	("pending", None),
-	("fail", False),
-    )
-    name = tables.Column("name", verbose_name=_("Name"))
+    name = tables.Column("test_id", verbose_name=_("Test ID"))
     last_run = tables.Column(get_last_run, link=("horizon:project:connections:reachability_tests:detail"), verbose_name=_("Last Run"))
-    status = tables.Column("status", 
+    status = tables.Column(get_status, 
 			   filters=(title, filters.replace_underscores), 
 			   verbose_name=_("Status"),
 			   status_choices=STATUS_CHOICES,

@@ -53,7 +53,7 @@ class ReachabilityTestResult(model_base.BASEV2):
     tenant_id = sa.Column(sa.String(64), primary_key=False, nullable=False)
     test_id = sa.Column(sa.String(64), primary_key=False, nullable=False)
     test_time = sa.Column(TIMESTAMP(timezone=True), primary_key=False, nullable=False, default=func.now())
-    test_result = sa.Column(Enum("PASS", "FAIL", "PENDING"), nullable=False)
+    test_result = sa.Column(Enum("pass", "fail", "pending"), nullable=False)
     detail = sa.Column(JSONEncodedDict(255), nullable=True)
 
     reachabilitytest = relationship("ReachabilityTest", backref=backref('reachabilitytestresult',\
