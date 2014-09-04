@@ -42,7 +42,8 @@ from openstack_dashboard.dashboards.project.connections.reachability_tests \
     import tabs as project_tabs
 from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_api import ReachabilityTestAPI
 from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_db \
-    import ReachabilityTest, ReachabilityTestResult, ReachabilityQuickTest, ReachabilityQuickTestResult, tenant_id, Session
+    import ReachabilityTest, ReachabilityTestResult, ReachabilityQuickTest, ReachabilityQuickTestResult
+from openstack_dashboard.dashboards.project.connections.reachability_tests.const import tenant_id, Session
 
 class ReachabilityTestData():
     '''

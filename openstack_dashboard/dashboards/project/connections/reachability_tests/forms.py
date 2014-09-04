@@ -36,7 +36,8 @@ from openstack_dashboard.utils import filters
 from openstack_dashboard import api
 from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_api import ReachabilityTestAPI
 from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_db import \
-     ReachabilityTest, ReachabilityTestResult, ReachabilityQuickTest, ReachabilityQuickTestResult, tenant_id, Session
+     ReachabilityTest, ReachabilityTestResult, ReachabilityQuickTest, ReachabilityQuickTestResult
+from openstack_dashboard.dashboards.project.connections.reachability_tests.const import tenant_id, Session
 
 NEW_LINES = re.compile(r"\r|\n")
 EXPECTATION_CHOICES = [('default',_('--- Select Result ---')),\
@@ -45,7 +46,7 @@ EXPECTATION_CHOICES = [('default',_('--- Select Result ---')),\
                        ('dropped by policy', _('dropped by policy')),
                        ('dropped due to private segment', _('dropped due to private segment')),
                        ('packet in', _('packet in')),
-                       ('forwared', _('forwared')),
+                       ('forwarded', _('forwarded')),
                        ('dropped', _('dropped')),
                        ('multiple sources', _('multiple sources')),
                        ('unsupported', _('unsupported')),\
@@ -60,7 +61,7 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
     tenant_source = forms.CharField(max_length="255",
                           label=_("Sepecify source tenant"),
                           required=True,
-                          initial="",
+                          initial=tenant_id,
                           widget=forms.TextInput(
                               attrs={'class': 'switched',
                                      'data-connection_source-tenant': _('Specify source tenant')}))
@@ -84,7 +85,7 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
     tenant_destination = forms.CharField(max_length="255",
                           label=_("Sepecify destination tenant"),
                           required=True,
-                          initial="",
+                          initial=tenant_id,
                           widget=forms.TextInput(
                               attrs={'class': 'switched',
                                      'data-connection_destination-tenant': _('Specify destination tenant')}))
@@ -174,7 +175,7 @@ class RunQuickTestForm(forms.SelfHandlingForm):
     tenant_source = forms.CharField(max_length="255",
                           label=_("Sepecify source tenant"),
                           required=True,
-                          initial="",
+                          initial=tenant_id,
                           widget=forms.TextInput(
                               attrs={'class': 'switched',
                                      'data-connection_source-tenant': _('Specify source tenant')}))
@@ -198,7 +199,7 @@ class RunQuickTestForm(forms.SelfHandlingForm):
     tenant_destination = forms.CharField(max_length="255",
                           label=_("Sepecify destination tenant"),
                           required=True,
-                          initial="",
+                          initial=tenant_id,
                           widget=forms.TextInput(
                               attrs={'class': 'switched',
                                      'data-connection_destination-tenant': _('Specify destination tenant')}))
@@ -296,7 +297,7 @@ class UpdateForm(forms.SelfHandlingForm):
     tenant_source = forms.CharField(max_length="255",
                           label=_("Sepecify source tenant"),
                           required=True,
-                          initial="",
+                          initial=tenant_id,
                           widget=forms.TextInput(
                               attrs={'class': 'switched',
                                      'data-connection_source-tenant': _('Specify source tenant')}))
@@ -320,7 +321,7 @@ class UpdateForm(forms.SelfHandlingForm):
     tenant_destination = forms.CharField(max_length="255",
                           label=_("Sepecify destination tenant"),
                           required=True,
-                          initial="",
+                          initial=tenant_id,
                           widget=forms.TextInput(
                               attrs={'class': 'switched',
                                      'data-connection_destination-tenant': _('Specify destination tenant')}))

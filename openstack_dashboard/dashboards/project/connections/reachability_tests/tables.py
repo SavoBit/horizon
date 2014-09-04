@@ -26,7 +26,8 @@ from openstack_dashboard.usage import quotas
 
 from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_api import ReachabilityTestAPI
 from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_db \
-      import ReachabilityTest, ReachabilityTestResult, ReachabilityQuickTest, ReachabilityQuickTestResult, tenant_id, Session
+      import ReachabilityTest, ReachabilityTestResult, ReachabilityQuickTest, ReachabilityQuickTestResult
+from openstack_dashboard.dashboards.project.connections.reachability_tests.const import tenant_id, Session
 
 class DeleteReachabilityTests(tables.DeleteAction):
     data_type_singular = _("Test")

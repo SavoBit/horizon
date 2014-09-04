@@ -1,13 +1,16 @@
 import os
+import json
 from sqlalchemy import func, desc
+from openstack_dashboard.dashboards.project.connections.reachability_tests.bcf_testpath_api import Controller
 from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_db \
       import ReachabilityTest, ReachabilityTestResult, ReachabilityQuickTest, ReachabilityQuickTestResult
+from openstack_dashboard.dashboards.project.connections.reachability_tests.const import debug
 
 result_limit = 1
 
 class ReachabilityTestAPI:
 
-    def _saveTest(self, tenant_id, test_id, test, session):
+    def saveTest(self, tenant_id, test_id, test, session):
         existing_tests = session.query(ReachabilityTest).filter(ReachabilityTest.tenant_id == tenant_id, ReachabilityTest.test_id == test_id).all()
         if existing_tests == None or len(existing_tests) == 0:
             session.add(test)
@@ -23,7 +26,7 @@ class ReachabilityTestAPI:
         session.flush()
 
     def addReachabilityTest(self, test, session):
-        self._saveTest(test.tenant_id, test.test_id, test, session)
+        self.saveTest(test.tenant_id, test.test_id, test, session)
         return session.query(ReachabilityTest).filter(ReachabilityTest.tenant_id == test.tenant_id, ReachabilityTest.test_id == test.test_id).first()
 
     def addQuickTest(self, test, session):
@@ -54,7 +57,7 @@ class ReachabilityTestAPI:
                                     dst_segment_id = quick_test.dst_segment_id,\
                                     dst_ip = quick_test.dst_ip,\
                                     expected_result = quick_test.expected_result)
-            self._saveTest(tenant_id, test_id, test, session)
+            self.saveTest(tenant_id, test_id, test, session)
         return test
 
     def saveQuickTestResult(self, tenant_id, test_id, session):
@@ -86,14 +89,39 @@ class ReachabilityTestAPI:
         if(test):
             session.delete(test)
 
+    def getBcfTestResult(self, test):
+        src = {}
+        src['tenant'] = test.src_tenant_id
+        src['segment'] = test.src_segment_id
+        src['ip'] = test.src_ip
+        dst = {}
+        dst['tenant'] = test.dst_tenant_id
+        dst['segment'] = test.dst_segment_id
+        dst['ip'] = test.dst_ip
+        bcf = Controller()
+        bcf.auth()
+        data = bcf.getTestPath(src, dst)
+        return data
+
     def runQuickTest(self, tenant_id, session):
         test = session.query(ReachabilityQuickTest).filter(ReachabilityQuickTest.tenant_id == tenant_id).first()
         if test:
+            data = self.getBcfTestResult(test)
+            debug(str("summary" in data))
+            debug(str(data[0]["summary"][0]["forward-result"]))
+            test_result = "pending"
+            if data and "summary" in data[0] and test.expected_result == data[0]["summary"][0]["forward-result"]:
+                test_result = "pass"
+            else:
+                test_result = "fail"
+            detail = None
+            if "physical-path" in data[0]:
+                detail = data[0]["physical-path"]
             result = ReachabilityQuickTestResult(test_primary_key = test.id,\
                                                  tenant_id = tenant_id,\
                                                  test_time = func.now(),\
-                                                 test_result = "pass",\
-                                                 detail = None)
+                                                 test_result = test_result,\
+                                                 detail = detail)
             session.add(result)
             results = session.query(ReachabilityQuickTestResult).filter(ReachabilityQuickTestResult.tenant_id == tenant_id)\
                                                                 .order_by(ReachabilityQuickTestResult.test_time).all()
@@ -104,11 +132,20 @@ class ReachabilityTestAPI:
     def runReachabilityTest(self, tenant_id, test_id, session):
         test = session.query(ReachabilityTest).filter(ReachabilityTest.tenant_id == tenant_id, ReachabilityTest.test_id == test_id).first()
         if test:
+            data = self.getBcfTestResult(test)
+            test_result = "pending"
+            if data and "summary" in data[0] and test.expected_result == data[0]["summary"][0]["forward-result"]:
+                test_result = "pass"
+            else:
+                test_result = "fail"
+            detail = None
+            if "physical-path" in data[0]:
+                detail = data[0]["physical-path"]
             result = ReachabilityTestResult(test_primary_key=test.id,\
                                             tenant_id = tenant_id,\
                                             test_id = test_id,\
-                                            test_result = "pass",\
-                                            detail = None)
+                                            test_result = test_result,\
+                                            detail = detail)
             session.add(result)
             results = session.query(ReachabilityTestResult).filter(ReachabilityTestResult.tenant_id == tenant_id, ReachabilityTestResult.test_id == test_id)\
                                                        .order_by(ReachabilityTestResult.test_time).all()
@@ -131,6 +168,6 @@ class ReachabilityTestAPI:
                                                          .order_by(desc(ReachabilityQuickTestResult.test_time)).first()
 
     def updateReachabilityTest(self, tenant_id, test_id, test, session):
-        self._saveTest(tenant_id, test_id, test, session)
+        self.saveTest(tenant_id, test_id, test, session)
         return session.query(ReachabilityTest).filter(ReachabilityTest.tenant_id == tenant_id, ReachabilityTest.test_id == test_id).first()
 

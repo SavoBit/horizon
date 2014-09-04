@@ -39,7 +39,8 @@ from openstack_dashboard.dashboards.project.connections.mockapi import NetworkTe
 
 from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_api import ReachabilityTestAPI
 from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_db import \
-     ReachabilityTest, ReachabilityTestResult, ReachabilityQuickTest, ReachabilityQuickTestResult, tenant_id, Session
+     ReachabilityTest, ReachabilityTestResult, ReachabilityQuickTest, ReachabilityQuickTestResult
+from openstack_dashboard.dashboards.project.connections.reachability_tests.const import tenant_id, Session
 
 class NetworkTemplateTab(tabs.Tab):
     name = _("Network Template")
