@@ -35,8 +35,15 @@ class DeleteReachabilityTests(tables.DeleteAction):
     def delete(self, request, obj_id):
 	api = ReachabilityTestAPI()
         session = Session()
-        with session.begin(subtransactions=True):
+        try:
             api.deleteReachabilityTest(tenant_id, obj_id.encode('ascii','ignore'), session)
+            session.commit()
+        except:
+            session.rollback()
+            raise
+        finally:
+            session.close()
+
 
 class CreateReachabilityTest(tables.LinkAction):
     name = "create"
@@ -71,8 +78,15 @@ class RunTest(tables.BatchAction):
     def action(self, request, obj_id):
 	api = ReachabilityTestAPI()
 	session = Session()
-        with session.begin(subtransactions=True):
+        try:
             api.runReachabilityTest(tenant_id, obj_id.encode('ascii','ignore'), session)
+            session.commit()
+        except:
+            session.rollback()
+            raise
+        finally:
+            session.close()
+
 
 class UpdateTest(tables.LinkAction):
     name = "update"
@@ -88,8 +102,15 @@ def get_last_run(test):
 def get_run_list(test):
     api = ReachabilityTestAPI()
     session = Session()
-    with session.begin(subtransactions=True):
+    try:
         api.listReachabilityTestResults(tenant_id, test.name, session)
+        session.commit()
+    except:
+        session.rollback()
+        raise
+    finally:
+        session.close()
+
 
 STATUS_DISPLAY_CHOICES = (
     ("pass", _("PASS")),

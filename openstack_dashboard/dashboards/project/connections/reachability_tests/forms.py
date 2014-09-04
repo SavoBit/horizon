@@ -158,8 +158,14 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
                                 expected_result = expected)
         api = ReachabilityTestAPI()
         session = Session()
-        with session.begin(subtransactions=True):
+        try:
             test = api.addReachabilityTest(test, session)
+            session.commit()
+        except:
+            session.rollback()
+            raise
+        finally:
+            session.close()
         messages.success(request, _('Successfully created reachability test: %s') % data['name'])
         return test
 
@@ -265,10 +271,17 @@ class RunQuickTestForm(forms.SelfHandlingForm):
                                      expected_result = expected)
         api = ReachabilityTestAPI()
         session = Session()
-        with session.begin(subtransactions=True):
+        try:
             api.addQuickTest(test, session)
             api.runQuickTest(tenant_id, session)
             test = api.getQuickTest(tenant_id, session)
+            session.commit()
+        except:
+            session.rollback()
+            raise
+        finally:
+            session.close()
+
         messages.success(request, _('Successfully ran quick test.'))
         return test
 
@@ -381,8 +394,15 @@ class UpdateForm(forms.SelfHandlingForm):
         api = ReachabilityTestAPI()
         session = Session()
         test = None
-        with session.begin(subtransactions=True):
+        try:
             test = api.updateReachabilityTest(tenant_id, test_id, test, session)
+            session.commit()
+        except:
+            session.rollback()
+            raise
+        finally:
+            session.close()
+
         messages.success(request, _('Successfully updated reachability test.'))
         return test
 
@@ -409,7 +429,14 @@ class SaveQuickTestForm(forms.SelfHandlingForm):
         api = ReachabilityTestAPI()
         session = Session()
         test = None
-        with session.begin(subtransactions=True):
+        try:
             test = api.saveQuickTest(tenant_id, test_id, session)
+            session.commit()
+        except:
+            session.rollback()
+            raise
+        finally:
+            session.close()
+
         messages.success(request, _('Successfully saved quick test: %s') % data['name'])
 	return test
