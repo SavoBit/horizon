@@ -35,10 +35,11 @@ from openstack_dashboard.dashboards.project.connections.\
     top_talkers.tables import TopTalkersTable
 from openstack_dashboard.dashboards.project.connections.\
     reachability_tests.tables import ReachabilityTestsTable
-from openstack_dashboard.dashboards.project.connections.mockobjects import ReachabilityTestStub
-from openstack_dashboard.dashboards.project.connections.mockapi import ReachabilityTestAPI
 from openstack_dashboard.dashboards.project.connections.mockapi import NetworkTemplateAPI
 
+from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_api import ReachabilityTestAPI
+from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_db import \
+     ReachabilityTest, ReachabilityTestResult, ReachabilityQuickTest, ReachabilityQuickTestResult, tenant_id, Session
 
 class NetworkTemplateTab(tabs.Tab):
     name = _("Network Template")
@@ -68,15 +69,18 @@ class ReachabilityTestsTab(tabs.TableTab):
     template_name = "horizon/common/_detail_table.html"
 
     def get_reachability_tests_data(self):
+        session = Session()
         try:
-	    #TODO: Replace with API call to get the list of objects to add
-	    #to the table.
 	    api = ReachabilityTestAPI()
-	    reachability_tests = api.listReachabilityTest()
+	    reachability_tests = api.listReachabilityTests(tenant_id, session)
+            session.commit()
         except Exception:
+            session.rollback()
             reachability_tests = []
             exceptions.handle(self.request,
                               _('Unable to retrieve reachability test list.'))
+        finally:
+            session.close()
 
         return reachability_tests
 

@@ -36,7 +36,7 @@ from openstack_dashboard.utils import filters
 from openstack_dashboard import api
 from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_api import ReachabilityTestAPI
 from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_db import \
-     ReachabilityTest, ReachabilityTestResult, ReachabilityQuickTest, ReachabilityQuickTestResult, tenant_id, Session, debug
+     ReachabilityTest, ReachabilityTestResult, ReachabilityQuickTest, ReachabilityQuickTestResult, tenant_id, Session
 
 NEW_LINES = re.compile(r"\r|\n")
 EXPECTATION_CHOICES = [('default',_('--- Select Result ---')),\
@@ -431,6 +431,7 @@ class SaveQuickTestForm(forms.SelfHandlingForm):
         test = None
         try:
             test = api.saveQuickTest(tenant_id, test_id, session)
+            api.saveQuickTestResult(tenant_id, test_id, session)
             session.commit()
         except:
             session.rollback()

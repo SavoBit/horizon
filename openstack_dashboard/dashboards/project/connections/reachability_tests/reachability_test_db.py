@@ -9,11 +9,6 @@ from sqlalchemy.orm import relationship, backref, sessionmaker
 from sqlalchemy.types import Enum, TIMESTAMP, TypeDecorator
 from sqlalchemy import Table, Column, ForeignKey, func, Integer, create_engine
 
-def debug(msg):
-            f = open('haha', 'a')
-            f.write(msg)
-            f.close()
-
 class JSONEncodedDict(TypeDecorator):
     """Represents an immutable structure as a json-encoded string.
     Usage::
@@ -104,7 +99,12 @@ db_pwd = 'password'
 tenant_id = 'admin'
 engine_string = "mysql+mysqldb://%s:%s@%s/neutron?charset=utf8" % (db_user, db_pwd, db_ip)
 engine = create_engine(engine_string)
-Session = sessionmaker(bind=engine)
+Session = sessionmaker(bind=engine, expire_on_commit=False)
 Base = model_base.BASEV2()
 Base.metadata.create_all(bind=engine)
+
+def debug(msg):
+    f = open('haha', 'a')
+    f.write(msg)
+    f.close()
 

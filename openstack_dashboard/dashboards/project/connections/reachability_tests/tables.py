@@ -102,14 +102,16 @@ def get_last_run(test):
 def get_run_list(test):
     api = ReachabilityTestAPI()
     session = Session()
+    run_list = None
     try:
-        api.listReachabilityTestResults(tenant_id, test.name, session)
+        run_list = api.listReachabilityTestResults(tenant_id, test.name, session)
         session.commit()
     except:
         session.rollback()
         raise
     finally:
         session.close()
+    return run_list
 
 
 STATUS_DISPLAY_CHOICES = (
@@ -140,7 +142,7 @@ class ReachabilityTestsTable(tables.DataTable):
     run_list = tables.Column(get_run_list, hidden=True, verbose_name=_("Run List"))    
 
     def get_object_id(self, reachability_test):
-        return reachability_test.name
+        return reachability_test.test_id
 
     class Meta:
         name = "reachability_tests"
