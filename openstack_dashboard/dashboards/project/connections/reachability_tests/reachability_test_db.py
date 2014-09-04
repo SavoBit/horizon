@@ -31,17 +31,21 @@ class ReachabilityTest(model_base.BASEV2):
     '''
     __tablename__ = 'reachabilitytest'
     id = Column(Integer, primary_key=True)
-    tenant_id = sa.Column(sa.String(64), primary_key=False, nullable=False)
-    test_id = sa.Column(sa.String(64), primary_key=False, nullable=False)
-    src_tenant_id = sa.Column(sa.String(64), primary_key=False, nullable=False)
-    src_segment_id = sa.Column(sa.String(64), primary_key=False, nullable=False)
-    src_ip = sa.Column(sa.String(16), nullable=False, primary_key=False)
-    dst_tenant_id = sa.Column(sa.String(64), nullable=False, primary_key=False)
-    dst_segment_id = sa.Column(sa.String(64), nullable=False, primary_key=False)
+    tenant_id = sa.Column(sa.String(64), nullable=False)
+    test_id = sa.Column(sa.String(64), nullable=False)
+    src_tenant_id = sa.Column(sa.String(64), nullable=False)
+    src_segment_id = sa.Column(sa.String(64), nullable=False)
+    src_ip = sa.Column(sa.String(16), nullable=False)
+    dst_tenant_id = sa.Column(sa.String(64), nullable=False)
+    dst_segment_id = sa.Column(sa.String(64), nullable=False)
     dst_ip = sa.Column(sa.String(16), nullable=False)
-    expected_result = sa.Column(Enum("reached destination", "dropped by route", "dropped by policy", \
-                                     "dropped due to private segment", "packet in", "forwarded", "dropped", "multiple sources", \
-                                     "unsupported", "invalid input", name="expected_result"), nullable=False)
+    expected_result = sa.Column(Enum("reached destination", "dropped by route",
+                                     "dropped by policy",
+                                     "dropped due to private segment",
+                                     "packet in", "forwarded", "dropped",
+                                     "multiple sources",
+                                     "unsupported", "invalid input",
+                                     name="expected_result"), nullable=False)
 
     def get_connection_source(self):
         source = {}
@@ -63,16 +67,19 @@ class ReachabilityTestResult(model_base.BASEV2):
     '''
     __tablename__ = 'reachabilitytestresult'
     id = Column(Integer, primary_key=True)
-    test_primary_key = sa.Column(Integer, ForeignKey('reachabilitytest.id'), nullable=False)
-    tenant_id = sa.Column(sa.String(64), primary_key=False, nullable=False)
-    test_id = sa.Column(sa.String(64), primary_key=False, nullable=False)
-    test_time = sa.Column(TIMESTAMP(timezone=True), primary_key=False, nullable=False, default=func.now())
+    test_primary_key = sa.Column(Integer, ForeignKey('reachabilitytest.id'),
+                                                     nullable=False)
+    tenant_id = sa.Column(sa.String(64), nullable=False)
+    test_id = sa.Column(sa.String(64), nullable=False)
+    test_time = sa.Column(TIMESTAMP(timezone=True),
+                          nullable=False, default=func.now())
     test_result = sa.Column(Enum("pass", "fail", "pending"), nullable=False)
     detail = sa.Column(JSONEncodedDict(8192), nullable=True)
 
-    reachabilitytest = relationship("ReachabilityTest", backref=backref('reachabilitytestresult',\
-                                                                        order_by=id, uselist=True,\
-                                                                        cascade='delete,all'))
+    reachabilitytest = relationship("ReachabilityTest",
+                                    backref=backref('reachabilitytestresult',
+                                                    order_by=id, uselist=True,
+                                                    cascade='delete,all'))
 
 class ReachabilityQuickTest(model_base.BASEV2):
     '''
@@ -80,16 +87,20 @@ class ReachabilityQuickTest(model_base.BASEV2):
     '''
     __tablename__ = 'reachabilityquicktest'
     id = Column(Integer, primary_key=True)
-    tenant_id = sa.Column(sa.String(64), primary_key=False, nullable=False)
-    src_tenant_id = sa.Column(sa.String(64), primary_key=False, nullable=False)
-    src_segment_id = sa.Column(sa.String(64), primary_key=False, nullable=False)
-    src_ip = sa.Column(sa.String(16), nullable=False, primary_key=False)
-    dst_tenant_id = sa.Column(sa.String(64), nullable=False, primary_key=False)
-    dst_segment_id = sa.Column(sa.String(64), nullable=False, primary_key=False)
+    tenant_id = sa.Column(sa.String(64), nullable=False)
+    src_tenant_id = sa.Column(sa.String(64), nullable=False)
+    src_segment_id = sa.Column(sa.String(64), nullable=False)
+    src_ip = sa.Column(sa.String(16), nullable=False)
+    dst_tenant_id = sa.Column(sa.String(64), nullable=False)
+    dst_segment_id = sa.Column(sa.String(64), nullable=False)
     dst_ip = sa.Column(sa.String(16), nullable=False)
-    expected_result = sa.Column(Enum("reached destination", "dropped by route", "dropped by policy", \
-                                     "dropped due to private segment", "packet in", "forwarded", "dropped", "multiple sources", \
-                                     "unsupported", "invalid input", name="expected_result"), nullable=False)
+    expected_result = sa.Column(Enum("reached destination", "dropped by route",
+                                     "dropped by policy",
+                                     "dropped due to private segment",
+                                     "packet in", "forwarded", "dropped",
+                                     "multiple sources", "unsupported",
+                                     "invalid input", name="expected_result"),
+                                     nullable=False)
 
     def get_connection_source(self):
         source = {}
@@ -111,13 +122,16 @@ class ReachabilityQuickTestResult(model_base.BASEV2):
     '''
     __tablename__ = 'reachabilityquicktestresult'
     id = Column(Integer, primary_key=True)
-    test_primary_key = sa.Column(Integer, ForeignKey('reachabilityquicktest.id'), nullable=False)
-    tenant_id = sa.Column(sa.String(64), primary_key=False, nullable=False)
-    test_time = sa.Column(TIMESTAMP(timezone=True), primary_key=False, nullable=False, default=func.now())
+    test_primary_key = sa.Column(Integer,
+                                 ForeignKey('reachabilityquicktest.id'), nullable=False)
+    tenant_id = sa.Column(sa.String(64), nullable=False)
+    test_time = sa.Column(TIMESTAMP(timezone=True),
+                          nullable=False, default=func.now())
     test_result = sa.Column(Enum("pass", "fail", "pending"), nullable=False)
     detail = sa.Column(JSONEncodedDict(8192), nullable=True)
 
-    reachabilitytest = relationship("ReachabilityQuickTest", backref=backref('reachabilityquicktestresult',\
-                                                                             order_by=id, uselist=True,\
-                                                                             cascade='delete,all'))
+    reachabilitytest = relationship("ReachabilityQuickTest",
+                                    backref=backref('reachabilityquicktestresult',
+                                                    order_by=id, uselist=True,
+                                                    cascade='delete,all'))
 

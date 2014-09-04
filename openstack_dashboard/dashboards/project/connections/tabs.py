@@ -40,7 +40,7 @@ from openstack_dashboard.dashboards.project.connections.mockapi import NetworkTe
 from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_api import ReachabilityTestAPI
 from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_db import \
      ReachabilityTest, ReachabilityTestResult, ReachabilityQuickTest, ReachabilityQuickTestResult
-from openstack_dashboard.dashboards.project.connections.reachability_tests.const import tenant_id, Session
+import openstack_dashboard.dashboards.project.connections.reachability_tests.const as const
 
 class NetworkTemplateTab(tabs.Tab):
     name = _("Network Template")
@@ -70,19 +70,10 @@ class ReachabilityTestsTab(tabs.TableTab):
     template_name = "horizon/common/_detail_table.html"
 
     def get_reachability_tests_data(self):
-        session = Session()
-        try:
-	    api = ReachabilityTestAPI()
-	    reachability_tests = api.listReachabilityTests(tenant_id, session)
-            session.commit()
-        except Exception:
-            session.rollback()
-            reachability_tests = []
-            exceptions.handle(self.request,
-                              _('Unable to retrieve reachability test list.'))
-        finally:
-            session.close()
-
+        api = ReachabilityTestAPI()
+        session = const.Session()
+        with session.begin(subtransactions=True):
+	    reachability_tests = api.listReachabilityTests(const.tenant_id, session)
         return reachability_tests
 
 class TopTalkersTab(tabs.TableTab):

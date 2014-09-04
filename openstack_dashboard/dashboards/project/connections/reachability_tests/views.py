@@ -43,7 +43,7 @@ from openstack_dashboard.dashboards.project.connections.reachability_tests \
 from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_api import ReachabilityTestAPI
 from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_db \
     import ReachabilityTest, ReachabilityTestResult, ReachabilityQuickTest, ReachabilityQuickTestResult
-from openstack_dashboard.dashboards.project.connections.reachability_tests.const import tenant_id, Session
+import openstack_dashboard.dashboards.project.connections.reachability_tests.const as const
 
 LJUST_WIDTH = 50
 
@@ -96,20 +96,12 @@ class UpdateView(forms.ModalFormView):
     def get_object(self):
         test_data = None
         test_id = self.kwargs['reachability_test_id'].encode('ascii','ignore')
-        try:
-	    api = ReachabilityTestAPI()
-            session = Session()
-            test = api.getReachabilityTest(tenant_id, test_id, session)
-            result = api.getLastReachabilityTestResult(tenant_id, test_id, session)
+	api = ReachabilityTestAPI()
+        session = const.Session()
+        with session.begin(subtransactions=True):
+            test = api.getReachabilityTest(const.tenant_id, test_id, session)
+            result = api.getLastReachabilityTestResult(const.tenant_id, test_id, session)
             test_data = ReachabilityTestData(test, result)
-            session.commit()
-        except Exception:
-            session.rollback()
-            msg = _('Unable to retrieve test.')
-            url = reverse('horizon:project:connections:index')
-            exceptions.handle(self.request, msg, redirect=url)
-        finally:
-            session.close()
         return test_data
 
     def get_context_data(self, **kwargs):
@@ -141,21 +133,12 @@ class DetailView(tabs.TabView):
     def get_data(self):
         test_data = None
         test_id = self.kwargs['reachability_test_id'].encode('ascii','ignore')
-        try:
-            api = ReachabilityTestAPI()
-            session = Session()
-            test = api.getReachabilityTest(tenant_id, test_id, session)
-            result = api.getLastReachabilityTestResult(tenant_id, test_id, session)
+        api = ReachabilityTestAPI()
+        session = const.Session()
+        with session.begin(subtransactions=True):
+            test = api.getReachabilityTest(const.tenant_id, test_id, session)
+            result = api.getLastReachabilityTestResult(const.tenant_id, test_id, session)
             test_data = ReachabilityTestData(test, result)
-            session.commit()
-        except Exception:
-            session.rollback()
-            url = reverse('horizon:project:connections:index')
-            exceptions.handle(self.request,
-                              _('Unable to retrieve reachability test details.'),
-                              redirect=url)
-        finally:
-            session.close()
         return test_data
 
     def get_tabs(self, request, *args, **kwargs):
@@ -176,21 +159,12 @@ class QuickDetailView(tabs.TabView):
     @memoized.memoized_method
     def get_data(self):
         test_data = None
-        try:
-            api = ReachabilityTestAPI()
-            session = Session()
-            test = api. getQuickTest(tenant_id, session)
-            result = api.getLastReachabilityQuickTestResult(tenant_id, session)
+        api = ReachabilityTestAPI()
+        session = const.Session()
+        with session.begin(subtransactions=True):
+            test = api. getQuickTest(const.tenant_id, session)
+            result = api.getLastReachabilityQuickTestResult(const.tenant_id, session)
             test_data = ReachabilityTestData(test, result)
-            session.commit()
-        except Exception:
-            session.rollback()
-            url = reverse('horizon:project:connections:index')
-            exceptions.handle(self.request,
-                              _('Could not run quick test.'),
-                              redirect=url)
-        finally:
-            session.close()
         return test_data
 
     def get_tabs(self, request, *args, **kwargs):

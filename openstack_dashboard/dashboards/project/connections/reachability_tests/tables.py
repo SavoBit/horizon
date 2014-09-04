@@ -25,9 +25,9 @@ from openstack_dashboard import api
 from openstack_dashboard.usage import quotas
 
 from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_api import ReachabilityTestAPI
-from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_db \
-      import ReachabilityTest, ReachabilityTestResult, ReachabilityQuickTest, ReachabilityQuickTestResult
-from openstack_dashboard.dashboards.project.connections.reachability_tests.const import tenant_id, Session
+#from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_db \
+#      import ReachabilityTest, ReachabilityTestResult, ReachabilityQuickTest, ReachabilityQuickTestResult
+import openstack_dashboard.dashboards.project.connections.reachability_tests.const as const
 
 class DeleteReachabilityTests(tables.DeleteAction):
     data_type_singular = _("Test")
@@ -35,16 +35,9 @@ class DeleteReachabilityTests(tables.DeleteAction):
 
     def delete(self, request, obj_id):
 	api = ReachabilityTestAPI()
-        session = Session()
-        try:
-            api.deleteReachabilityTest(tenant_id, obj_id.encode('ascii','ignore'), session)
-            session.commit()
-        except:
-            session.rollback()
-            raise
-        finally:
-            session.close()
-
+        session = const.Session()
+        with session.begin(subtransactions=True):
+            api.deleteReachabilityTest(const.tenant_id, obj_id.encode('ascii','ignore'), session)
 
 class CreateReachabilityTest(tables.LinkAction):
     name = "create"
@@ -78,15 +71,9 @@ class RunTest(tables.BatchAction):
         
     def action(self, request, obj_id):
 	api = ReachabilityTestAPI()
-	session = Session()
-        try:
-            api.runReachabilityTest(tenant_id, obj_id.encode('ascii','ignore'), session)
-            session.commit()
-        except:
-            session.rollback()
-            raise
-        finally:
-            session.close()
+	session = const.Session()
+        with session.begin(subtransactions=True):
+            api.runReachabilityTest(const.tenant_id, obj_id.encode('ascii','ignore'), session)
 
 
 class UpdateTest(tables.LinkAction):
@@ -97,48 +84,30 @@ class UpdateTest(tables.LinkAction):
 
 def get_last_run(test):
     api = ReachabilityTestAPI()
-    session = Session()
+    session = const.Session()
     timestamp = None
-    try:
+    with session.begin(subtransactions=True):
         last_result = api.getLastReachabilityTestResult(test.tenant_id, test.test_id, session)
         if last_result:
             timestamp = last_result.test_time
-        session.commit()
-    except:
-        session.rollback()
-        raise
-    finally:
-        session.close()
     return timestamp
 
 def get_status(test):
     api = ReachabilityTestAPI()
-    session = Session()
+    session = const.Session()
     status = ''
-    try:
+    with session.begin(subtransactions=True):
         last_result = api.getLastReachabilityTestResult(test.tenant_id, test.test_id, session)
         if last_result:
             status = last_result.test_result
-        session.commit()
-    except:
-        session.rollback()
-        raise
-    finally:
-        session.close()
     return status
 
 def get_run_list(test):
     api = ReachabilityTestAPI()
-    session = Session()
+    session = const.Session()
     run_list = None
-    try:
+    with session.begin(subtransactions=True):
         run_list = api.listReachabilityTestResults(test.tenant_id, test.test_id, session)
-        session.commit()
-    except:
-        session.rollback()
-        raise
-    finally:
-        session.close()
     return run_list
 
 
