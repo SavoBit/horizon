@@ -23,19 +23,20 @@ from horizon.utils import filters
 
 from openstack_dashboard import api
 from openstack_dashboard.usage import quotas
-from openstack_dashboard.dashboards.project.connections.mockapi import ReachabilityTestAPI
-from openstack_dashboard.dashboards.project.connections.mockobjects import ReachabilityTestStub
 
+from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_api import ReachabilityTestAPI
+from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_db \
+      import ReachabilityTest, ReachabilityTestResult, ReachabilityQuickTest, ReachabilityQuickTestResult, tenant_id, Session
 
 class DeleteReachabilityTests(tables.DeleteAction):
     data_type_singular = _("Test")
     data_type_plural = _("Tests")
 
     def delete(self, request, obj_id):
-	#TODO: Replace with API call to remove a reachability test.
 	api = ReachabilityTestAPI()
-        api.deleteReachabilityTest(obj_id.encode('ascii','ignore'))
-
+        session = Session()
+        with session.begin(subtransactions=True):
+            api.deleteReachabilityTest(tenant_id, obj_id.encode('ascii','ignore'), session)
 
 class CreateReachabilityTest(tables.LinkAction):
     name = "create"
@@ -68,10 +69,10 @@ class RunTest(tables.BatchAction):
     classes = ("btn-edit",)
         
     def action(self, request, obj_id):
-	#TODO: Replace with API call to run a quick/Troubleshoot test.
 	api = ReachabilityTestAPI()
-	api.runReachabilityTest(obj_id.encode('ascii','ignore'))
-
+	session = Session()
+        with session.begin(subtransactions=True):
+            api.runReachabilityTest(tenant_id, obj_id.encode('ascii','ignore'), session)
 
 class UpdateTest(tables.LinkAction):
     name = "update"
@@ -85,10 +86,10 @@ def get_last_run(test):
 
 
 def get_run_list(test):
-    #TODO: Replace with API call to get the list of past time stamp runs for a test.
     api = ReachabilityTestAPI()
-    return api.listTestRuns(test.name)
-
+    session = Session()
+    with session.begin(subtransactions=True):
+        api.listReachabilityTestResults(tenant_id, test.name, session)
 
 STATUS_DISPLAY_CHOICES = (
     ("pass", _("PASS")),

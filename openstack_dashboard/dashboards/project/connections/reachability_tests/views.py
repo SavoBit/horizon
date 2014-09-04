@@ -35,11 +35,13 @@ from horizon.utils import memoized
 from horizon import tabs
 
 from openstack_dashboard import api
-from openstack_dashboard.dashboards.project.connections.mockapi import ReachabilityTestAPI
 from openstack_dashboard.dashboards.project.connections.reachability_tests \
     import forms as project_forms
 from openstack_dashboard.dashboards.project.connections.reachability_tests \
     import tabs as project_tabs
+from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_api import ReachabilityTestAPI
+from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_db \
+    import ReachabilityTest, ReachabilityTestResult, ReachabilityQuickTest, ReachabilityQuickTestResult, tenant_id, Session
 
 
 class CreateView(forms.ModalFormView):
@@ -61,15 +63,20 @@ class UpdateView(forms.ModalFormView):
 
     @memoized.memoized_method
     def get_object(self):
+        test = None
         try:
-	    #TODO: Replace with API call to get the existing data of the reachability test you want to update.
-	    #The form will be populated with this information.
 	    api = ReachabilityTestAPI()
-            return api.getReachabilityTest(self.kwargs['reachability_test_id'].encode('ascii','ignore'))
+            session = Session()
+            test = api.getReachabilityTest(tenant_id, self.kwargs['reachability_test_id'].encode('ascii','ignore'), session)
+            session.commit()
         except Exception:
+            session.rollback()
             msg = _('Unable to retrieve test.')
             url = reverse('horizon:project:connections:index')
             exceptions.handle(self.request, msg, redirect=url)
+        finally:
+            session.close()
+        return test
 
     def get_context_data(self, **kwargs):
         context = super(UpdateView, self).get_context_data(**kwargs)
@@ -98,15 +105,21 @@ class DetailView(tabs.TabView):
 
     @memoized.memoized_method
     def get_data(self):
+        test = None
         try:
-	    #TODO: Replace with API call to get data to display in the details page.
-	    api = ReachabilityTestAPI()
-            return api.getReachabilityTest(self.kwargs['reachability_test_id'].encode('ascii','ignore'))
+            api = ReachabilityTestAPI()
+            session = Session()
+            test = api.getReachabilityTest(tenant_id, self.kwargs['reachability_test_id'].encode('ascii','ignore'), session)
+            session.commit()
         except Exception:
+            session.rollback()
             url = reverse('horizon:project:connections:index')
             exceptions.handle(self.request,
                               _('Unable to retrieve reachability test details.'),
                               redirect=url)
+        finally:
+            session.close()
+        return test
 
     def get_tabs(self, request, *args, **kwargs):
         reachability_test = self.get_data()
@@ -125,15 +138,21 @@ class QuickDetailView(tabs.TabView):
 
     @memoized.memoized_method
     def get_data(self):
+        test = None
         try:
-	    #TODO: Replace with API call to get data to display in the quick test results page.
             api = ReachabilityTestAPI()
-            return  api.getQuickTest()
+            session = Session()
+            test = api. getQuickTest(tenant_id, session)
+            session.commit()
         except Exception:
+            session.rollback()
             url = reverse('horizon:project:connections:index')
             exceptions.handle(self.request,
                               _('Could not run quick test.'),
                               redirect=url)
+        finally:
+            session.close()
+        return test
 
     def get_tabs(self, request, *args, **kwargs):
         quick_test = self.get_data()

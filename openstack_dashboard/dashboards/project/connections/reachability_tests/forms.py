@@ -34,8 +34,9 @@ from horizon.utils import validators as utils_validators
 
 from openstack_dashboard.utils import filters
 from openstack_dashboard import api
-from openstack_dashboard.dashboards.project.connections.mockobjects import ReachabilityTestStub
-from openstack_dashboard.dashboards.project.connections.mockapi import ReachabilityTestAPI
+from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_api import ReachabilityTestAPI
+from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_db import \
+     ReachabilityTest, ReachabilityTestResult, ReachabilityQuickTest, ReachabilityQuickTestResult, tenant_id, Session, debug
 
 NEW_LINES = re.compile(r"\r|\n")
 EXPECTATION_CHOICES = [('default',_('--- Select Result ---')),\
@@ -51,6 +52,7 @@ EXPECTATION_CHOICES = [('default',_('--- Select Result ---')),\
                        ('invalid input', _('invalid input'))]
 
 class CreateReachabilityTest(forms.SelfHandlingForm):
+
     name = forms.CharField(max_length="255",
                            label=_("Name"),
                            required=True)
@@ -130,6 +132,7 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
 	return cleaned_data
 
     def handle(self, request, data):
+        test_id = data['name'].encode('ascii','ignore')
         source = {}
         source['tenant'] = data['tenant_source'].encode('ascii')
         source['segment'] = data['segment_source'].encode('ascii')
@@ -139,17 +142,25 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
         dest['segment'] = data['segment_destination'].encode('ascii')
         dest['ip'] = data['ip_destination'].encode('ascii','ignore')
 	expected = data['expected_connection'].encode('ascii','ignore')
-	new_test_data = {'name' : data['name'].encode('ascii','ignore'),
+	new_test_data = {'name' : test_id,
 			'connection_source' : source,
 			'connection_destination' : dest,
 			'expected_connection' : expected}
 
-	#TODO: Replace with API call to create a test.
-	test = ReachabilityTestStub(new_test_data)
-        messages.success(request, _('Successfully created reachability test: %s') % data['name'])
+        test = ReachabilityTest(tenant_id = tenant_id,\
+                                test_id = test_id,\
+                                src_tenant_id = source['tenant'],\
+                                src_segment_id = source['segment'],\
+                                src_ip = source['ip'],\
+                                dst_tenant_id = dest['tenant'],\
+                                dst_segment_id = dest['segment'],\
+                                dst_ip = dest['ip'],\
+                                expected_result = expected)
         api = ReachabilityTestAPI()
-        api.addReachabilityTest(test)
-
+        session = Session()
+        with session.begin(subtransactions=True):
+            test = api.addReachabilityTest(test, session)
+        messages.success(request, _('Successfully created reachability test: %s') % data['name'])
         return test
 
 class RunQuickTestForm(forms.SelfHandlingForm):
@@ -239,19 +250,26 @@ class RunQuickTestForm(forms.SelfHandlingForm):
         dest['segment'] = data['segment_destination'].encode('ascii')
         dest['ip'] = data['ip_destination'].encode('ascii','ignore')
 	expected = data['expected_connection'].encode('ascii','ignore')
-        new_test_data = {'name' : 'quick test',
+        new_test_data = {'name' : None,
                         'connection_source' : source,
                         'connection_destination' : dest,
                         'expected_connection' : expected}
 
-	#TODO: Replace with API call to run a quick/troubleshoot test.
-        test = ReachabilityTestStub(new_test_data) 
+        test = ReachabilityQuickTest(tenant_id = tenant_id,\
+                                     src_tenant_id = source['tenant'],\
+                                     src_segment_id = source['segment'],\
+                                     src_ip = source['ip'],\
+                                     dst_tenant_id = dest['tenant'],\
+                                     dst_segment_id = dest['segment'],\
+                                     dst_ip = dest['ip'],\
+                                     expected_result = expected)
         api = ReachabilityTestAPI()
-        api.addQuickTest(test)
-	api.runQuickTest()
-	test = api.getQuickTest()
-	messages.success(request, _('Successfully ran quick test.'))
-
+        session = Session()
+        with session.begin(subtransactions=True):
+            api.addQuickTest(test, session)
+            api.runQuickTest(tenant_id, session)
+            test = api.getQuickTest(tenant_id, session)
+        messages.success(request, _('Successfully ran quick test.'))
         return test
 
 
@@ -336,6 +354,7 @@ class UpdateForm(forms.SelfHandlingForm):
 	return cleaned_data
 
     def handle(self, request, data):
+        test_id = data['name'].encode('ascii','ignore')
         source = {}
         source['tenant'] = data['tenant_source'].encode('ascii')
         source['segment'] = data['segment_source'].encode('ascii')
@@ -345,17 +364,26 @@ class UpdateForm(forms.SelfHandlingForm):
         dest['segment'] = data['segment_destination'].encode('ascii')
         dest['ip'] = data['ip_destination'].encode('ascii','ignore')
 	expected = data['expected_connection'].encode('ascii','ignore')
-	new_test_data = {'name' : data['name'].encode('ascii','ignore'),
+	new_test_data = {'name' : test_id,
                         'connection_source' : source,
                         'connection_destination' : dest,
                         'expected_connection' : expected}
-       
-	#TODO: Replace with API call to update an existing test with new data. 
-	test = ReachabilityTestStub(new_test_data)
-        api = ReachabilityTestAPI()
-        api.updateReachabilityTest(data['reachability_test_id'].encode('ascii','ignore'),test)
-        messages.success(request, _('Successfully updated reachability test.'))
 
+        test = ReachabilityTest(tenant_id = tenant_id,\
+                                test_id = test_id,\
+                                src_tenant_id = source['tenant'],\
+                                src_segment_id = source['segment'],\
+                                src_ip = source['ip'],\
+                                dst_tenant_id = dest['tenant'],\
+                                dst_segment_id = dest['segment'],\
+                                dst_ip = dest['ip'],\
+                                expected_result = expected)
+        api = ReachabilityTestAPI()
+        session = Session()
+        test = None
+        with session.begin(subtransactions=True):
+            test = api.updateReachabilityTest(tenant_id, test_id, test, session)
+        messages.success(request, _('Successfully updated reachability test.'))
         return test
 
 
@@ -377,9 +405,11 @@ class SaveQuickTestForm(forms.SelfHandlingForm):
         return cleaned_data
 
     def handle(self, request, data):
-	#TODO: Replace with API call to save a quick/troubleshoot test
-	api = ReachabilityTestAPI()
-        test = api.saveQuickTest(data['name'].encode('ascii','ignore'))
+        test_id = data['name'].encode('ascii','ignore')
+        api = ReachabilityTestAPI()
+        session = Session()
+        test = None
+        with session.begin(subtransactions=True):
+            test = api.saveQuickTest(tenant_id, test_id, session)
         messages.success(request, _('Successfully saved quick test: %s') % data['name'])
-        
 	return test
