@@ -23,19 +23,21 @@ from horizon.utils import filters
 
 from openstack_dashboard import api
 from openstack_dashboard.usage import quotas
-from openstack_dashboard.dashboards.project.connections.mockapi import ReachabilityTestAPI
-from openstack_dashboard.dashboards.project.connections.mockobjects import ReachabilityTestStub
 
+from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_api import ReachabilityTestAPI
+#from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_db \
+#      import ReachabilityTest, ReachabilityTestResult, ReachabilityQuickTest, ReachabilityQuickTestResult
+import openstack_dashboard.dashboards.project.connections.reachability_tests.const as const
 
 class DeleteReachabilityTests(tables.DeleteAction):
     data_type_singular = _("Test")
     data_type_plural = _("Tests")
 
     def delete(self, request, obj_id):
-	#TODO: Replace with API call to remove a reachability test.
 	api = ReachabilityTestAPI()
-        api.deleteReachabilityTest(obj_id.encode('ascii','ignore'))
-
+        session = const.Session()
+        with session.begin(subtransactions=True):
+            api.deleteReachabilityTest(const.tenant_id, obj_id.encode('ascii','ignore'), session)
 
 class CreateReachabilityTest(tables.LinkAction):
     name = "create"
@@ -68,9 +70,10 @@ class RunTest(tables.BatchAction):
     classes = ("btn-edit",)
         
     def action(self, request, obj_id):
-	#TODO: Replace with API call to run a quick/Troubleshoot test.
 	api = ReachabilityTestAPI()
-	api.runReachabilityTest(obj_id.encode('ascii','ignore'))
+	session = const.Session()
+        with session.begin(subtransactions=True):
+            api.runReachabilityTest(const.tenant_id, obj_id.encode('ascii','ignore'), session)
 
 
 class UpdateTest(tables.LinkAction):
@@ -79,15 +82,33 @@ class UpdateTest(tables.LinkAction):
     url = "horizon:project:connections:reachability_tests:update"
     classes = ("ajax-modal", "btn-edit")
 
-
 def get_last_run(test):
-    return getattr(test, "last_run", None) or test.last_run
+    api = ReachabilityTestAPI()
+    session = const.Session()
+    timestamp = None
+    with session.begin(subtransactions=True):
+        last_result = api.getLastReachabilityTestResult(test.tenant_id, test.test_id, session)
+        if last_result:
+            timestamp = last_result.test_time
+    return timestamp
 
+def get_status(test):
+    api = ReachabilityTestAPI()
+    session = const.Session()
+    status = ''
+    with session.begin(subtransactions=True):
+        last_result = api.getLastReachabilityTestResult(test.tenant_id, test.test_id, session)
+        if last_result:
+            status = last_result.test_result
+    return status
 
 def get_run_list(test):
-    #TODO: Replace with API call to get the list of past time stamp runs for a test.
     api = ReachabilityTestAPI()
-    return api.listTestRuns(test.name)
+    session = const.Session()
+    run_list = None
+    with session.begin(subtransactions=True):
+        run_list = api.listReachabilityTestResults(test.tenant_id, test.test_id, session)
+    return run_list
 
 
 STATUS_DISPLAY_CHOICES = (
@@ -98,18 +119,18 @@ STATUS_DISPLAY_CHOICES = (
     ('', _("-")),
 )
 
+STATUS_CHOICES = (
+        ("pass", True),
+        ("-", None),
+        ('', None),
+        ("pending", None),
+        ("fail", False),
+    )
 
 class ReachabilityTestsTable(tables.DataTable):
-    STATUS_CHOICES = (
-	("pass", True),
-	("-", None),
-	('', None),
-	("pending", None),
-	("fail", False),
-    )
-    name = tables.Column("name", verbose_name=_("Name"))
+    name = tables.Column("test_id", verbose_name=_("Test ID"))
     last_run = tables.Column(get_last_run, link=("horizon:project:connections:reachability_tests:detail"), verbose_name=_("Last Run"))
-    status = tables.Column("status", 
+    status = tables.Column(get_status, 
 			   filters=(title, filters.replace_underscores), 
 			   verbose_name=_("Status"),
 			   status_choices=STATUS_CHOICES,
@@ -118,7 +139,7 @@ class ReachabilityTestsTable(tables.DataTable):
     run_list = tables.Column(get_run_list, hidden=True, verbose_name=_("Run List"))    
 
     def get_object_id(self, reachability_test):
-        return reachability_test.name
+        return reachability_test.test_id
 
     class Meta:
         name = "reachability_tests"
