@@ -1,0 +1,83 @@
+heat_template_version: 2013-05-23
+
+description: >
+  Template to create a three tier topology connected by a router.
+
+parameters:
+  out_net_name:
+    type: string
+    label: Outer Tier Name
+    description: Name to assign to the tier exposed to the Internet
+    default: web
+  out_net_cidr:
+    type: string
+    label: Outer network CIDR
+    description: Network address for the outer tier (CIDR notation)
+  mid_net_name:
+    type: string
+    label: Middle Tier Name
+    description: Name to assign to the tier exposed to the outer tier
+    default: app
+  mid_net_cidr:
+    type: string
+    label: Middle network CIDR
+    description: Network address for middle tier (CIDR notation)
+  inner_net_name:
+    type: string
+    label: Inner Tier Name
+    description: Name to assign to the tier exposed to the middle tier
+    default: db
+  inner_net_cidr:
+    type: string
+    label: Inner network CIDR
+    description: Network address for inner tier (CIDR notation)
+
+
+resources:
+  out_net:
+    type: OS::Neutron::Net
+    properties:
+      name: { get_param: out_net_name }
+  mid_net:
+    type: OS::Neutron::Net
+    properties:
+      name: { get_param: mid_net_name }
+  inner_net:
+    type: OS::Neutron::Net
+    properties:
+      name: { get_param: inner_net_name }
+
+  out_subnet:
+    type: OS::Neutron::Subnet
+    properties:
+      network_id: { get_resource: out_net }
+      cidr: { get_param: out_net_cidr }
+  mid_subnet:
+    type: OS::Neutron::Subnet
+    properties:
+      network_id: { get_resource: mid_net }
+      cidr: { get_param: mid_net_cidr }
+  inner_subnet:
+    type: OS::Neutron::Subnet
+    properties:
+      network_id: { get_resource: inner_net }
+      cidr: { get_param: inner_net_cidr }
+
+  router:
+    type: OS::Neutron::Router
+
+  router_interface:
+    type: OS::Neutron::RouterInterface
+    properties:
+      router_id: { get_resource: router }
+      subnet_id: { get_resource: out_subnet }
+  router_interface:
+    type: OS::Neutron::RouterInterface
+    properties:
+      router_id: { get_resource: router }
+      subnet_id: { get_resource: mid_subnet }
+  router_interface:
+    type: OS::Neutron::RouterInterface
+    properties:
+      router_id: { get_resource: router }
+      subnet_id: { get_resource: inner_subnet }
