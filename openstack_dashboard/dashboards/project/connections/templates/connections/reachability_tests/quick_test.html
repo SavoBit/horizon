@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{% trans "Run Quick Test" %}{% endblock %}
+
+{% block page_header %}
+  {% include "horizon/common/_page_header.html" with title=_("Run Quick Test") %}
+{% endblock page_header %}
+
+{% block main %}
+  {% include 'project/connections/reachability_tests/_quick_test.html' %}
+{% endblock %}
+

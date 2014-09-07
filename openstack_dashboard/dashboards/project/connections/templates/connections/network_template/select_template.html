@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{% trans "Apply Network Template" %}{% endblock %}
+
+{% block page_header %}
+  {% include "horizon/common/_page_header.html" with title=_("Apply Network Template") %}
+{% endblock page_header %}
+
+{% block main %}
+  {% include 'project/connections/network_template/_select_template.html' %}
+{% endblock %}
+

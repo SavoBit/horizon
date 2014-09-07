@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Quick Test Details"%}{% endblock %}
+
+{% block page_header %}
+  {% include "horizon/common/_page_header.html" with title=_("Quick Test Details") %}
+<style>
+.command-prompt-background {
+  background-color: black;
+  border: 2px solid gray;
+  border-radius: 5px;
+  margin: 5px 5px 5px 5px;
+}
+.command-prompt-text {
+  color: white;
+  margin: 10px 10px 10px 10px;
+  font-family: FreeMono, monospace;
+  font-size: 12px;
+}
+</style>
+
+{% endblock page_header %}
+
+{% block main %}
+<div class="row-fluid">
+  <div class="span12">
+  {{ tab_group.render }}
+  <div class="command-prompt-holder" style="display:none;">{{quick_test.command_line|default:_("None")}}
+  </div>
+</div>
+<script type='text/javascript'>
+/**
+*  Function to format the mock command line prompt.
+**/
+$(function(){
+        var cleanData = $(".command-prompt-holder").text().split("\n");
+        var listElement = $(".command-prompt-text");
+        var numberOfListItems = cleanData.length;
+
+        for( var i =  0 ; i < numberOfListItems ; ++i){                
+		$(listElement).append("<div>" + cleanData[i] + "</div>");
+        }
+});
+
+</script>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% load i18n sizeformat %}
+{% block main %}
+<link rel="stylesheet" href="css/network-template.css">
+<link rel="stylesheet" href="css/demo-all.css">
+<link rel="stylesheet" href="css/demo.css">
+
+<h3 id="network_page_title" class="network-template-headers">Network Template</h3>
+{% block modal-header %}
+  <a href="{% url 'horizon:project:connections:network_template:select' %}" id="apply_network_template_button" class="btn btn-small btn-create ajax-modal pull-right"></a>
+  <a href="{% url 'horizon:project:connections:network_template:remove' %}" id="remove_network_instance_button" class="btn btn-small btn-danger ajax-modal btn-delete pull-right"></a>
+{% endblock %}
+
+<div id="no_template_message">
+	<h3 id="message_text" style="display:none;">No Network Template Applied</h3>
+    	<div id="network_entities" style="display:none;">{{ network_entities }}</div>
+	<div id="network_connections" style="display:none;">{{ network_connections  }}</div>
+	<div id="main" style="display:none;">
+            <div id="drag-drop-demo" class="demo drag-drop-demo">
+                <div id="list"></div>
+            </div>
+        </div>
+</div>
+
+<script type='text/javascript'>
+/**
+*  Function to get the data needed to render the network template.
+**/
+$(function(){
+        if($("#network_entities").text() != "{}"){
+		$("#network_page_title").html("Network Instance");
+		$("#apply_network_template_button").hide();
+		$("#remove_network_instance_button").show();
+                $("#message_text").hide();
+                var network_entities = JSON.parse($("#network_entities").text());
+                var network_connections = JSON.parse($("#network_connections").text());
+                renderNetworkTemplate(network_entities,network_connections);
+        }else{
+		$("#remove_network_instance_button").hide();
+		$("#apply_network_template_button").show();
+		$("#message_text").show();
+	}
+});
+
+/**
+*  Function to add the html elements needed based on the network template.
+**/
+function renderNetworkTemplate(network_entities,network_connections){
+	var connections = network_connections;
+	var entities = network_entities;
+	var count = 1;
+
+	$.each(entities,function(i,val){
+		var name = val.properties.name;
+
+		$("#drag-drop-demo").append('<div class="window dragDropWindow'+count+'" id='+i+'>'+name+'<br/><a href="#" class="cmdLink hide" rel="dragDropWindow'+count+'">toggle connections</a><br/><a href="#" class="cmdLink drag" rel="dragDropWindow'+count+'">net: '+name+'</a></div>');
+
+		count++;
+	});
+
+        $("#main").show();
+}
+</script>
+
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js'></script>
+<script type='text/javascript' src='lib/jquery.ui.touch-punch.min.js'></script>
+
+<!-- for demo dropdown. not a jsplumb dependency -->
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+<script type='text/javascript' src='lib/jquery.jsPlumb-1.5.5.js'></script>
+
+<!--  demo code -->
+<script src="js/demo.js"></script>
+
+{% endblock %}

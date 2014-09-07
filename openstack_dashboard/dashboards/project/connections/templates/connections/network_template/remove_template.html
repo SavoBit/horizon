@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{% trans "Confirm Remove Network Instance" %}{% endblock %}
+
+{% block page_header %}
+  {% include "horizon/common/_page_header.html" with title=_("Confirm Remove Network Instance") %}
+{% endblock page_header %}
+
+{% block main %}
+  {% include 'project/connections/network_template/_remove_template.html' %}
+{% endblock %}
+

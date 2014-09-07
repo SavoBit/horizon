@@ -1,0 +1,26 @@
+{% extends "horizon/common/_modal_form.html" %}
+{% load i18n %}
+{% load url from future %}
+
+{% block form_id %}create_reachability_test_form{% endblock %}
+{% block form_action %}{% url 'horizon:project:connections:reachability_tests:create' %}{% endblock %}
+
+{% block modal-header %}{% trans "Create Reachability Test" %}{% endblock %}
+
+{% block modal-body %}
+<div class="left">
+    <fieldset>
+    {% include "horizon/common/_form_fields.html" %}
+    </fieldset>
+</div>
+<div class="right">
+    <h3>{% trans "Description" %}:</h3>
+    <p>{% trans "Reachability test are automated test to check for connectivity between two points in a network." %}</p>
+    <p>{% trans "The test can be between VMs, end point groups, tenants or connections to outside IP address." %}</p>
+</div>
+{% endblock %}
+
+{% block modal-footer %}
+  <input class="btn btn-primary pull-right" type="submit" value="{% trans "Create Test" %}" />
+  <a href="{% url 'horizon:project:connections:index' %}" class="btn secondary cancel close">{% trans "Cancel" %}</a>
+{% endblock %}
