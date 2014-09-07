@@ -1,6 +1,5 @@
 import os
 
-from neutron.db import api
 from neutron.db import models_v2
 from neutron.db import model_base
 from oslo.config import cfg
@@ -31,7 +30,6 @@ paths = ['/etc/neutron/neutron.conf', '/etc/neutron/plugin.ini',
 params = ["--config-file=%s" % p for p in paths if os.path.exists(p)]
 conf.register_opts(restproxy_opts, "RESTPROXY")
 conf(params)
-api._FACADE = session.EngineFacade.from_config(conf, sqlite_fk=True)
 
 # ignore port from neutron config because it references NSAPI instead of
 # floodlight API
@@ -41,7 +39,8 @@ port = 8080
 username, password = conf.RESTPROXY.server_auth.split(':', 1)
 #tenant_id = 'admin'
 
-Session = api.get_session()
+_FACADE = session.EngineFacade.from_config(conf, sqlite_fk=True)
+Session = _FACADE.get_session(autocommit=True, expire_on_commit=False)
 Base = model_base.BASEV2()
 Base.metadata.create_all(bind=api.get_engine())
 
