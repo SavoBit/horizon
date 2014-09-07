@@ -6,7 +6,7 @@ from openstack_dashboard.dashboards.admin import dashboard
 
 
 class Connections(horizon.Panel):
-    name = _("Connections")
+    name = _("Network Fabric")
     slug = 'connections'
 
 

@@ -41,15 +41,17 @@ from openstack_dashboard.dashboards.project.connections.reachability_tests \
 from openstack_dashboard.dashboards.project.connections.reachability_tests \
     import tabs as project_tabs
 from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_api import ReachabilityTestAPI
-from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_db \
-    import ReachabilityTest, ReachabilityTestResult, ReachabilityQuickTest, ReachabilityQuickTestResult
-import openstack_dashboard.dashboards.project.connections.reachability_tests.const as const
+from openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_db import (
+    ReachabilityTest, ReachabilityTestResult,
+    ReachabilityQuickTest,ReachabilityQuickTestResult)
+from openstack_dashboard.dashboards.project.connections import bsn_api
 
 LJUST_WIDTH = 50
 
+
 class ReachabilityTestData():
     '''
-    convert to this format for display purpose 
+    convert to this format for display purpose
     '''
     name = ''
     connection_source = ''
@@ -65,15 +67,20 @@ class ReachabilityTestData():
                 self.name = test.test_id
             self.status = result.test_result
             self.connection_source = json.dumps(test.get_connection_source())
-            self.connection_destination = json.dumps(test.get_connection_destination())
+            self.connection_destination = json.dumps(
+                test.get_connection_destination())
             self.expected_connection = test.expected_result
         if result:
             self.last_run = result.test_time
             l = []
-            l.append("{0:20} {1:20} {2:50}".format("Path Index", "Hop Index","Hop"))
+            l.append("{0:20} {1:20} {2:50}".format("Path Index", "Hop Index",
+                                                   "Hop"))
             for hop in result.detail:
-                l.append("{0:20} {1:20} {2:50}".format(hop["path-index"], hop["hop-index"], hop["hop-name"]))
+                l.append("{0:20} {1:20} {2:50}".format(hop["path-index"],
+                                                       hop["hop-index"],
+                                                       hop["hop-name"]))
             self.command_line = '\n'.join(l)
+
 
 class CreateView(forms.ModalFormView):
     form_class = project_forms.CreateReachabilityTest
@@ -84,7 +91,8 @@ class CreateView(forms.ModalFormView):
 class RunQuickTestView(forms.ModalFormView):
     form_class = project_forms.RunQuickTestForm
     template_name = 'project/connections/reachability_tests/quick_test.html'
-    success_url = reverse_lazy("horizon:project:connections:reachability_tests:quick")
+    success_url = reverse_lazy(
+        "horizon:project:connections:reachability_tests:quick")
 
 
 class UpdateView(forms.ModalFormView):
@@ -95,12 +103,14 @@ class UpdateView(forms.ModalFormView):
     @memoized.memoized_method
     def get_object(self):
         test_data = None
-        test_id = self.kwargs['reachability_test_id'].encode('ascii','ignore')
-	api = ReachabilityTestAPI()
-        session = const.Session()
-        with session.begin(subtransactions=True):
-            test = api.getReachabilityTest(const.tenant_id, test_id, session)
-            result = api.getLastReachabilityTestResult(const.tenant_id, test_id, session)
+        test_id = self.kwargs['reachability_test_id'].encode('ascii', 'ignore')
+        api = ReachabilityTestAPI()
+        with bsn_api.Session.begin(subtransactions=True):
+            test = api.getReachabilityTest(self.request.user.project_id,
+                                           test_id,
+                                           bsn_api.Session)
+            result = api.getLastReachabilityTestResult(
+                self.request.user.project_id, test_id, bsn_api.Session)
             test_data = ReachabilityTestData(test, result)
         return test_data
 
@@ -112,12 +122,13 @@ class UpdateView(forms.ModalFormView):
     def get_initial(self):
         reachability_test = self.get_object()
         properties = getattr(reachability_test, 'properties', {})
-	
-        return {'reachability_test_id': self.kwargs['reachability_test_id'],
-		connection_source : reachability_test.connection_source,
-		connection_destination : reachability_test.connection_destination,
-                'name': reachability_test.name,
-		'expected_connection' : reachability_test.expected_connection}
+        return {
+            'reachability_test_id': self.kwargs['reachability_test_id'],
+            connection_source: reachability_test.connection_source,
+            connection_destination: reachability_test.connection_destination,
+            'name': reachability_test.name,
+            'expected_connection': reachability_test.expected_connection
+        }
 
 
 class DetailView(tabs.TabView):
@@ -129,21 +140,22 @@ class DetailView(tabs.TabView):
         context["reachability_test"] = self.get_data()
         return context
 
-    @memoized.memoized_method
     def get_data(self):
         test_data = None
-        test_id = self.kwargs['reachability_test_id'].encode('ascii','ignore')
+        test_id = self.kwargs['reachability_test_id'].encode('ascii', 'ignore')
         api = ReachabilityTestAPI()
-        session = const.Session()
-        with session.begin(subtransactions=True):
-            test = api.getReachabilityTest(const.tenant_id, test_id, session)
-            result = api.getLastReachabilityTestResult(const.tenant_id, test_id, session)
+        with bsn_api.Session.begin(subtransactions=True):
+            test = api.getReachabilityTest(
+                self.request.user.project_id, test_id, bsn_api.Session)
+            result = api.getLastReachabilityTestResult(
+                self.request.user.project_id, test_id, bsn_api.Session)
             test_data = ReachabilityTestData(test, result)
         return test_data
 
     def get_tabs(self, request, *args, **kwargs):
         reachability_test = self.get_data()
-        return self.tab_group_class(request, reachability_test=reachability_test, **kwargs)
+        return self.tab_group_class(
+            request, reachability_test=reachability_test, **kwargs)
 
 
 class QuickDetailView(tabs.TabView):
@@ -160,10 +172,11 @@ class QuickDetailView(tabs.TabView):
     def get_data(self):
         test_data = None
         api = ReachabilityTestAPI()
-        session = const.Session()
-        with session.begin(subtransactions=True):
-            test = api. getQuickTest(const.tenant_id, session)
-            result = api.getLastReachabilityQuickTestResult(const.tenant_id, session)
+        with bsn_api.Session.begin(subtransactions=True):
+            test = api. getQuickTest(self.request.user.project_id,
+                                     bsn_api.Session)
+            result = api.getLastReachabilityQuickTestResult(
+                self.request.user.project_id, bsn_api.Session)
             test_data = ReachabilityTestData(test, result)
         return test_data
 

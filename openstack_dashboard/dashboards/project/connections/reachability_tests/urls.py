@@ -24,13 +24,16 @@ from django.conf.urls import url  # noqa
 from openstack_dashboard.dashboards.project.connections.reachability_tests \
     import views
 
-VIEWS_MOD = ('openstack_dashboard.dashboards.project.connections.reachability_tests.views')
+VIEWS_MOD = (
+    'openstack_dashboard.dashboards.project.connections.reachability_tests.views')
 
 urlpatterns = patterns(VIEWS_MOD,
     url(r'^create/$', views.CreateView.as_view(), name='create'),
     url(r'^run/$', views.RunQuickTestView.as_view(), name='run'),
     url(r'^quicktest/$', views.QuickDetailView.as_view(), name='quick'),
     url(r'^save/$', views.SaveQuickTestView.as_view(), name='save'),
-    url(r'^(?P<reachability_test_id>[^/]+)/update/$', views.UpdateView.as_view(), name='update'),
-    url(r'^(?P<reachability_test_id>[^/]+)/$', views.DetailView.as_view(), name='detail'),
+    url(r'^(?P<reachability_test_id>[^/]+)/update/$',
+        views.UpdateView.as_view(), name='update'),
+    url(r'^(?P<reachability_test_id>[^/]+)/$',
+        views.DetailView.as_view(), name='detail'),
 )

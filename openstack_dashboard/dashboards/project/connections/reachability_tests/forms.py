@@ -34,16 +34,20 @@ from horizon.utils import validators as utils_validators
 
 from openstack_dashboard.utils import filters
 from openstack_dashboard import api
-import openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_api as reachability_test_api
-import openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_db as reachability_test_db
-import openstack_dashboard.dashboards.project.connections.reachability_tests.const as const
+import openstack_dashboard.dashboards.project.connections.reachability_tests.\
+    reachability_test_api as reachability_test_api
+import openstack_dashboard.dashboards.project.connections.reachability_tests.\
+    reachability_test_db as reachability_test_db
+import openstack_dashboard.dashboards.project.connections.bsn_api as bsn_api
+
 
 NEW_LINES = re.compile(r"\r|\n")
-EXPECTATION_CHOICES = [('default',_('--- Select Result ---')),
+EXPECTATION_CHOICES = [('default', _('--- Select Result ---')),
                        ('reached destination', _('reached destination')),
                        ('dropped by route', _('dropped by route')),
                        ('dropped by policy', _('dropped by policy')),
-                       ('dropped due to private segment', _('dropped due to private segment')),
+                       ('dropped due to private segment',
+                        _('dropped due to private segment')),
                        ('packet in', _('packet in')),
                        ('forwarded', _('forwarded')),
                        ('dropped', _('dropped')),
@@ -51,73 +55,85 @@ EXPECTATION_CHOICES = [('default',_('--- Select Result ---')),
                        ('unsupported', _('unsupported')),
                        ('invalid input', _('invalid input'))]
 
+
 class CreateReachabilityTest(forms.SelfHandlingForm):
 
     name = forms.CharField(max_length="255",
                            label=_("Name"),
                            required=True)
 
-    tenant_source = forms.CharField(max_length="255",
-                          label=_("Sepecify source tenant"),
-                          required=True,
-                          initial=const.tenant_id,
-                          widget=forms.TextInput(
-                              attrs={'class': 'switched',
-                                     'data-connection_source-tenant':
-                                     _('Specify source tenant')}))
+    def __init__(self, request, *args, **kwargs):
+        super(CreateReachabilityTest, self).__init__(request, *args, **kwargs)
+        self.fields['tenant_source'].initial = request.user.project_id
+        self.fields['tenant_destination'].initial = request.user.project_id
 
-    segment_source = forms.CharField(max_length="255",
-                          label=_("Sepecify source segment"),
-                          required=True,
-                          initial="",
-                          widget=forms.TextInput(
-                              attrs={'class': 'switched',
-                                     'data-connection_source-segment':
-                                     _('Specify source segment')}))
+    tenant_source = forms.CharField(
+        max_length="255",
+        label=_("Sepecify source tenant"),
+        required=True,
+        initial="",
+        widget=forms.TextInput(
+            attrs={'class': 'switched',
+                   'data-connection_source-tenant':
+                   _('Specify source tenant')}))
 
-    ip_source = forms.CharField(max_length="255",
-			  label=_("Use ip address as source"),
-                          required=True,
-                          initial="0.0.0.0",
-                          widget=forms.TextInput(
-                              attrs={'class': 'switched',
-                                     'data-connection_source_type-ip':
-                                     _('Specify source IP address')}))
+    segment_source = forms.CharField(
+        max_length="255",
+        label=_("Sepecify source segment"),
+        required=True,
+        initial="",
+        widget=forms.TextInput(
+            attrs={'class': 'switched',
+                   'data-connection_source-segment':
+                   _('Specify source segment')}))
 
-    tenant_destination = forms.CharField(max_length="255",
-                          label=_("Sepecify destination tenant"),
-                          required=True,
-                          initial=const.tenant_id,
-                          widget=forms.TextInput(
-                              attrs={'class': 'switched',
-                                     'data-connection_destination-tenant':
-                                     _('Specify destination tenant')}))
+    ip_source = forms.CharField(
+        max_length="255",
+        label=_("Use ip address as source"),
+        required=True,
+        initial="0.0.0.0",
+        widget=forms.TextInput(
+            attrs={'class': 'switched',
+                   'data-connection_source_type-ip':
+                   _('Specify source IP address')}))
 
-    segment_destination = forms.CharField(max_length="255",
-                          label=_("Sepecify destination segment"),
-                          required=True,
-                          initial="",
-                          widget=forms.TextInput(
-                              attrs={'class': 'switched',
-                                     'data-connection_destination-segment':
-                                     _('Specify destination segment')}))
+    tenant_destination = forms.CharField(
+        max_length="255",
+        label=_("Sepecify destination tenant"),
+        required=True,
+        initial="",
+        widget=forms.TextInput(
+            attrs={'class': 'switched',
+                   'data-connection_destination-tenant':
+                   _('Specify destination tenant')}))
 
-    ip_destination = forms.CharField(max_length="255",
-			  label=_("Use ip address as destination"),
-                          required=True,
-                          initial="0.0.0.0",
-                          widget=forms.TextInput(
-                              attrs={'class': 'switched',
-                                     'data-connection_destination_type-ip':
-                                     _('Specify destination IP address')}))
+    segment_destination = forms.CharField(
+        max_length="255",
+        label=_("Sepecify destination segment"),
+        required=True,
+        initial="",
+        widget=forms.TextInput(
+            attrs={'class': 'switched',
+                   'data-connection_destination-segment':
+                   _('Specify destination segment')}))
+
+    ip_destination = forms.CharField(
+        max_length="255",
+        label=_("Use ip address as destination"),
+        required=True,
+        initial="0.0.0.0",
+        widget=forms.TextInput(
+            attrs={'class': 'switched',
+                   'data-connection_destination_type-ip':
+                   _('Specify destination IP address')}))
 
     expected_connection = forms.ChoiceField(
         label=_('Expected Connection Results'),
         required=True,
         choices=EXPECTATION_CHOICES,
-        widget=forms.Select(attrs={
-                'class': 'switchable',
-                'data-slug': 'expected_connection'}))
+        widget=forms.Select(
+            attrs={'class': 'switchable',
+                   'data-slug': 'expected_connection'}))
 
     def clean(self):
         cleaned_data = super(CreateReachabilityTest, self).clean()
@@ -125,98 +141,112 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
         def update_cleaned_data(key, value):
             cleaned_data[key] = value
             self.errors.pop(key, None)
-	
-	expected_connection = cleaned_data.get('expected_connection')	
 
-	if expected_connection == 'default':
-		msg = _('A expected connection result must be selected.')
-                raise ValidationError(msg)
+        expected_connection = cleaned_data.get('expected_connection')
 
-	return cleaned_data
+        if expected_connection == 'default':
+            msg = _('A expected connection result must be selected.')
+            raise ValidationError(msg)
+
+        return cleaned_data
 
     def handle(self, request, data):
         testargs = {
-            'tenant_id': const.tenant_id,
-            'test_id': data['name'].encode('ascii','ignore'),
+            'tenant_id': request.user.project_id,
+            'test_id': data['name'].encode('ascii', 'ignore'),
             'src_tenant_id': data['tenant_source'].encode('ascii'),
             'src_segment_id': data['segment_source'].encode('ascii'),
-            'src_ip': data['ip_source'].encode('ascii','ignore'),
+            'src_ip': data['ip_source'].encode('ascii', 'ignore'),
             'dst_tenant_id': data['tenant_destination'].encode('ascii'),
             'dst_segment_id': data['segment_destination'].encode('ascii'),
-            'dst_ip': data['ip_destination'].encode('ascii','ignore'),
-            'expected_result': data['expected_connection'].encode('ascii','ignore')
+            'dst_ip': data['ip_destination'].encode('ascii', 'ignore'),
+            'expected_result': data['expected_connection'].encode('ascii',
+                                                                  'ignore')
         }
         api = reachability_test_api.ReachabilityTestAPI()
-        session = const.Session()
-        with session.begin(subtransactions=True):
+        with bsn_api.Session.begin(subtransactions=True):
             test = reachability_test_db.ReachabilityTest(**testargs)
-            test = api.addReachabilityTest(test, session)
-        messages.success(request, _('Successfully created reachability test: %s') % data['name'])
+            test = api.addReachabilityTest(test, bsn_api.Session)
+        messages.success(
+            request,
+            _('Successfully created reachability test: %s') % data['name'])
         return test
+
 
 class RunQuickTestForm(forms.SelfHandlingForm):
 
-    tenant_source = forms.CharField(max_length="255",
-                          label=_("Sepecify source tenant"),
-                          required=True,
-                          initial=const.tenant_id,
-                          widget=forms.TextInput(
-                              attrs={'class': 'switched',
-                                     'data-connection_source-tenant':
-                                     _('Specify source tenant')}))
+    def __init__(self, request, *args, **kwargs):
+        super(RunQuickTestForm, self).__init__(request, *args, **kwargs)
+        self.fields['tenant_source'].initial = request.user.project_id
+        self.fields['tenant_destination'].initial = request.user.project_id
 
-    segment_source = forms.CharField(max_length="255",
-                          label=_("Sepecify source segment"),
-                          required=True,
-                          initial="",
-                          widget=forms.TextInput(
-                              attrs={'class': 'switched',
-                                     'data-connection_source-segment':
-                                     _('Specify source segment')}))
+    tenant_source = forms.CharField(
+        max_length="255",
+        label=_("Sepecify source tenant"),
+        required=True,
+        initial="",
+        widget=forms.TextInput(
+            attrs={'class': 'switched',
+                   'data-connection_source-tenant':
+                   _('Specify source tenant')}))
 
-    ip_source = forms.CharField(max_length="255",
-                          label=_("Use ip address as source"),
-                          required=True,
-                          initial="0.0.0.0",
-                          widget=forms.TextInput(
-                              attrs={'class': 'switched',
-                                     'data-connection_source_type-ip':
-                                     _('Specify source IP address')}))
+    segment_source = forms.CharField(
+        max_length="255",
+        label=_("Sepecify source segment"),
+        required=True,
+        initial="",
+        widget=forms.TextInput(
+            attrs={'class': 'switched',
+                   'data-connection_source-segment':
+                   _('Specify source segment')}))
 
-    tenant_destination = forms.CharField(max_length="255",
-                          label=_("Sepecify destination tenant"),
-                          required=True,
-                          initial=const.tenant_id,
-                          widget=forms.TextInput(
-                              attrs={'class': 'switched',
-                                     'data-connection_destination-tenant':
-                                     _('Specify destination tenant')}))
+    ip_source = forms.CharField(
+        max_length="255",
+        label=_("Use ip address as source"),
+        required=True,
+        initial="0.0.0.0",
+        widget=forms.TextInput(
+            attrs={'class': 'switched',
+                   'data-connection_source_type-ip':
+                   _('Specify source IP address')}))
 
-    segment_destination = forms.CharField(max_length="255",
-                          label=_("Sepecify destination segment"),
-                          required=True,
-                          initial="",
-                          widget=forms.TextInput(
-                              attrs={'class': 'switched',
-                                     'data-connection_destination-segment':
-                                     _('Specify destination segment')}))
+    tenant_destination = forms.CharField(
+        max_length="255",
+        label=_("Sepecify destination tenant"),
+        required=True,
+        initial="",
+        widget=forms.TextInput(
+            attrs={'class': 'switched',
+                   'data-connection_destination-tenant':
+                   _('Specify destination tenant')}))
 
-    ip_destination = forms.CharField(max_length="255",
-                          label=_("Use ip address as destination"),
-                          required=True,
-                          initial="0.0.0.0",
-                          widget=forms.TextInput(
-                              attrs={'class': 'switched',
-                                     'data-connection_destination_type-ip':
-                                     _('Specify destination IP address')}))
+    segment_destination = forms.CharField(
+        max_length="255",
+        label=_("Sepecify destination segment"),
+        required=True,
+        initial="",
+        widget=forms.TextInput(
+            attrs={'class': 'switched',
+                   'data-connection_destination-segment':
+                   _('Specify destination segment')}))
+
+    ip_destination = forms.CharField(
+        max_length="255",
+        label=_("Use ip address as destination"),
+        required=True,
+        initial="0.0.0.0",
+        widget=forms.TextInput(
+            attrs={'class': 'switched',
+                   'data-connection_destination_type-ip':
+                   _('Specify destination IP address')}))
 
     expected_connection = forms.ChoiceField(
         label=_('Expected Connection Results'),
         required=True,
         choices=EXPECTATION_CHOICES,
-        widget=forms.Select(attrs={
-                'class': 'switchable',
-                'data-slug': 'expected_connection'}))
+        widget=forms.Select(
+            attrs={'class': 'switchable',
+                   'data-slug': 'expected_connection'}))
 
     def clean(self):
         cleaned_data = super(RunQuickTestForm, self).clean()
@@ -224,34 +254,33 @@ class RunQuickTestForm(forms.SelfHandlingForm):
         def update_cleaned_data(key, value):
             cleaned_data[key] = value
             self.errors.pop(key, None)
-	
-	expected_connection = cleaned_data.get('expected_connection')	
-	
-	if expected_connection == 'default':
-		msg = _('A expected connection result must be selected.')
-                raise ValidationError(msg)
 
-	return cleaned_data
+        expected_connection = cleaned_data.get('expected_connection')
 
+        if expected_connection == 'default':
+            msg = _('A expected connection result must be selected.')
+            raise ValidationError(msg)
+
+        return cleaned_data
 
     def handle(self, request, data):
         testargs = {
-            'tenant_id': const.tenant_id,
+            'tenant_id': request.user.project_id,
             'src_tenant_id': data['tenant_source'].encode('ascii'),
             'src_segment_id': data['segment_source'].encode('ascii'),
-            'src_ip': data['ip_source'].encode('ascii','ignore'),
+            'src_ip': data['ip_source'].encode('ascii', 'ignore'),
             'dst_tenant_id': data['tenant_destination'].encode('ascii'),
             'dst_segment_id': data['segment_destination'].encode('ascii'),
-            'dst_ip': data['ip_destination'].encode('ascii','ignore'),
-            'expected_result': data['expected_connection'].encode('ascii','ignore')
+            'dst_ip': data['ip_destination'].encode('ascii', 'ignore'),
+            'expected_result': data['expected_connection'].encode('ascii',
+                                                                  'ignore')
         }
         api = reachability_test_api.ReachabilityTestAPI()
-        session = const.Session()
-        with session.begin(subtransactions=True):
+        with bsn_api.Session.begin(subtransactions=True):
             test = reachability_test_db.ReachabilityQuickTest(**testargs)
-            api.addQuickTest(test, session)
-            api.runQuickTest(const.tenant_id, session)
-            test = api.getQuickTest(const.tenant_id, session)
+            api.addQuickTest(test, bsn_api.Session)
+            api.runQuickTest(request.user.project_id, bsn_api.Session)
+            test = api.getQuickTest(request.user.project_id, bsn_api.Session)
         messages.success(request, _('Successfully ran quick test.'))
         return test
 
@@ -263,70 +292,78 @@ class UpdateForm(forms.SelfHandlingForm):
                            label=_("Name"),
                            required=True)
 
-    tenant_source = forms.CharField(max_length="255",
-                          label=_("Sepecify source tenant"),
-                          required=True,
-                          initial=const.tenant_id,
-                          widget=forms.TextInput(
-                              attrs={'class': 'switched',
-                                     'data-connection_source-tenant':
-                                     _('Specify source tenant')}))
+    def __init__(self, request, *args, **kwargs):
+        super(UpdateForm, self).__init__(request, *args, **kwargs)
+        self.fields['tenant_source'].initial = request.user.project_id
+        self.fields['tenant_destination'].initial = request.user.project_id
 
-    segment_source = forms.CharField(max_length="255",
-                          label=_("Sepecify source segment"),
-                          required=True,
-                          initial="",
-                          widget=forms.TextInput(
-                              attrs={'class': 'switched',
-                                     'data-connection_source-segment':
-                                     _('Specify source segment')}))
+    tenant_source = forms.CharField(
+        max_length="255",
+        label=_("Sepecify source tenant"),
+        required=True,
+        initial="",
+        widget=forms.TextInput(
+            attrs={'class': 'switched',
+                   'data-connection_source-tenant':
+                   _('Specify source tenant')}))
 
-    ip_source = forms.CharField(max_length="255",
-                          label=_("Use ip address as source"),
-                          required=True,
-                          initial="0.0.0.0",
-                          widget=forms.TextInput(
-                              attrs={'class': 'switched',
-                                     'data-connection_source_type-ip':
-                                     _('Specify source IP address')}))
+    segment_source = forms.CharField(
+        max_length="255",
+        label=_("Sepecify source segment"),
+        required=True,
+        initial="",
+        widget=forms.TextInput(
+            attrs={'class': 'switched',
+                   'data-connection_source-segment':
+                   _('Specify source segment')}))
 
-    tenant_destination = forms.CharField(max_length="255",
-                          label=_("Sepecify destination tenant"),
-                          required=True,
-                          initial=const.tenant_id,
-                          widget=forms.TextInput(
-                              attrs={'class': 'switched',
-                                     'data-connection_destination-tenant':
-                                     _('Specify destination tenant')}))
+    ip_source = forms.CharField(
+        max_length="255",
+        label=_("Use ip address as source"),
+        required=True,
+        initial="0.0.0.0",
+        widget=forms.TextInput(
+            attrs={'class': 'switched',
+                   'data-connection_source_type-ip':
+                   _('Specify source IP address')}))
 
-    segment_destination = forms.CharField(max_length="255",
-                          label=_("Sepecify destination segment"),
-                          required=True,
-                          initial="",
-                          widget=forms.TextInput(
-                              attrs={'class': 'switched',
-                                     'data-connection_destination-segment':
-                                     _('Specify destination segment')}))
+    tenant_destination = forms.CharField(
+        max_length="255",
+        label=_("Sepecify destination tenant"),
+        required=True,
+        initial="",
+        widget=forms.TextInput(
+            attrs={'class': 'switched',
+                   'data-connection_destination-tenant':
+                   _('Specify destination tenant')}))
 
-    ip_destination = forms.CharField(max_length="255",
-                          label=_("Use ip address as destination"),
-                          required=True,
-                          initial="0.0.0.0",
-                          widget=forms.TextInput(
-                              attrs={'class': 'switched',
-                                     'data-connection_destination_type-ip':
-                                     _('Specify destination IP address')}))
+    segment_destination = forms.CharField(
+        max_length="255",
+        label=_("Sepecify destination segment"),
+        required=True,
+        initial="",
+        widget=forms.TextInput(
+            attrs={'class': 'switched',
+                   'data-connection_destination-segment':
+                   _('Specify destination segment')}))
+
+    ip_destination = forms.CharField(
+        max_length="255",
+        label=_("Use ip address as destination"),
+        required=True,
+        initial="0.0.0.0",
+        widget=forms.TextInput(
+            attrs={'class': 'switched',
+                   'data-connection_destination_type-ip':
+                   _('Specify destination IP address')}))
 
     expected_connection = forms.ChoiceField(
         label=_('Expected Connection Results'),
         required=True,
         choices=EXPECTATION_CHOICES,
-        widget=forms.Select(attrs={
-                'class': 'switchable',
-                'data-slug': 'expected_connection'}))
-
-    def __init__(self, *args, **kwargs):
-        super(UpdateForm, self).__init__(*args, **kwargs)
+        widget=forms.Select(
+            attrs={'class': 'switchable',
+                   'data-slug': 'expected_connection'}))
 
     def clean(self):
         cleaned_data = super(UpdateForm, self).clean()
@@ -334,42 +371,42 @@ class UpdateForm(forms.SelfHandlingForm):
         def update_cleaned_data(key, value):
             cleaned_data[key] = value
             self.errors.pop(key, None)
-	
-	expected_connection = cleaned_data.get('expected_connection')	
-	if expected_connection == 'default':
-		msg = _('A expected connection result must be selected.')
-                raise ValidationError(msg)
 
-	return cleaned_data
+        expected_connection = cleaned_data.get('expected_connection')
+        if expected_connection == 'default':
+            msg = _('A expected connection result must be selected.')
+            raise ValidationError(msg)
+
+        return cleaned_data
 
     def handle(self, request, data):
         testargs = {
-            'tenant_id': const.tenant_id,
-            'test_id': data['name'].encode('ascii','ignore'),
+            'tenant_id': request.user.project_id,
+            'test_id': data['name'].encode('ascii', 'ignore'),
             'src_tenant_id': data['tenant_source'].encode('ascii'),
             'src_segment_id': data['segment_source'].encode('ascii'),
-            'src_ip': data['ip_source'].encode('ascii','ignore'),
+            'src_ip': data['ip_source'].encode('ascii', 'ignore'),
             'dst_tenant_id': data['tenant_destination'].encode('ascii'),
             'dst_segment_id': data['segment_destination'].encode('ascii'),
-            'dst_ip': data['ip_destination'].encode('ascii','ignore'),
-            'expected_result': data['expected_connection'].encode('ascii','ignore')
+            'dst_ip': data['ip_destination'].encode('ascii', 'ignore'),
+            'expected_result': data['expected_connection'].encode('ascii',
+                                                                  'ignore')
         }
         api = reachability_test_api.ReachabilityTestAPI()
-        session = const.Session()
-        with session.begin(subtransactions=True):
+        with bsn_api.Session.begin(subtransactions=True):
             test = reachability_test_db.ReachabilityTest(**testargs)
-            test = api.updateReachabilityTest(const.tenant_id, test_id, test, session)
+            test = api.updateReachabilityTest(request.user.project_id,
+                                              test_id, test,
+                                              bsn_api.Session)
         messages.success(request, _('Successfully updated reachability test.'))
         return test
 
 
 class SaveQuickTestForm(forms.SelfHandlingForm):
+
     name = forms.CharField(max_length="255",
                            label=_("Name"),
                            required=True)
-
-    def __init__(self, *args, **kwargs):
-        super(SaveQuickTestForm, self).__init__(*args, **kwargs)
 
     def clean(self):
         cleaned_data = super(SaveQuickTestForm, self).clean()
@@ -381,12 +418,13 @@ class SaveQuickTestForm(forms.SelfHandlingForm):
         return cleaned_data
 
     def handle(self, request, data):
-        test_id = data['name'].encode('ascii','ignore')
+        test_id = data['name'].encode('ascii', 'ignore')
         api = reachability_test_api.ReachabilityTestAPI()
-        session = const.Session()
-        with session.begin(subtransactions=True):
-            test = api.saveQuickTest(const.tenant_id, test_id, session)
-            api.saveQuickTestResult(const.tenant_id, test_id, session)
-        messages.success(request, _('Successfully saved quick test: %s') % data['name'])
-	return test
-
+        with bsn_api.Session.begin(subtransactions=True):
+            test = api.saveQuickTest(request.user.project_id, test_id,
+                                     bsn_api.Session)
+            api.saveQuickTestResult(request.user.project_id, test_id,
+                                    bsn_api.Session)
+        messages.success(
+            request, _('Successfully saved quick test: %s') % data['name'])
+        return test

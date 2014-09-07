@@ -1,3 +1,5 @@
+# Copyright 2014 Big Switch Networks
+#
 from django.utils.translation import ugettext_lazy as _
 
 import horizon

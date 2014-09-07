@@ -15,7 +15,7 @@
     	<div id="network_entities" style="display:none;">{{ network_entities }}</div>
 	<div id="network_connections" style="display:none;">{{ network_connections  }}</div>
 	<div id="main" style="display:none;">
-            <div id="drag-drop-demo" class="demo drag-drop-demo">                       
+            <div id="drag-drop-demo" class="demo drag-drop-demo">
                 <div id="list"></div>
             </div>
         </div>
@@ -53,7 +53,7 @@ function renderNetworkTemplate(network_entities,network_connections){
 		var name = val.properties.name;
 
 		$("#drag-drop-demo").append('<div class="window dragDropWindow'+count+'" id='+i+'>'+name+'<br/><a href="#" class="cmdLink hide" rel="dragDropWindow'+count+'">toggle connections</a><br/><a href="#" class="cmdLink drag" rel="dragDropWindow'+count+'">net: '+name+'</a></div>');
-		
+
 		count++;
 	});
 

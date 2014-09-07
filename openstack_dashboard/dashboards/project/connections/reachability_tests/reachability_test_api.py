@@ -1,7 +1,7 @@
 import os
 import json
 from sqlalchemy import func, desc
-from openstack_dashboard.dashboards.project.connections.reachability_tests.bcf_testpath_api import Controller
+from openstack_dashboard.dashboards.project.connections.reachability_tests.bcf_testpath_api import ControllerCluster
 import openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_db as db
 
 result_limit = 1
@@ -109,7 +109,7 @@ class ReachabilityTestAPI(object):
         dst['tenant'] = test.dst_tenant_id
         dst['segment'] = test.dst_segment_id
         dst['ip'] = test.dst_ip
-        bcf = Controller()
+        bcf = ControllerCluster()
         bcf.auth()
         data = bcf.getTestPath(src, dst)
         return data
