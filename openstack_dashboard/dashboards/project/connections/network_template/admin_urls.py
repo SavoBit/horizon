@@ -1,3 +1,9 @@
+# vim: tabstop=4 shiftwidth=4 softtabstop=4
+
+# Copyright 2012 United States Government as represented by the
+# Administrator of the National Aeronautics and Space Administration.
+# All Rights Reserved.
+#
 # Copyright 2012 Nebula, Inc.
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -12,26 +18,14 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-from django.utils.translation import ugettext_lazy as _
+from django.conf.urls import patterns  # noqa
+from django.conf.urls import url  # noqa
 
-import horizon
-
-
-class SystemPanels(horizon.PanelGroup):
-    slug = "admin"
-    name = _("System")
-    panels = ('overview', 'metering', 'hypervisors', 'aggregates',
-              'instances', 'volumes', 'flavors', 'images',
-              'networks', 'routers', 'defaults', 'metadata_defs', 'info',
-              'connections')
+from openstack_dashboard.dashboards.project.connections.\
+    network_template import views
 
 
-class Admin(horizon.Dashboard):
-    name = _("Admin")
-    slug = "admin"
-    panels = (SystemPanels,)
-    default_panel = 'overview'
-    permissions = ('openstack.roles.admin',)
-
-
-horizon.register(Admin)
+urlpatterns = patterns('',
+    url(r'^detail/(?P<template_id>[^/]+)$', views.DetailView.as_view(), name='detail'),
+    url(r'^create/$', views.CreateView.as_view(), name='create'),
+)

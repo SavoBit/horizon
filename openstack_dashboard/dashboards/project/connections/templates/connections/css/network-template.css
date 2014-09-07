@@ -1,0 +1,32 @@
+/** TEXT FORMAT FOR HEADER **/
+.network-template-headers {
+	font-family: anivers;
+	font-weight: normal;
+	font-size: 24px;
+	margin-bottom: 5px;
+	float: left;
+}
+
+/** SIZE OF TAB **/
+#connections_tabs__network_template_tab {
+	height: 350px;
+}
+
+/** FORMAT OF NO TEMPLATE MESSAGE  **/
+#no_template_message {
+	width: 100%;
+	height: 100%;
+	text-align: center;
+}
+
+#message_text {
+	position:relative;
+	font-weight: normal;
+	top: 140px;
+	right: 60px;
+}
+
+/** COLOR OF REMOVE BUTTON TEXT **/
+#remove_network_template_button{
+	color: white;
+}

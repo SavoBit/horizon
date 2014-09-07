@@ -1,0 +1,26 @@
+{% extends "horizon/common/_modal_form.html" %}
+{% load i18n %}
+{% load url from future %}
+
+{% block form_id %}create_save_quick_test_form{% endblock %}
+{% block form_action %}{% url 'horizon:project:connections:reachability_tests:save' %}{% endblock %}
+
+{% block modal-header %}{% trans "Save Quick Test" %}{% endblock %}
+
+{% block modal-body %}
+<div class="left">
+    <fieldset>
+    {% include "horizon/common/_form_fields.html" %}
+    </fieldset>
+</div>
+<div class="right">
+    <h3>{% trans "Description" %}:</h3>
+    <p>{% trans "From here you can save a quick test into a reachability test to use for testing later." %}</p>
+    <p>{% trans "Hit save to save into the reachability tests table or cancel to go the table without saving." %}</p>
+</div>
+{% endblock %}
+
+{% block modal-footer %}
+  <input class="btn btn-primary pull-right" type="submit" value="{% trans "Save Test" %}" />
+  <a href="{% url 'horizon:project:connections:index' %}" class="btn secondary close cancel">{% trans "Cancel" %}</a>
+{% endblock %}

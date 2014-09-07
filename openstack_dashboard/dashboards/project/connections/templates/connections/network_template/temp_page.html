@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load url from future %}
+{% block title %}{% trans "Apply Network Template" %}{% endblock %}
+
+{% block page_header %}
+  {% include "horizon/common/_page_header.html" with title=_("Apply Network Template") %}
+{% endblock page_header %}
+
+{% block main %}
+<a id="temp" href="{% url 'horizon:project:connections:network_template:apply' template_id=template_id %}" style="display:none;" class="ajax-modal">Temp</a>
+
+<script type='text/javascript'>
+/**
+*  Function to fix issue with transitioning from one dialog window to another after the form is submitted.
+**/
+$(function(){
+	window.setTimeout("delayClick()",50);
+});
+function delayClick(){
+	$("#temp").trigger('click');
+}
+</script>
+{% endblock %}
+
