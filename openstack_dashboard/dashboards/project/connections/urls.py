@@ -33,9 +33,9 @@ from openstack_dashboard.dashboards.project.connections.\
 from openstack_dashboard.dashboards.project.connections import views
 
 
-CSS_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__).decode('utf-7')), 'templates', 'connections', 'css')
-JS_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__).decode('utf-7')), 'templates', 'connections', 'js')
-LIB_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__).decode('utf-7')), 'templates', 'connections', 'lib')
+CSS_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'templates', 'connections', 'css')
+JS_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'templates', 'connections', 'js')
+LIB_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'templates', 'connections', 'lib')
 
 
 urlpatterns = patterns('',

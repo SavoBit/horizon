@@ -3,7 +3,7 @@ import os
 from neutron.db import models_v2
 from neutron.db import model_base
 from oslo.config import cfg
-from oslo.db.sqlalchemy import session
+from neutron.openstack.common.db.sqlalchemy import session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import openstack_dashboard.dashboards.project.connections.network_template.network_template_db
@@ -24,12 +24,13 @@ restproxy_opts = [
 ]
 conf = cfg.ConfigOpts()
 paths = ['/etc/neutron/neutron.conf', '/etc/neutron/plugin.ini',
-         '/usr/share/neutron/neutron-dist.conf',
          '/etc/neutron/plugins/ml2/ml2_conf.ini',
          '/etc/neutron/plugins/bigswitch/restproxy.ini']
 params = ["--config-file=%s" % p for p in paths if os.path.exists(p)]
 conf.register_opts(restproxy_opts, "RESTPROXY")
+conf.register_opts(session.database_opts, "database")
 conf(params)
+session.CONF = conf
 
 # ignore port from neutron config because it references NSAPI instead of
 # floodlight API
@@ -39,8 +40,8 @@ port = 8080
 username, password = conf.RESTPROXY.server_auth.split(':', 1)
 #tenant_id = 'admin'
 
-_FACADE = session.EngineFacade.from_config(conf, sqlite_fk=True)
-Session = _FACADE.get_session(autocommit=True, expire_on_commit=False)
+#_FACADE = session.EngineFacade.from_config(conf, sqlite_fk=True)
+Session = session.get_session(autocommit=True, expire_on_commit=False,
+                              sqlite_fk=True)
 Base = model_base.BASEV2()
-Base.metadata.create_all(bind=api.get_engine())
-
+Base.metadata.create_all(bind=session.get_engine(sqlite_fk=True))

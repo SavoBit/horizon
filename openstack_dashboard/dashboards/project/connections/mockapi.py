@@ -255,6 +255,7 @@ class NetworkTemplateAPI:
        dictionary.
        return: dictionary"""
     def getHeatTemplate(self):
+        return {}
         h = shelve.open(self.heatdb)
         if(h.has_key(self.heat_template)):
             template = h[self.heat_template]

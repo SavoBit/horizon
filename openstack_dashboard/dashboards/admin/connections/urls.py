@@ -7,11 +7,11 @@ from openstack_dashboard.dashboards.project.connections.\
     network_template import urls as network_template_urls
 from .views import IndexView
 
-LIB_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__).decode('utf-7')), 'templates', 'connections', 'lib')
+LIB_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'templates', 'connections', 'lib')
 
-JS_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__).decode('utf-7')), 'templates', 'connections', 'js')
+JS_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'templates', 'connections', 'js')
 
-CSS_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__).decode('utf-7')), 'templates', 'connections', 'css')
+CSS_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'templates', 'connections', 'css')
 
 urlpatterns = patterns('',
     url(r'^$', IndexView.as_view(), name='index'),
