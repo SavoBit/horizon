@@ -163,18 +163,19 @@ horizon.forms.add_password_fields_reveal_buttons = function (el) {
   $(el).find('input[type="password"]').each(function (i, input) {
     var $input = $(input);
 
-    $(
-      '<span class="password-reveal-button icon-eye-open"></span>'
+    $input.closest('.form-group').addClass("has-feedback");
+    $('<span>').addClass(
+      "form-control-feedback glyphicon glyphicon-eye-open"
     ).insertAfter($input).click(function () {
       var $icon = $(this);
 
       if ($input.attr('type') === 'password') {
-        $icon.removeClass('icon-eye-open');
-        $icon.addClass('icon-eye-close');
+        $icon.removeClass('glyphicon-eye-open');
+        $icon.addClass('glyphicon-eye-close');
         $input = _change_input_type($input, 'text');
       } else {
-        $icon.removeClass('icon-eye-close');
-        $icon.addClass('icon-eye-open');
+        $icon.removeClass('glyphicon-eye-close');
+        $icon.addClass('glyphicon-eye-open');
         $input = _change_input_type($input, 'password');
       }
     });
@@ -232,7 +233,7 @@ horizon.addInitFunction(function () {
         visible = $switchable.is(':visible'),
         val = $switchable.val();
 
-      $fieldset.find('.switched[data-switch-on*="' + slug + '"]').each(function(index, input){
+      function handle_switched_field(index, input){
         var $input = $(input),
           data = $input.data(slug + "-" + val);
 
@@ -242,7 +243,10 @@ horizon.addInitFunction(function () {
           $('label[for=' + $input.attr('id') + ']').html(data);
           $input.closest('.form-group').show();
         }
-      });
+      }
+
+      $fieldset.find('.switched[data-switch-on*="' + slug + '"]').each(handle_switched_field);
+      $fieldset.siblings().find('.switched[data-switch-on*="' + slug + '"]').each(handle_switched_field);
     });
   });
 
