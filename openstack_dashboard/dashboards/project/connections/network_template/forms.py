@@ -123,7 +123,8 @@ class ApplyTemplateForm(forms.SelfHandlingForm):
                 template = network_template_api.extract_fields_from_body(
                     self.request, template_db.body)
         except Exception as e:
-            msg = _("Failed preparing template")
+            msg = _("Failed preparing template. You may not have permissions to "
+                    "use Heat templates.")
             exceptions.handle(self.request, msg,
                               redirect=reverse(self.failure_url))
 

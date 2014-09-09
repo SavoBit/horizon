@@ -58,7 +58,7 @@ class DeleteTemplateAction(tables.DeleteAction):
 class CreateTemplateAction(tables.LinkAction):
     name = "create"
     verbose_name = _("Create Network Template")
-    url = "horizon:admin:connections:network_template:create"
+    url = "horizon:admin:connections:network_template_admin:create"
     classes = ("ajax-modal", "btn-create")
 
 
@@ -67,7 +67,7 @@ class NetworkTemplateAdminTable(tables.DataTable):
                                 verbose_name=_("Template ID"))
     template_name = tables.Column(
         "template_name",
-        link=("horizon:admin:connections:network_template:detail"),
+        link=("horizon:admin:connections:network_template_admin:detail"),
         verbose_name=_("Template Name"))
 
     def get_object_id(self, template):
