@@ -2,13 +2,12 @@
 {% load i18n %}
 {% load url from future %}
 
-{% block form_id %}template_create{% endblock %}
+{% block form_id %}create_template_form{% endblock %}
 {% block form_action %}
-{% url 'horizon:project:connections:network_template:create' %}
+{% url 'horizon:admin:connections:network_template:create' %}
 {% endblock %}
 
 {% block modal-header %}{% trans "Template Setup" %}{% endblock %}
-{% block modal_id %}template_setup_modal{% endblock %}
 
 {% block modal-body %}
 <div class="left">

@@ -107,19 +107,7 @@ class NetworkTemplateTab(tabs.Tab):
                 and super(NetworkTemplateTab, self).allowed(request))
 
     def get_context_data(self, request):
-        #TODO: Replace with API call to get the current template applied.
-        #This will be used to render the page.
-        api = NetworkTemplateAPI()
-        template = api.getHeatTemplate()
-
-        if 'web_map' in template:
-            entities = json.dumps(template['web_map'].network_entities)
-            connections = json.dumps(template['web_map'].network_connections)
-        else:
-            entities = {}
-            connections = {}
-
-        return {"network_entities": entities, "network_connections": connections}
+        return network_template_api.get_stack_topology(request)
 
 
 class ReachabilityTestsTab(tabs.TableTab):
@@ -163,7 +151,7 @@ class CreateNetworkTemplate(forms.SelfHandlingForm):
     body = forms.CharField(
         widget=forms.Textarea(attrs={'rows': 20}),
         max_length=None, label=_("Template Body"), required=True)
-    existing_id = forms.CharField(widget=forms.HiddenInput())
+    existing_id = forms.CharField(widget=forms.HiddenInput(), required=False)
     template_name = "horizon/common/_detail_table.html"
 
     def handle(self, request, data):

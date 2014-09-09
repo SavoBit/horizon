@@ -9,7 +9,7 @@
 			list.innerHTML = s;
 			list.style.display = "block";
 			jsPlumb.repaintEverything();
-		},	
+		},
 		hideConnectionInfo = function() {
 			list.style.display = "none";
 			jsPlumb.repaintEverything();
@@ -39,10 +39,10 @@
 					s = s + "<tr><td>" + connections[j].scope + "</td>" + "<td>" + entities[connections[j].sourceId].properties.name + "</td><td>" + entities[connections[j].targetId].properties.name + "</td></tr>";
 				}
 				showConnectionInfo(s);
-			} else 
+			} else
 				hideConnectionInfo();
 		};
-	
+
 	jsPlumb.ready(function() {
 
 			var instance = jsPlumb.getInstance({
@@ -52,10 +52,10 @@
 				Endpoint : "Rectangle",
 				Anchors : ["TopCenter", "TopCenter"],
 				Container:"drag-drop-demo"
-			});		
+			});
 
 			// suspend drawing and initialise.
-			instance.doWhileSuspended(function() {										
+			instance.doWhileSuspended(function() {
 
 				// bind to connection/connectionDetached events, and update the list of connections on screen.
 				instance.bind("connection", function(info, originalEvent) {
@@ -99,11 +99,11 @@
 						dashstyle:"2 2"
 					},
 					isTarget:true,
-					beforeDrop:function(params) { 
-						return confirm("Connect " + params.sourceId + " to " + params.targetId + "?"); 
-					},				
+					beforeDrop:function(params) {
+						return confirm("Connect " + params.sourceId + " to " + params.targetId + "?");
+					},
 					dropOptions : exampleDropOptions
-				};			
+				};
 
 				//
 				// the second example uses a Dot of radius 15 as the endpoint marker, is both a source and target,
@@ -127,7 +127,7 @@
 					endpoint:["Dot", { radius:11 }],
 					paintStyle:{ fillStyle:colorGreen },
 					isSource:true,
-                                        anchor: "Top",
+                    anchor: "Top",
 					scope:"forward",
 					connectorStyle:{ strokeStyle:colorGreen, lineWidth:2 },
 					connector: ["Bezier", { curviness:63 } ],
@@ -141,9 +141,9 @@
 				// 'exampleConnection3'.  it uses a Straight connector, and the Anchor is created here (bottom left corner) and never
 				// overriden, so it appears in the same place on every element.
 				//
-				// this example also demonstrates the beforeDetach interceptor, which allows you to intercept 
+				// this example also demonstrates the beforeDetach interceptor, which allows you to intercept
 				// a connection detach and decide whether or not you wish to allow it to proceed.
-				//			
+				//
 				var example3Color = "rgba(229,219,61,0.5)";
 				var exampleEndpoint3 = {
 					endpoint:["Dot", {radius:17} ],
@@ -167,13 +167,13 @@
 				// of the anchor (purely because we want to move the anchor around here; you could set it one time and forget about it though.)
 				var e1 = instance.addEndpoint('dragDropWindow1', { anchor:[0.5, 1, 0, 1] }, exampleEndpoint2);
 
-				// setup some DynamicAnchors for use with the blue endpoints			
+				// setup some DynamicAnchors for use with the blue endpoints
 				// and a function to set as the maxConnections callback.
 				var anchors = [[1, 0.2, 1, 0], [0.8, 1, 0, 1], [0, 0.8, -1, 0], [0.2, 0, 0, -1] ],
 					maxConnectionsCallback = function(info) {
 						alert("Cannot drop connection " + info.connection.id + " : maxConnections has been reached on Endpoint " + info.endpoint.id);
 					};
-					
+
 				var e1 = instance.addEndpoint("dragDropWindow1", { anchor:anchors }, exampleEndpoint);
 				// you can bind for a maxConnections callback using a standard bind call, but you can also supply 'onMaxConnections' in an Endpoint definition - see exampleEndpoint3 above.
 				e1.bind("maxConnections", maxConnectionsCallback);
@@ -188,16 +188,16 @@
 				instance.addEndpoint("dragDropWindow3", { anchor:[0.75, 0, 0, -1] }, exampleEndpoint2);
 
 				var e4 = instance.addEndpoint("dragDropWindow4", { anchor:[1, 0.5, 1, 0] }, exampleEndpoint);
-				e4.bind("maxConnections", maxConnectionsCallback);			
+				e4.bind("maxConnections", maxConnectionsCallback);
 				instance.addEndpoint("dragDropWindow4", { anchor:[0.25, 0, 0, -1] }, exampleEndpoint2);
 **/
 				// make .window divs draggable
 				instance.draggable(jsPlumb.getSelector(".drag-drop-demo .window"));
 
-				// add endpoint of type 3 using a selector. 
+				// add endpoint of type 3 using a selector.
 				instance.addEndpoint(jsPlumb.getSelector(".drag-drop-demo .window"), exampleEndpoint2);
 				instance.addEndpoint(jsPlumb.getSelector(".drag-drop-demo .window"), exampleEndpointGreen);
-				
+
 				var hideLinks = jsPlumb.getSelector(".drag-drop-demo .hide");
 				_bind(hideLinks, "click", function(e) {
 					instance.toggleVisible(this.getAttribute("rel"));
@@ -208,7 +208,7 @@
 				var dragLinks = jsPlumb.getSelector(".drag-drop-demo .drag");
 				_bind(dragLinks, "click", function(e) {
 					var s = instance.toggleDraggable(this.getAttribute("rel"));
-					this.innerHTML = (s ? 'disable dragging' : 'enable dragging');				
+					this.innerHTML = (s ? 'disable dragging' : 'enable dragging');
 					e.stopPropagation();
 					e.preventDefault();
 				});
@@ -220,20 +220,20 @@
 					e.preventDefault();
 				});
 
-				_bind(document.getElementById("clear"), "click", function(e) { 
+				_bind(document.getElementById("clear"), "click", function(e) {
 					instance.detachEveryConnection();
 					showConnectionInfo("");
 					e.stopPropagation();
 					e.preventDefault();
 				});
-				
+
 				//Add the connections between the networks based on
 				//info passed on from the template.
 				var network_connections = JSON.parse($("#network_connections").text());
-				$.each(network_connections,function(i,val){
+				$.each(network_connections, function(i,val){
 					instance.connect({
-						paintStyle:{ 
-							strokeStyle:colorGreen, 
+						paintStyle:{
+							strokeStyle:colorGreen,
 							lineWidth:2,
 							outlineColor:"white",
 							outlineWidth:0.1
@@ -242,12 +242,12 @@
 						endpoint:["Dot", { radius:11 }],
 						EndpointStyle : { fillStyle: colorGreen  },
 						anchor:"Top",
-						source:i,
-                                        	target:val.destination,
-                                        	scope:val.expected_connection
-                        		});
+						source:val.source,
+                        target:val.destination,
+                        scope:val.expected_connection
+                    });
 				});
 			});
-		
-	});	
+
+	});
 })();

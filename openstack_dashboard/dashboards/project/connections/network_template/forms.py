@@ -94,97 +94,66 @@ class SelectTemplateForm(forms.SelfHandlingForm):
         return cleaned_data
 
     def handle(self, request, data):
-        #raise Exception(data['network_templates'])
-        # TODO(kevinbenton): Replace the following lines with your
-        # API call to load templates.
-        api = NetworkTemplateAPI()
-        api.loadHeatTemplate()
-
+        # nothing is done until the apply step because the required fields
+        # need to be extracted.
         return data
 
 
 class RemoveTemplateForm(forms.SelfHandlingForm):
 
     def handle(self, request, data):
-        # TODO(kevinbenton): Replace the following with your API
-        # call to remove template.
-        api = NetworkTemplateAPI()
-        api.removeHeatTemplate()
-
+        network_template_api.delete_associated_stack(request)
         return True
 
 
 class ApplyTemplateForm(forms.SelfHandlingForm):
+    failure_url = 'horizon:project:connections:index'
 
     def __init__(self, *args, **kwargs):
         super(ApplyTemplateForm, self).__init__(*args, **kwargs)
-        # TODO(kevinbenton): Replace with your API call to load the selected
-        # template.
-        api = NetworkTemplateAPI()
-        template = api.getHeatTemplate()
+        try:
+            template_id = self.request.path_info.split('/')[-1]
+            template_db = network_template_api.get_template_by_id(template_id)
+            if not template_db:
+                raise Exception(_("Could not find a template with that ID."))
+            if network_template_api.get_tenant_stack_assignment(
+                    self.request.user.tenant_id):
+                raise Exception(_("This tenant already has a deployed template."))
+            if template_db:
+                template = network_template_api.extract_fields_from_body(
+                    self.request, template_db.body)
+        except Exception as e:
+            msg = _("Failed preparing template")
+            exceptions.handle(self.request, msg,
+                              redirect=reverse(self.failure_url))
 
         # Sorts the parameters in the template.
-        parameters = template['parameters'].keys()
+        parameters = template['Parameters'].keys()
         parameters.sort()
         parameters.reverse()
-
         # Populates the form dynamically with information from the template.
         for parameter in parameters:
             self.fields[parameter] = forms.CharField(
                 max_length="255",
-                label=template['parameters'][parameter]['label'],
-                initial=findDefault(template['parameters'][parameter],
-                                    'default'),
-                help_text=template['parameters'][parameter]['description'],
+                label=template['Parameters'][parameter]['Label'],
+                initial=findDefault(template['Parameters'][parameter],
+                                    'Default'),
+                help_text=template['Parameters'][parameter]['Description'],
                 required=True
             )
 
     def handle(self, request, data):
-        # TODO(kevinbenton): Replace with your own API call to fetch
-        # the current template.
-        api = NetworkTemplateAPI()
-        template = api.getHeatTemplate()
-
-        new_data = {}
-        new_data = template['resources']
-        network_entities = {}
-        network_connections = {}
-
-        # Fetches the data entered in the form and populates a dictionary
-        # based of it and of the networks available.
-        for resource in template['resources']:
-            if 'properties' in new_data[resource]:
-                if 'name' in new_data[resource]['properties']:
-                    network_entities[resource] = {'properties': {'name': ''}}
-                    network_entities[resource]['properties']['name'] = data[
-                        new_data[resource]['properties']['name']['get_param']
-                    ].encode('ascii', 'ignore')
-
-        # Fetches information from the template and makes a connection mapping.
-        # TODO(kevinbenton): The mapping is based of name. Change if name
-        # changes or using a different way to represent connecitons in the
-        # template.
-        for network in network_entities:
-            token = network.split("_")
-            if token[0] == "out":
-                if 'mid_net' in network_entities:
-                    network_connections[network] = {
-                        'destination': 'mid_net',
-                        'expected_connection': 'forward'
-                    }
-            elif token[0] == "mid":
-                if 'inner_net' in network_entities:
-                    network_connections[network] = {
-                        'destination': 'inner_net',
-                        'expected_connection': 'forward'
-                    }
-
-        # Create new object to hold the to dictionaries.
-        network_template = NetworkTemplateStub({
-            "network_entities": network_entities,
-            "network_connections": network_connections
-        })
-        template['web_map'] = network_template
-        api.updateHeatTemplate(template)
-
-        return template
+        try:
+            template_id = self.request.path_info.split('/')[-1]
+            template_db = network_template_api.get_template_by_id(template_id)
+            if not template_db:
+                raise Exception(_("Could not find a template with that ID."))
+            if template_db:
+                template = network_template_api.extract_fields_from_body(
+                    self.request, template_db.body)
+                hresource = network_template_api.deploy_instance(
+                    self.request, template_db.id, data)
+        except:
+            msg = _("Error loading template")
+            exceptions.handle(self.request, msg, redirect=self.failure_url)
+        return True
