@@ -32,8 +32,6 @@ urlpatterns = patterns('',
         name='select'),
     url(r'^populate_template/(?P<template_id>[^/]+)$',
         views.PopulateTemplateView.as_view(), name='populate_template'),
-    url(r'^detail/(?P<template_id>[^/]+)$', views.DetailView.as_view(), name='detail'),
-    url(r'^create/$', views.CreateView.as_view(), name='create'),
     url(r'^remove_template/$', views.RemoveTemplateView.as_view(),
         name='remove'),
 )
