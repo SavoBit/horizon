@@ -6,12 +6,13 @@ import os
 from openstack_dashboard.dashboards.project.connections.\
     network_template import admin_urls as network_template_urls
 from .views import IndexView
+from openstack_dashboard.dashboards.project.connections import urls as purl
 
-LIB_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'templates', 'connections', 'lib')
+LIB_PATH = os.path.join(os.path.abspath(os.path.dirname(purl.__file__)), 'templates', 'connections', 'lib')
 
-JS_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'templates', 'connections', 'js')
+JS_PATH = os.path.join(os.path.abspath(os.path.dirname(purl.__file__)), 'templates', 'connections', 'js')
 
-CSS_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'templates', 'connections', 'css')
+CSS_PATH = os.path.join(os.path.abspath(os.path.dirname(purl.__file__)), 'templates', 'connections', 'css')
 
 urlpatterns = patterns('',
     url(r'^$', IndexView.as_view(), name='index'),

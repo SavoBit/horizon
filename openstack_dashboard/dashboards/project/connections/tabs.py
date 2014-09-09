@@ -89,7 +89,7 @@ class NetworkTemplateAdminTab(tabs.TableTab):
     # template_name = "project/connections/network_template/_template_adminhome.html"
 
     def allowed(self, request):
-        return (self.request.path.startswith('/admin/') and
+        return (self.request.path_info.startswith('/admin/') and
                 super(NetworkTemplateAdminTab, self).allowed(request))
 
     def get_networktemplate_admin_data(self):
@@ -103,7 +103,7 @@ class NetworkTemplateTab(tabs.Tab):
 
     def allowed(self, request):
         # don't show the regular template tab to admins
-        return (not request.path.startswith('/admin/')
+        return (not request.path_info.startswith('/admin/')
                 and super(NetworkTemplateTab, self).allowed(request))
 
     def get_context_data(self, request):
