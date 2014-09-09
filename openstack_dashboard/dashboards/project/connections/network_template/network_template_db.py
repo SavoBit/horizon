@@ -16,6 +16,6 @@ class NetworkTemplateAssignment(model_base.BASEV2):
     __tablename__ = 'networktemplateassignments'
     __table_args__ = {'extend_existing': True}
     template_id = sa.Column(sa.Integer, sa.ForeignKey('networktemplates.id'),
-                            nullable=False, primary_key=True)
+                            nullable=False)
     tenant_id = sa.Column(sa.String(255), nullable=False, primary_key=True)
     stack_id = sa.Column(sa.String(255), nullable=False)
