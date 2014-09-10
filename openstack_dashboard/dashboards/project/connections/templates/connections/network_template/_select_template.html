@@ -21,7 +21,7 @@
 
 {% block modal-footer %}
       <input class="btn btn-primary pull-right" type="submit" value="{% trans "Next" %}" />
-      <a href="/project/connections" class="btn secondary">{% trans "Cancel" %}</a>
+      <a href="./" class="btn secondary">{% trans "Cancel" %}</a>
 
 <script type='text/javascript'>
 /**
@@ -33,7 +33,7 @@ $(function(){
 });
 function delayClick(){
         //debugger
-        $($(".close")[0]).prop("href","/project/connections")
+        $($(".close")[0]).prop("href","./")
         $($(".close")[0]).attr("data-dismiss", "")
 }
 </script>
