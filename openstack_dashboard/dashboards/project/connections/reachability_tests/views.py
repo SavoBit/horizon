@@ -65,7 +65,7 @@ class ReachabilityTestData():
         if test:
             if hasattr(test, 'test_id'):
                 self.name = test.test_id
-            self.status = result.test_result
+            self.status = getattr(result, 'test_result', '')
             self.connection_source = json.dumps(test.get_connection_source())
             self.connection_destination = json.dumps(
                 test.get_connection_destination())
@@ -122,13 +122,23 @@ class UpdateView(forms.ModalFormView):
     def get_initial(self):
         reachability_test = self.get_object()
         properties = getattr(reachability_test, 'properties', {})
-        return {
+        body = {
             'reachability_test_id': self.kwargs['reachability_test_id'],
-            connection_source: reachability_test.connection_source,
-            connection_destination: reachability_test.connection_destination,
+            'connection_source': reachability_test.connection_source,
+            'connection_destination': reachability_test.connection_destination,
             'name': reachability_test.name,
-            'expected_connection': reachability_test.expected_connection
+            'expected_connection': reachability_test.expected_connection,
         }
+        try:
+            src = json.loads(reachability_test.connection_source)
+            dst = json.loads(reachability_test.connection_destination)
+            body['segment_destination'] = dst['segment']
+            body['segment_source'] = src['segment']
+            body['ip_destination'] = dst['ip']
+            body['ip_source'] = src['ip']
+        except:
+            pass
+        return body
 
 
 class DetailView(tabs.TabView):

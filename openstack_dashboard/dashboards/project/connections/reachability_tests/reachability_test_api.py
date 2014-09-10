@@ -1,6 +1,7 @@
 import os
 import json
 from sqlalchemy import func, desc
+from openstack_dashboard import api
 from openstack_dashboard.dashboards.project.connections.reachability_tests.bcf_testpath_api import ControllerCluster
 import openstack_dashboard.dashboards.project.connections.reachability_tests.reachability_test_db as db
 
@@ -100,34 +101,43 @@ class ReachabilityTestAPI(object):
                       .filter(db.ReachabilityQuickTest.tenant_id == tenant_id)\
                       .delete()
 
-    def getBcfTestResult(self, test):
+    def resolve_segment(self, segment, request):
+        if not request:
+            return segment
+        if len(segment) > 30:
+            # already a UUID
+            return segment
+        try:
+            nets = api.neutron.network_list_for_tenant(
+                request, request.user.tenant_id)
+            for net in nets:
+                if net['name'] and net['name'].lower() == segment.lower():
+                    segment = net['id']
+        finally:
+            return segment
+
+    def getBcfTestResult(self, test, request):
         src = {}
         src['tenant'] = test.src_tenant_id
-        src['segment'] = test.src_segment_id
+        src['segment'] = self.resolve_segment(test.src_segment_id, request)
         src['ip'] = test.src_ip
         dst = {}
         dst['tenant'] = test.dst_tenant_id
-        dst['segment'] = test.dst_segment_id
+        dst['segment'] = self.resolve_segment(test.dst_segment_id, request)
         dst['ip'] = test.dst_ip
         bcf = ControllerCluster()
         bcf.auth()
         data = bcf.getTestPath(src, dst)
         return data
 
-    def runQuickTest(self, tenant_id, session):
+    def runQuickTest(self, tenant_id, session, request=None):
         test = session.query(db.ReachabilityQuickTest)\
                       .filter(db.ReachabilityQuickTest.tenant_id == tenant_id)\
                       .first()
         if not test:
             return
-        data = self.getBcfTestResult(test)
-        test_result = "pending"
-        if data and data[0].get("summary", [{}])[0].get("forward-result") == test.expected_result:
-            test_result = "pass"
-        else:
-            test_result = "fail"
-        detail = None
-        detail = data[0].get("physical-path")
+        data = self.getBcfTestResult(test, request)
+        test_result, detail = self.parse_result(data, test)
         result = db.ReachabilityQuickTestResult(test_primary_key = test.id,
                                                 tenant_id = tenant_id,
                                                 test_time = func.now(),
@@ -142,20 +152,40 @@ class ReachabilityTestAPI(object):
             expired_result = results.pop(0)
             session.delete(expired_result)
 
-    def runReachabilityTest(self, tenant_id, test_id, session):
+    def parse_result(self, data, test):
+        test_result = "pending"
+        if not data:
+            test_result = "fail"
+            detail = [["No result"]]
+        elif data[0].get("summary", [{}])[0].get("forward-result") != test.expected_result:
+            test_result = "fail"
+            detail =[["Expected: %s. Actual: %s" % (
+                test.expected_result, data[0].get("summary", [{}])[0].get("forward-result"))]]
+            try:
+                detail[0][0] += " - " + data[0]['summary'][0]['logical-error']
+            except:
+                pass
+        elif data[0].get("summary", [{}])[0].get("forward-result") == test.expected_result:
+            test_result = "pass"
+            detail = data[0].get("physical-path")
+        else:
+            try:
+                detail = [data[0]['summary'][0]['logical-error']]
+            except:
+                detail = [[json.dumps(data)]]
+            test_result = "fail"
+        return test_result, detail
+
+    def runReachabilityTest(self, tenant_id, test_id, session, request=None):
         test = session.query(db.ReachabilityTest)\
                       .filter(db.ReachabilityTest.tenant_id == tenant_id,
                               db.ReachabilityTest.test_id == test_id)\
                       .first()
         if not test:
             return
-        data = self.getBcfTestResult(test)
-        test_result = "pending"
-        if data and data[0].get("summary", [{}])[0].get("forward-result") == test.expected_result:
-            test_result = "pass"
-        else:
-            test_result = "fail"
-        detail = data[0].get("physical-path")
+        data = self.getBcfTestResult(test, request)
+        test_result, detail = self.parse_result(data, test)
+
         result = db.ReachabilityTestResult(test_primary_key=test.id,
                                            tenant_id = tenant_id,
                                            test_id = test_id,
@@ -182,7 +212,7 @@ class ReachabilityTestAPI(object):
                       .filter(db.ReachabilityTestResult.tenant_id == tenant_id,
                               db.ReachabilityTestResult.test_id == test_id)\
                       .order_by(desc(db.ReachabilityTestResult.test_time))\
-                      .first()       
+                      .first()
 
     def getQuickTest(self, tenant_id, session):
         return session.query(db.ReachabilityQuickTest)\
@@ -201,4 +231,3 @@ class ReachabilityTestAPI(object):
                       .filter(db.ReachabilityTest.tenant_id == tenant_id,
                               db.ReachabilityTest.test_id == test_id)\
                       .first()
-

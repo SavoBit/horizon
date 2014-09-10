@@ -49,14 +49,14 @@ class ReachabilityTest(model_base.BASEV2):
 
     def get_connection_source(self):
         source = {}
-        source['tenent'] = self.src_tenant_id
+        source['tenant'] = self.src_tenant_id
         source['segment'] = self.src_segment_id
         source['ip'] = self.src_ip
         return source
 
     def get_connection_destination(self):
         destination = {}
-        destination['tenent'] = self.dst_tenant_id
+        destination['tenant'] = self.dst_tenant_id
         destination['segment'] = self.dst_segment_id
         destination['ip'] = self.dst_ip
         return destination
