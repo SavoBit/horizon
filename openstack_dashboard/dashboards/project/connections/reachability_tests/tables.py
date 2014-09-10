@@ -1,6 +1,4 @@
-# vim: tabstop=4 shiftwidth=4 softtabstop=4
-
-# Copyright 2012 Nebula, Inc.
+# Copyright 2014 Big Switch Networks
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
 #    not use this file except in compliance with the License. You may obtain
@@ -26,10 +24,6 @@ from openstack_dashboard.usage import quotas
 
 from openstack_dashboard.dashboards.project.connections.reachability_tests.\
     reachability_test_api import ReachabilityTestAPI
-#from openstack_dashboard.dashboards.project.connections.reachability_tests.\
-#    reachability_test_db import (ReachabilityTest, ReachabilityTestResult,
-#                                  ReachabilityQuickTest,
-#                                  ReachabilityQuickTestResult)
 import openstack_dashboard.dashboards.project.connections.bsn_api as bsn_api
 
 
@@ -80,7 +74,7 @@ class RunTest(tables.BatchAction):
         with bsn_api.Session.begin(subtransactions=True):
             api.runReachabilityTest(request.user.tenant_id,
                                     obj_id.encode('ascii', 'ignore'),
-                                    bsn_api.Session)
+                                    bsn_api.Session, request)
 
 
 class UpdateTest(tables.LinkAction):

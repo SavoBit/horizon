@@ -396,7 +396,7 @@ class UpdateForm(forms.SelfHandlingForm):
         with bsn_api.Session.begin(subtransactions=True):
             test = reachability_test_db.ReachabilityTest(**testargs)
             test = api.updateReachabilityTest(request.user.project_id,
-                                              test_id, test,
+                                              testargs['test_id'], test,
                                               bsn_api.Session)
         messages.success(request, _('Successfully updated reachability test.'))
         return test
