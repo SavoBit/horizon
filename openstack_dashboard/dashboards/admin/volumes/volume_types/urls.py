@@ -16,6 +16,8 @@ from django.conf.urls import url  # noqa
 
 from openstack_dashboard.dashboards.admin.volumes.volume_types.extras \
     import urls as extras_urls
+from openstack_dashboard.dashboards.admin.volumes.volume_types.qos_specs \
+    import urls as qos_specs_urls
 from openstack_dashboard.dashboards.admin.volumes.volume_types \
     import views
 
@@ -24,6 +26,10 @@ VIEWS_MOD = ('openstack_dashboard.dashboards.admin.volumes.volume_types.views')
 urlpatterns = patterns('VIEWS_MOD',
     url(r'^create_type$', views.CreateVolumeTypeView.as_view(),
             name='create_type'),
+    url(r'^create_qos_spec$', views.CreateQosSpecView.as_view(),
+            name='create_qos_spec'),
     url(r'^(?P<type_id>[^/]+)/extras/',
             include(extras_urls, namespace='extras')),
+    url(r'^qos_specs/',
+            include(qos_specs_urls, namespace='qos_specs')),
 )

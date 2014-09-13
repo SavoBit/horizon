@@ -123,9 +123,8 @@ class VolTypeExtraSpec(object):
 
 
 class QosSpec(object):
-    def __init__(self, spec_id, key, val):
-        self.spec_id = spec_id
-        self.id = key
+    def __init__(self, id, key, val):
+        self.id = id
         self.key = key
         self.value = val
 
@@ -413,12 +412,12 @@ def qos_spec_delete(request, qos_spec_id):
     return cinderclient(request).qos_specs.delete(qos_spec_id, force=True)
 
 
-def qos_spec_create(request, name, qos_spec_id):
-    return cinderclient(request).qos_specs.create(name, qos_spec_id)
+def qos_spec_create(request, name, specs):
+    return cinderclient(request).qos_specs.create(name, specs)
 
 
 def qos_spec_get_keys(request, qos_spec_id, raw=False):
-    spec = cinderclient(request).qos_specs.get(qos_spec_id)
+    spec = qos_spec_get(request, qos_spec_id)
     qos_specs = spec.specs
     if raw:
         return spec

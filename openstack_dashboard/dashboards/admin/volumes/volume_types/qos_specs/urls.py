@@ -10,18 +10,16 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from horizon.test import helpers as test
+from django.conf.urls import patterns  # noqa
+from django.conf.urls import url  # noqa
 
+from openstack_dashboard.dashboards.admin.volumes.volume_types.qos_specs \
+    import views
 
-class ServicesTests(test.JasmineTests):
-    sources = [
-        'horizon/js/horizon.js',
-        'horizon/js/angular/horizon.conf.js',
-        'horizon/js/angular/horizon.js',
-        'horizon/js/angular/services/horizon.utils.js',
-        'horizon/js/angular/controllers/metadata-widget-controller.js'
-    ]
-    specs = [
-        'horizon/tests/jasmine/utilsSpec.js',
-        'horizon/tests/jasmine/metadataWidgetControllerSpec.js'
-    ]
+urlpatterns = patterns('',
+    url(r'^(?P<qos_spec_id>[^/]+)/create/$',
+            views.CreateKeyValuePairView.as_view(), name='create'),
+    url(r'^(?P<qos_spec_id>[^/]+)/$', views.IndexView.as_view(), name='index'),
+    url(r'^(?P<qos_spec_id>[^/]+)/key/(?P<key>[^/]+)/edit/$',
+            views.EditKeyValuePairView.as_view(), name='edit')
+)

@@ -10,26 +10,62 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from django.template import defaultfilters as filters
+from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from horizon import tables
 
-
-def render_spec_keys(qos_spec):
-    qos_spec_keys = ["%s=%s" % (key, value)
-                     for key, value in qos_spec.specs.items()]
-    return qos_spec_keys
+from openstack_dashboard import api
 
 
-class QosSpecsTable(tables.DataTable):
-    name = tables.Column('name', verbose_name=_('Name'))
-    consumer = tables.Column('consumer', verbose_name=_('Consumer'))
-    specs = tables.Column(render_spec_keys,
-                          verbose_name=_('Specs'),
-                          wrap_list=True,
-                          filters=(filters.unordered_list,))
+class SpecCreateKeyValuePair(tables.LinkAction):
+    # this is to create a spec key-value pair for an existing QOS Spec
+    name = "create"
+    verbose_name = _("Create")
+    url = "horizon:admin:volumes:volume_types:qos_specs:create"
+    classes = ("ajax-modal",)
+    icon = "plus"
+
+    def get_link_url(self, qos_spec=None):
+        qos_spec_id = self.table.kwargs['qos_spec_id']
+        return reverse(self.url, args=[qos_spec_id])
+
+
+class SpecDeleteKeyValuePair(tables.DeleteAction):
+    data_type_singular = _("Spec")
+    data_type_plural = _("Specs")
+
+    def delete(self, request, obj_ids):
+        qos_spec_id = self.table.kwargs['qos_spec_id']
+        # use "unset" api to remove this key-value pair from QOS Spec
+        api.cinder.qos_spec_unset_keys(request,
+                                       qos_spec_id,
+                                       [obj_ids])
+
+
+class SpecEditKeyValuePair(tables.LinkAction):
+    name = "edit"
+    verbose_name = _("Edit")
+    url = "horizon:admin:volumes:volume_types:qos_specs:edit"
+    classes = ("ajax-modal",)
+    icon = "pencil"
+
+    def get_link_url(self, qos_spec):
+        return reverse(self.url, args=[qos_spec.id, qos_spec.key])
+
+
+class SpecsTable(tables.DataTable):
+    key = tables.Column('key', verbose_name=_('Key'))
+    value = tables.Column('value', verbose_name=_('Value'))
 
     class Meta:
-        name = "qos_specs"
-        verbose_name = _("QOS Specs")
+        name = "specs"
+        verbose_name = _("Key-Value Pairs")
+        table_actions = (SpecCreateKeyValuePair, SpecDeleteKeyValuePair)
+        row_actions = (SpecEditKeyValuePair, SpecDeleteKeyValuePair)
+
+    def get_object_id(self, datum):
+        return datum.key
+
+    def get_object_display(self, datum):
+        return datum.key
