@@ -126,7 +126,6 @@ class ReachabilityTestAPI(object):
         dst['segment'] = self.resolve_segment(test.dst_segment_id, request)
         dst['ip'] = test.dst_ip
         bcf = ControllerCluster()
-        bcf.auth()
         data = bcf.getTestPath(src, dst)
         return data
 
@@ -156,13 +155,13 @@ class ReachabilityTestAPI(object):
         test_result = "pending"
         if not data:
             test_result = "fail"
-            detail = [["No result"]]
+            detail = [{'path-index': "No result"}]
         elif data[0].get("summary", [{}])[0].get("forward-result") != test.expected_result:
             test_result = "fail"
-            detail =[["Expected: %s. Actual: %s" % (
-                test.expected_result, data[0].get("summary", [{}])[0].get("forward-result"))]]
+            detail =[{'path-index': "Expected: %s. Actual: %s" % (
+                test.expected_result, data[0].get("summary", [{}])[0].get("forward-result"))}]
             try:
-                detail[0][0] += " - " + data[0]['summary'][0]['logical-error']
+                detail[0]['path-index'] += " - " + data[0]['summary'][0]['logical-error']
             except:
                 pass
         elif data[0].get("summary", [{}])[0].get("forward-result") == test.expected_result:
@@ -170,10 +169,12 @@ class ReachabilityTestAPI(object):
             detail = data[0].get("physical-path")
         else:
             try:
-                detail = [data[0]['summary'][0]['logical-error']]
+                detail = [{'path-index': data[0]['summary'][0]['logical-error']}]
             except:
-                detail = [[json.dumps(data)]]
+                detail = [{'path-index': json.dumps(data)}]
             test_result = "fail"
+        detail[0]['hop-index'] = detail[0].get('hop-index', '')
+        detail[0]['hop-name'] = detail[0].get('hop-name', '')
         return test_result, detail
 
     def runReachabilityTest(self, tenant_id, test_id, session, request=None):

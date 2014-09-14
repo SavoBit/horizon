@@ -6,8 +6,7 @@ HASH_HEADER = 'Floodlight-Verify-Path'
 
 
 def request(url, prefix="/api/v1/data/controller/", method='GET',
-            data='', hashPath=None, host="127.0.0.1:8080", cookie=None,
-            secure=False):
+            data='', hashPath=None, host="127.0.0.1:8080", cookie=None):
     headers = {'Content-type': 'application/json'}
 
     if cookie:
@@ -16,11 +15,7 @@ def request(url, prefix="/api/v1/data/controller/", method='GET',
     if hashPath:
         headers[HASH_HEADER] = hashPath
 
-    connection = None
-    if secure:
-        connection = httplib.HTTPSConnection(host)
-    else:
-        connection = httplib.HTTPConnection(host)
+    connection = httplib.HTTPSConnection(host)
 
     try:
         connection.request(method, prefix + url, data, headers)
