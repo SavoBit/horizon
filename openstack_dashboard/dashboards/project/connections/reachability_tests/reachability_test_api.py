@@ -166,13 +166,14 @@ class ReachabilityTestAPI(object):
                 pass
         elif data[0].get("summary", [{}])[0].get("forward-result") == test.expected_result:
             test_result = "pass"
-            detail = data[0].get("physical-path")
+            detail = data[0].get("physical-path", [{}])
         else:
             try:
                 detail = [{'path-index': data[0]['summary'][0]['logical-error']}]
             except:
                 detail = [{'path-index': json.dumps(data)}]
             test_result = "fail"
+        detail[0]['path-index'] = detail[0].get('path-index', '')
         detail[0]['hop-index'] = detail[0].get('hop-index', '')
         detail[0]['hop-name'] = detail[0].get('hop-name', '')
         return test_result, detail
