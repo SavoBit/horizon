@@ -26,8 +26,12 @@ from openstack_dashboard.dashboards.project.connections.\
 
 
 urlpatterns = patterns('',
-    url(r'^apply_template/$', views.ApplyTemplateView.as_view(), name='apply'),
-    url(r'^select_template/$', views.SelectTemplateView.as_view(), name='select'),
-    url(r'^temp_page/$', views.TempPageView.as_view(), name='temp'),
-    url(r'^remove_template/$', views.RemoveTemplateView.as_view(), name='remove'),
+    url(r'^apply_template/(?P<template_id>[^/]+)$',
+        views.ApplyTemplateView.as_view(), name='apply'),
+    url(r'^select_template/$', views.SelectTemplateView.as_view(),
+        name='select'),
+    url(r'^populate_template/(?P<template_id>[^/]+)$',
+        views.PopulateTemplateView.as_view(), name='populate_template'),
+    url(r'^remove_template/$', views.RemoveTemplateView.as_view(),
+        name='remove'),
 )

@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% block title %}{% trans "Connections" %}{% endblock %}
+{% block title %}{% trans "Network Fabric" %}{% endblock %}
 
 {% block page_header %}
 <div class="page-header-container">
-  {% include "horizon/common/_page_header.html" with title=_("<img class='big-switch-logo' src='css/logo.png'/><span class='page-header-text'>Connections</span>") %}
+  {% include "horizon/common/_page_header.html" with title=_("<img class='big-switch-logo' src='css/logo.png'/><span class='page-header-text'>Big Cloud Fabric</span>") %}
 </div>
 {% endblock page_header %}
 
@@ -13,9 +13,8 @@
 <link rel="stylesheet" href="css/status-light.css">
 <link rel="stylesheet" href="css/opentip.css">
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
-
-<div class="row-fluid">
-  <div class="span12">
+<div class="row">
+  <div class="col-sm-12">
   {{ tab_group.render }}
   	<div id="info" style="display: none;"></div>
   </div>
@@ -58,7 +57,7 @@ $(function(){
 	
 	//Added html containers to hold the Font Awesome icons.
 	$( ".test-pass" ).wrapInner( "<div class='test-general-settings'><div class='test-text'>PASS</div><i class='status-light test-pass-msg fa fa-check fa-3x'></i></div>");
-     	$( ".test-pending" ).wrapInner( "<div class='test-general-settings'><div class='test-text'>PENDING</div><i class='status-light test-pending-msg fa fa-question fa-3x'></i></div>");
+    $( ".test-pending" ).wrapInner( "<div class='test-general-settings'><div class='test-text'>PENDING</div><i class='status-light test-pending-msg fa fa-question fa-3x'></i></div>");
 	$( ".test-fail" ).wrapInner( "<div class='test-general-settings'><div class='test-text'>FAIL</div><i class='status-light test-fail-msg fa fa-times fa-3x'></i></div>");
 
 	//Create a Open Tip object for the icons and bind their apperance
@@ -159,7 +158,7 @@ function populateMenu(dataObject){
 
         for( var i =  0 ; i < numberOfListItems ; ++i){
 		statusMsg = listItemStatus(dataObject);
-		$(listElement).append("<div class=status-list-msg>" + statusMsg + "<a href='{% url 'horizon:project:connections:index' %}reachability_tests/"+testName+"/'>" + cleanData[i] + "</a></div>");
+		$(listElement).append("<div class=status-list-msg>" + statusMsg + "<a href='{% url horizon:project:connections:index %}reachability_tests/"+testName+"/'>" + cleanData[i] + "</a></div>");
         }
 	
 }

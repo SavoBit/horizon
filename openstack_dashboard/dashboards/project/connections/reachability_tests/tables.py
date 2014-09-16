@@ -1,6 +1,4 @@
-# vim: tabstop=4 shiftwidth=4 softtabstop=4
-
-# Copyright 2012 Nebula, Inc.
+# Copyright 2014 Big Switch Networks
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
 #    not use this file except in compliance with the License. You may obtain
@@ -23,8 +21,10 @@ from horizon.utils import filters
 
 from openstack_dashboard import api
 from openstack_dashboard.usage import quotas
-from openstack_dashboard.dashboards.project.connections.mockapi import ReachabilityTestAPI
-from openstack_dashboard.dashboards.project.connections.mockobjects import ReachabilityTestStub
+
+from openstack_dashboard.dashboards.project.connections.reachability_tests.\
+    reachability_test_api import ReachabilityTestAPI
+import openstack_dashboard.dashboards.project.connections.bsn_api as bsn_api
 
 
 class DeleteReachabilityTests(tables.DeleteAction):
@@ -32,9 +32,11 @@ class DeleteReachabilityTests(tables.DeleteAction):
     data_type_plural = _("Tests")
 
     def delete(self, request, obj_id):
-	#TODO: Replace with API call to remove a reachability test.
-	api = ReachabilityTestAPI()
-        api.deleteReachabilityTest(obj_id.encode('ascii','ignore'))
+        api = ReachabilityTestAPI()
+        with bsn_api.Session.begin(subtransactions=True):
+            api.deleteReachabilityTest(request.user.tenant_id,
+                                       obj_id.encode('ascii', 'ignore'),
+                                       bsn_api.Session)
 
 
 class CreateReachabilityTest(tables.LinkAction):
@@ -52,12 +54,12 @@ class RunQuickTest(tables.LinkAction):
 
 
 class ReachabilityTestFilterAction(tables.FilterAction):
-    
+
     def filter(self, table, reachability_tests, filter_string):
-	"""Naive case-insentitive search."""
-	q = filter_string.lower()
-	return [reachability_test for reachability_test in reachability_tests
-		if q in reachability_tests.name.lower()]
+        """Naive case-insentitive search."""
+        q = filter_string.lower()
+        return [reachability_test for reachability_test in reachability_tests
+                if q in reachability_tests.name.lower()]
 
 
 class RunTest(tables.BatchAction):
@@ -65,12 +67,14 @@ class RunTest(tables.BatchAction):
     action_present = _("Run")
     action_past = _("Running")
     data_type_singular = _("Test")
-    classes = ("btn-edit",)
-        
+    classes = ("btn-edit", )
+
     def action(self, request, obj_id):
-	#TODO: Replace with API call to run a quick/Troubleshoot test.
-	api = ReachabilityTestAPI()
-	api.runReachabilityTest(obj_id.encode('ascii','ignore'))
+        api = ReachabilityTestAPI()
+        with bsn_api.Session.begin(subtransactions=True):
+            api.runReachabilityTest(request.user.tenant_id,
+                                    obj_id.encode('ascii', 'ignore'),
+                                    bsn_api.Session, request)
 
 
 class UpdateTest(tables.LinkAction):
@@ -81,13 +85,37 @@ class UpdateTest(tables.LinkAction):
 
 
 def get_last_run(test):
-    return getattr(test, "last_run", None) or test.last_run
+    api = ReachabilityTestAPI()
+    timestamp = None
+    with bsn_api.Session.begin(subtransactions=True):
+        last_result = api.getLastReachabilityTestResult(test.tenant_id,
+                                                        test.test_id,
+                                                        bsn_api.Session)
+        if last_result:
+            timestamp = last_result.test_time
+    return timestamp
+
+
+def get_status(test):
+    api = ReachabilityTestAPI()
+    status = ''
+    with bsn_api.Session.begin(subtransactions=True):
+        last_result = api.getLastReachabilityTestResult(test.tenant_id,
+                                                        test.test_id,
+                                                        bsn_api.Session)
+        if last_result:
+            status = last_result.test_result
+    return status
 
 
 def get_run_list(test):
-    #TODO: Replace with API call to get the list of past time stamp runs for a test.
     api = ReachabilityTestAPI()
-    return api.listTestRuns(test.name)
+    run_list = None
+    with bsn_api.Session.begin(subtransactions=True):
+        run_list = api.listReachabilityTestResults(test.tenant_id,
+                                                   test.test_id,
+                                                   bsn_api.Session)
+    return run_list
 
 
 STATUS_DISPLAY_CHOICES = (
@@ -98,30 +126,39 @@ STATUS_DISPLAY_CHOICES = (
     ('', _("-")),
 )
 
+STATUS_CHOICES = (
+    ("pass", True),
+    ("-", None),
+    ('', None),
+    ("pending", None),
+    ("fail", False),
+)
+
 
 class ReachabilityTestsTable(tables.DataTable):
-    STATUS_CHOICES = (
-	("pass", True),
-	("-", None),
-	('', None),
-	("pending", None),
-	("fail", False),
+    name = tables.Column("test_id", verbose_name=_("Test ID"))
+    last_run = tables.Column(
+        get_last_run,
+        link=("horizon:project:connections:reachability_tests:detail"),
+        verbose_name=_("Last Run")
     )
-    name = tables.Column("name", verbose_name=_("Name"))
-    last_run = tables.Column(get_last_run, link=("horizon:project:connections:reachability_tests:detail"), verbose_name=_("Last Run"))
-    status = tables.Column("status", 
-			   filters=(title, filters.replace_underscores), 
-			   verbose_name=_("Status"),
-			   status_choices=STATUS_CHOICES,
-			   display_choices=STATUS_DISPLAY_CHOICES)
+    status = tables.Column(
+        get_status,
+        filters=(title, filters.replace_underscores),
+        verbose_name=_("Status"),
+        status_choices=STATUS_CHOICES,
+        display_choices=STATUS_DISPLAY_CHOICES
+    )
     #hiddent column to store the data for the status list tool tip.
-    run_list = tables.Column(get_run_list, hidden=True, verbose_name=_("Run List"))    
+    run_list = tables.Column(get_run_list, hidden=True,
+                             verbose_name=_("Run List"))
 
     def get_object_id(self, reachability_test):
-        return reachability_test.name
+        return reachability_test.test_id
 
     class Meta:
         name = "reachability_tests"
         verbose_name = _("Reachability Tests")
-        table_actions = (CreateReachabilityTest, RunQuickTest,  DeleteReachabilityTests, ReachabilityTestFilterAction)
-        row_actions = (RunTest,UpdateTest,DeleteReachabilityTests)
+        table_actions = (CreateReachabilityTest, RunQuickTest,
+                         DeleteReachabilityTests, ReachabilityTestFilterAction)
+        row_actions = (RunTest, UpdateTest, DeleteReachabilityTests)

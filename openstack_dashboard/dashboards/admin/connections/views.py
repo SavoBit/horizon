@@ -1,10 +1,10 @@
-from horizon import views
+from horizon import forms
+from horizon import tabs
+
+from openstack_dashboard.dashboards.project.connections \
+    import tabs as project_tabs
 
 
-class IndexView(views.APIView):
-    # A very simple class-based view...
-    template_name = 'admin/connections/index.html'
-
-    def get_data(self, request, context, *args, **kwargs):
-        # Add data to the context here...
-        return context
+class IndexView(tabs.TabbedTableView):
+    tab_group_class = project_tabs.ConnectionsTabs
+    template_name = 'project/connections/index.html'

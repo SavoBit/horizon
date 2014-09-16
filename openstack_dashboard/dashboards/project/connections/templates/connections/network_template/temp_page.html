@@ -7,7 +7,7 @@
 {% endblock page_header %}
 
 {% block main %}
-<a id="temp" href="{% url 'horizon:project:connections:network_template:apply' %}" style="display:none;" class="ajax-modal">Temp</a>
+<a id="temp" href="{% url 'horizon:project:connections:network_template:apply' template_id=template_id %}" style="display:none;" class="ajax-modal">Temp</a>
 
 <script type='text/javascript'>
 /**
