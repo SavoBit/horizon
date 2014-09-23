@@ -100,7 +100,6 @@ class UpdateView(forms.ModalFormView):
     template_name = 'project/connections/reachability_tests/update.html'
     success_url = reverse_lazy('horizon:project:connections:index')
 
-    @memoized.memoized_method
     def get_object(self):
         test_data = None
         test_id = self.kwargs['reachability_test_id'].encode('ascii', 'ignore')
@@ -178,7 +177,6 @@ class QuickDetailView(tabs.TabView):
 
         return context
 
-    @memoized.memoized_method
     def get_data(self):
         test_data = None
         api = ReachabilityTestAPI()
