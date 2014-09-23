@@ -21,6 +21,7 @@
 
 import json
 
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from horizon import exceptions
@@ -62,6 +63,50 @@ class CreateTemplateAction(tables.LinkAction):
     classes = ("ajax-modal", "btn-create")
 
 
+class RemoveTemplateAction(tables.LinkAction):
+    name = "remove"
+    url = "horizon:project:connections:network_template:remove"
+    classes = ("ajax-modal", "btn-danger")
+    verbose_name = _("Remove Network Template Instance")
+
+    def allowed(self, request, datum):
+        tid = request.user.tenant_id
+        return (True if network_template_api.get_tenant_stack_assignment(tid)
+                else False)
+
+
+class ApplyTemplateAction(tables.LinkAction):
+    name = "apply"
+    verbose_name = _("Apply Network Template")
+    url = "horizon:project:connections:network_template:select"
+    classes = ("ajax-modal", "btn-create")
+
+    def allowed(self, request, datum):
+        tid = request.user.tenant_id
+        return (False if network_template_api.get_tenant_stack_assignment(tid)
+                else True)
+
+
+class NetworkTemplateTable(tables.DataTable):
+    template_name = tables.Column("template_name",
+                                  verbose_name=_("Template Name"))
+    heat_stack_name = tables.Column("heat_stack_name",
+                                    verbose_name=_("Heat Stack Name"))
+    description = tables.Column("description", verbose_name=_("Description"))
+    status = tables.Column("status", verbose_name=_("Status"))
+    resources = tables.Column("resources", verbose_name=_("Resources"))
+
+    def get_object_id(self, stack):
+        return None
+
+    class Meta:
+        multi_select = False
+        name = "networktemplate"
+        verbose_name = _("Network Template")
+        table_actions = (ApplyTemplateAction, RemoveTemplateAction)
+        row_actions = tuple()
+
+
 class NetworkTemplateAdminTable(tables.DataTable):
     template_id = tables.Column("id",
                                 verbose_name=_("Template ID"))
@@ -96,18 +141,32 @@ class NetworkTemplateAdminTab(tabs.TableTab):
         return network_template_api.get_network_templates()
 
 
-class NetworkTemplateTab(tabs.Tab):
+class NetworkTemplateTab(tabs.TableTab):
+    table_classes = (NetworkTemplateTable,)
     name = _("Network Template")
     slug = "network_template_tab"
-    template_name = "project/connections/network_template/_template_home.html"
+    template_name = "horizon/common/_detail_table.html"
 
     def allowed(self, request):
         # don't show the regular template tab to admins
         return (not request.path_info.startswith('/admin/')
                 and super(NetworkTemplateTab, self).allowed(request))
 
-    def get_context_data(self, request):
-        return network_template_api.get_stack_topology(request)
+    def get_networktemplate_data(self):
+        topology = network_template_api.get_stack_topology(self.request)
+        if not topology.get('assign'):
+            return []
+        tabledata = {
+            'template_name': topology['assign'].template.template_name,
+            'heat_stack_name': topology['stack'].stack_name,
+            'description': topology['stack'].description,
+            'status': topology['stack'].stack_status_reason,
+            'resources': mark_safe('<br>'.join([
+                ('%s (%s)' % (r.resource_name,
+                              r.resource_type)).replace(' ', '&nbsp;')
+                for r in topology['stack_resources']]))
+        }
+        return [tabledata]
 
 
 class ReachabilityTestsTab(tabs.TableTab):

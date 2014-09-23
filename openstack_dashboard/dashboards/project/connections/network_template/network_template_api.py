@@ -30,8 +30,6 @@ def delete_associated_stack(request):
               if s.id == assign.stack_id]
     if stacks:
         hc.stacks.delete(assign.stack_id)
-    with bsn_api.Session.begin(subtransactions=True):
-        bsn_api.Session.delete(assign)
 
 
 def get_stack_topology(request):
@@ -45,7 +43,8 @@ def get_stack_topology(request):
               if s.id == assign.stack_id]
     if not stacks:
         # leftover association
-        delete_associated_stack(request)
+        with bsn_api.Session.begin(subtransactions=True):
+            bsn_api.Session.delete(assign)
         return {"network_entities": "",
                 "network_connections": ""}
     resources = hc.resources.list(assign.stack_id)
@@ -62,7 +61,8 @@ def get_stack_topology(request):
                 'destination': res.physical_resource_id.split('subnet_id=')[-1],
                 'expected_connection': 'forward'
             })
-    resp = {'network_entities': json.dumps(entities),
+    resp = {'assign': assign,
+            'network_entities': json.dumps(entities),
             'network_connections': json.dumps(connections),
             'stack_resources': resources,
             'stack': stacks[0]}

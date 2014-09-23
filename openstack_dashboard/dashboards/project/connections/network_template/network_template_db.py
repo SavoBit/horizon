@@ -19,3 +19,4 @@ class NetworkTemplateAssignment(model_base.BASEV2):
                             nullable=False)
     tenant_id = sa.Column(sa.String(255), nullable=False, primary_key=True)
     stack_id = sa.Column(sa.String(255), nullable=False)
+    template = sa.orm.relationship("NetworkTemplate")
