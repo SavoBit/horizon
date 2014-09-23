@@ -32,16 +32,16 @@ class DeleteGroup(tables.DeleteAction):
     @staticmethod
     def action_present(count):
         return ungettext_lazy(
-            u"Delete security group",
-            u"Delete security groups",
+            u"Delete Security Group",
+            u"Delete Security Groups",
             count
         )
 
     @staticmethod
     def action_past(count):
         return ungettext_lazy(
-            u"Security group deleted",
-            u"Security groups deleted",
+            u"Deleted Security Group",
+            u"Deleted Security Groups",
             count
         )
 
@@ -169,8 +169,21 @@ class CreateRule(tables.LinkAction):
 
 
 class DeleteRule(tables.DeleteAction):
-    data_type_singular = _("Rule")
-    data_type_plural = _("Rules")
+    @staticmethod
+    def action_present(count):
+        return ungettext_lazy(
+            u"Delete Rule",
+            u"Delete Rules",
+            count
+        )
+
+    @staticmethod
+    def action_past(count):
+        return ungettext_lazy(
+            u"Deleted Rule",
+            u"Deleted Rules",
+            count
+        )
 
     def allowed(self, request, security_group_rule=None):
         if api.base.is_service_enabled(request, "network"):

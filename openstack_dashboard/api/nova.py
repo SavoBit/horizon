@@ -342,10 +342,13 @@ class FlavorExtraSpec(object):
 
 
 class FloatingIp(base.APIResourceWrapper):
-    _attrs = ['id', 'ip', 'fixed_ip', 'port_id', 'instance_id', 'pool']
+    _attrs = ['id', 'ip', 'fixed_ip', 'port_id', 'instance_id',
+              'instance_type', 'pool']
 
     def __init__(self, fip):
         fip.__setattr__('port_id', fip.instance_id)
+        fip.__setattr__('instance_type',
+                        'compute' if fip.instance_id else None)
         super(FloatingIp, self).__init__(fip)
 
 
@@ -412,6 +415,7 @@ class FloatingIpManager(network_base.FloatingIpManager):
         return True
 
 
+@memoized
 def novaclient(request):
     insecure = getattr(settings, 'OPENSTACK_SSL_NO_VERIFY', False)
     cacert = getattr(settings, 'OPENSTACK_SSL_CACERT', None)
@@ -755,9 +759,15 @@ def tenant_absolute_limits(request, reserved=False):
     limits = novaclient(request).limits.get(reserved=reserved).absolute
     limits_dict = {}
     for limit in limits:
-        # -1 is used to represent unlimited quotas
-        if limit.value == -1:
-            limits_dict[limit.name] = float("inf")
+        if limit.value < 0:
+            # Workaround for nova bug 1370867 that absolute_limits
+            # returns negative value for total.*Used instead of 0.
+            # For such case, replace negative values with 0.
+            if limit.name.startswith('total') and limit.name.endswith('Used'):
+                limits_dict[limit.name] = 0
+            else:
+                # -1 is used to represent unlimited quotas
+                limits_dict[limit.name] = float("inf")
         else:
             limits_dict[limit.name] = limit.value
     return limits_dict

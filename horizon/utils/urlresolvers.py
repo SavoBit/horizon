@@ -1,7 +1,3 @@
-# Copyright 2012 United States Government as represented by the
-# Administrator of the National Aeronautics and Space Administration.
-# All Rights Reserved.
-#
 # Copyright 2012 Nebula, Inc.
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -16,14 +12,19 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-from django.conf.urls import patterns
-from django.conf.urls import url
+import six
 
-from openstack_dashboard.dashboards.project.images.snapshots import views
+from django.core.urlresolvers import reverse as django_reverse
+from django.utils.http import urlquote  # noqa
+from django import VERSION  # noqa
 
 
-urlpatterns = patterns('',
-    url(r'^(?P<instance_id>[^/]+)/create',
-        views.CreateView.as_view(),
-        name='create')
-)
+def reverse(viewname, urlconf=None, args=None, kwargs=None, prefix=None,
+            current_app=None):
+    if VERSION < (1, 6):
+        if args:
+            args = [urlquote(x) for x in args]
+        if kwargs:
+            kwargs = dict([(x, urlquote(y)) for x, y in six.iteritems(kwargs)])
+    return django_reverse(viewname, urlconf, args, kwargs, prefix,
+                          current_app)

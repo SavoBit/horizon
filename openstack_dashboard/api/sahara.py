@@ -15,6 +15,7 @@ import logging
 
 from django.conf import settings
 
+from horizon.utils.memoized import memoized  # noqa
 from openstack_dashboard.api import base
 
 from saharaclient import client as api_client
@@ -37,6 +38,7 @@ VERSIONS.load_supported_version(1.1, {"client": api_client,
                                       "version": 1.1})
 
 
+@memoized
 def client(request):
     return api_client.Client(VERSIONS.get_active_version()["version"],
                              sahara_url=base.url_for(request, SAHARA_SERVICE),
@@ -286,7 +288,13 @@ def job_execution_create(request, job_id, cluster_id,
 
 
 def job_execution_list(request):
-    return client(request).job_executions.list()
+    jex_list = client(request).job_executions.list()
+    job_dict = dict((j.id, j) for j in job_list(request))
+    cluster_dict = dict((c.id, c) for c in cluster_list(request))
+    for jex in jex_list:
+        setattr(jex, 'job_name', job_dict.get(jex.job_id).name)
+        setattr(jex, 'cluster_name', cluster_dict.get(jex.cluster_id).name)
+    return jex_list
 
 
 def job_execution_get(request, jex_id):
