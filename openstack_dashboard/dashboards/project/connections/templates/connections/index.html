@@ -158,7 +158,7 @@ function populateMenu(dataObject){
 
         for( var i =  0 ; i < numberOfListItems ; ++i){
 		statusMsg = listItemStatus(dataObject);
-        var BASEURL = "{% url 'horizon:project:connections:index' %}";
+        var BASEURL = "{% url horizon:project:connections:index %}";
 		$(listElement).append("<div class=status-list-msg>" + statusMsg + "<a href='"+BASEURL+"reachability_tests/"+testName+"/'>" + cleanData[i] + "</a></div>");
         }
 	
