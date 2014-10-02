@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load url from future %}
 {% block title %}{% trans "Network Fabric" %}{% endblock %}
 
 {% block page_header %}
@@ -158,7 +159,7 @@ function populateMenu(dataObject){
 
         for( var i =  0 ; i < numberOfListItems ; ++i){
 		statusMsg = listItemStatus(dataObject);
-        var BASEURL = "{% url horizon:project:connections:index %}";
+        var BASEURL = "{% url 'horizon:project:connections:index' %}";
 		$(listElement).append("<div class=status-list-msg>" + statusMsg + "<a href='"+BASEURL+"reachability_tests/"+testName+"/'>" + cleanData[i] + "</a></div>");
         }
 	
