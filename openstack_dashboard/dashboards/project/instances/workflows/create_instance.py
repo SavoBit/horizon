@@ -110,7 +110,7 @@ class SetInstanceDetailsAction(workflows.Action):
 
     volume_size = forms.IntegerField(label=_("Device size (GB)"),
                                   initial=1,
-                                  min_value=1,
+                                  min_value=0,
                                   required=False,
                                   help_text=_("Volume size in gigabytes "
                                               "(integer value)."))
@@ -221,8 +221,12 @@ class SetInstanceDetailsAction(workflows.Action):
 
         if source_type in ('image_id', 'volume_image_id'):
             if source_type == 'volume_image_id':
-                if not self.data.get('volume_size', None):
+                volume_size = self.data.get('volume_size', None)
+                if not volume_size:
                     msg = _("You must set volume size")
+                    self._errors['volume_size'] = self.error_class([msg])
+                if float(volume_size) <= 0:
+                    msg = _("Volume size must be greater than 0")
                     self._errors['volume_size'] = self.error_class([msg])
                 if not cleaned_data.get('device_name'):
                     msg = _("You must set device name")
@@ -677,6 +681,7 @@ class SetNetworkAction(workflows.Action):
             for n in networks:
                 n.set_id_as_name_if_empty()
                 network_list.append((n.id, n.name))
+            sorted(network_list, key=lambda obj: obj[1])
         except Exception:
             exceptions.handle(request,
                               _('Unable to retrieve networks.'))
