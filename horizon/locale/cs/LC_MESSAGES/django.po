@@ -3,14 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Zbyněk Schwarz <zbynek.schwarz@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Horizon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-13 12:34-0500\n"
-"PO-Revision-Date: 2014-09-14 00:03+0000\n"
-"Last-Translator: openstackjenkins <jenkins@openstack.org>\n"
+"POT-Creation-Date: 2014-10-02 13:57-0500\n"
+"PO-Revision-Date: 2014-10-02 21:40+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Czech (http://www.transifex.com/projects/p/horizon/language/cs/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -45,7 +44,7 @@ msgstr "Neoprávněné: %s"
 msgid "Unauthorized. Please try logging in again."
 msgstr "Neoprávněný přístup. Prosím zkuste se přihlásit znovu."
 
-#: middleware.py:117
+#: middleware.py:97
 msgid "Session timed out."
 msgstr "Relace vypršela."
 
@@ -62,17 +61,27 @@ msgstr "Vyberte %s pro prohlížení."
 msgid "Password is not accepted"
 msgstr "Heslo není přijato"
 
-#: forms/fields.py:63
+#: forms/fields.py:64
 msgid "Incorrect format for IP address"
 msgstr "Nesprávný formát IP adresy"
 
-#: forms/fields.py:64
+#: forms/fields.py:65
 msgid "Invalid version for IP address"
 msgstr "Neplatná verze IP adresy"
 
-#: forms/fields.py:65
+#: forms/fields.py:66
 msgid "Invalid subnet mask"
 msgstr "Neplatná maska podsítě"
+
+#: forms/views.py:81 templates/horizon/common/_usage_summary.html:16
+msgid "Submit"
+msgstr "Odeslat"
+
+#: forms/views.py:82
+#: templates/horizon/common/_modal_form_update_metadata.html:239
+#: templates/horizon/common/_workflow.html:49
+msgid "Cancel"
+msgstr "Zrušit"
 
 #: tables/actions.py:460
 #: templates/horizon/common/_data_table_table_actions.html:16
@@ -94,61 +103,61 @@ msgctxt "present"
 msgid "%(action)s %(data_type)s"
 msgstr "%(action)s %(data_type)s"
 
-#: tables/actions.py:788 tables/base.py:1532
+#: tables/actions.py:786 tables/base.py:1537
 msgid "N/A"
 msgstr "Nedostupné"
 
-#: tables/actions.py:817
+#: tables/actions.py:815
 #, python-format
 msgid "You are not allowed to %(action)s: %(objs)s"
 msgstr "Nemáte oprávnění pro %(action)s: %(objs)s"
 
-#: tables/actions.py:824
+#: tables/actions.py:822
 #, python-format
 msgid "Unable to %(action)s: %(objs)s"
 msgstr "Nelze %(action)s: %(objs)s"
 
-#: tables/actions.py:830
+#: tables/actions.py:828
 #, python-format
 msgid "%(action)s: %(objs)s"
 msgstr "%(action)s: %(objs)s"
 
-#: tables/actions.py:873
+#: tables/actions.py:898
 msgid "Delete"
 msgstr "Smazat"
 
-#: tables/actions.py:875
+#: tables/actions.py:900
 msgid "Deleted"
 msgstr "Smazáno"
 
-#: tables/actions.py:907
+#: tables/actions.py:931
 msgid "Update"
 msgstr "Aktualizovat"
 
-#: tables/actions.py:908
+#: tables/actions.py:932
 msgid "Updated"
 msgstr "Aktualizováno"
 
-#: tables/base.py:354
+#: tables/base.py:355
 #, python-format
 msgid "The attribute %(attr)s doesn't exist on %(obj)s."
 msgstr "Vlastnost %(attr)s neexistuje v %(obj)s."
 
-#: tables/base.py:965
+#: tables/base.py:967
 msgid "No items to display."
 msgstr "Žádné položky k zobrazení."
 
-#: tables/base.py:1072
+#: tables/base.py:1074
 #: templates/horizon/common/_data_table_table_actions.html:40
 msgid "Actions"
 msgstr "Činnost"
 
-#: tables/base.py:1297
+#: tables/base.py:1302
 #, python-format
 msgid "No match returned for the id \"%s\"."
 msgstr "Nebyla nalezena shoda s id \"%s\"."
 
-#: tables/base.py:1448
+#: tables/base.py:1453
 msgid "Please select a row before taking that action."
 msgstr "Před provedením této činnosti prosím zvolte řádky."
 
@@ -212,9 +221,9 @@ msgstr "Přehled"
 #, python-format
 msgid "Displaying %(counter)s item"
 msgid_plural "Displaying %(counter)s items"
-msgstr[0] "Zobrazování %(counter)s položky"
-msgstr[1] "Zobrazování %(counter)s položek"
-msgstr[2] "Zobrazování %(counter)s položek"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: templates/horizon/common/_data_table.html:68
 msgid "&laquo;&nbsp;Prev"
@@ -321,26 +330,21 @@ msgstr ""
 msgid "Save"
 msgstr "Uložit"
 
-#: templates/horizon/common/_modal_form_update_metadata.html:239
-#: templates/horizon/common/_workflow.html:49
-msgid "Cancel"
-msgstr "Zrušit"
-
 #: templates/horizon/common/_resource_browser.html:10
 #, python-format
 msgid "Displaying %(nav_items)s item"
 msgid_plural "Displaying %(nav_items)s items"
-msgstr[0] "Zobrazování %(nav_items)s položky"
-msgstr[1] "Zobrazování %(nav_items)s položek"
-msgstr[2] "Zobrazování %(nav_items)s položek"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: templates/horizon/common/_resource_browser.html:11
 #, python-format
 msgid "Displaying %(content_items)s item"
 msgid_plural "Displaying %(content_items)s items"
-msgstr[0] "Zobrazování %(content_items)s položky"
-msgstr[1] "Zobrazování %(content_items)s položek"
-msgstr[2] "Zobrazování %(content_items)s položek"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: templates/horizon/common/_usage_summary.html:3
 msgid "Usage Summary"
@@ -363,10 +367,6 @@ msgid ""
 "\n"
 "      <label>To:</label>%(end)s"
 msgstr "\n      <label>Do:</label>%(end)s"
-
-#: templates/horizon/common/_usage_summary.html:16
-msgid "Submit"
-msgstr "Odeslat"
 
 #: templates/horizon/common/_usage_summary.html:17
 msgid "The date should be in YYYY-mm-dd format."
@@ -400,11 +400,11 @@ msgstr "Další"
 msgid "Horizon"
 msgstr "Horizon"
 
-#: templatetags/horizon.py:126 templatetags/horizon.py:136
+#: templatetags/horizon.py:130 templatetags/horizon.py:141
 msgid "No Limit"
 msgstr "Bez limitu"
 
-#: templatetags/horizon.py:128 templatetags/horizon.py:130
+#: templatetags/horizon.py:133 templatetags/horizon.py:135
 msgid "Available"
 msgstr "Dostupné"
 
@@ -412,9 +412,9 @@ msgstr "Dostupné"
 #, python-format
 msgid "%(size)d Byte"
 msgid_plural "%(size)d Bytes"
-msgstr[0] "%(size)d bajt"
-msgstr[1] "%(size)d bajty"
-msgstr[2] "%(size)d bajtů"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: templatetags/sizeformat.py:57
 #, python-format
@@ -444,6 +444,20 @@ msgstr "%s PB"
 #: templatetags/sizeformat.py:77
 msgid "0 bytes"
 msgstr "0 bajtů"
+
+#: test/test_dashboards/dogs/puppies/tables.py:31
+msgid "Sell Puppy"
+msgid_plural "Sell Puppies"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: test/test_dashboards/dogs/puppies/tables.py:40
+msgid "Sold Puppy"
+msgid_plural "Sold Puppies"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: utils/filters.py:49
 msgid "Never"

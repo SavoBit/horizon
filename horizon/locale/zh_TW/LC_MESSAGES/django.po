@@ -3,14 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Tom Fifield <tom@openstack.org>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Horizon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-16 09:35-0500\n"
-"PO-Revision-Date: 2014-09-17 04:00+0000\n"
-"Last-Translator: Zhang Xiaowei <zero00072@gmail.com>\n"
+"POT-Creation-Date: 2014-10-02 13:57-0500\n"
+"PO-Revision-Date: 2014-10-02 21:40+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/horizon/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -45,7 +44,7 @@ msgstr "未授權：%s"
 msgid "Unauthorized. Please try logging in again."
 msgstr "未授權。請試著重新登入。"
 
-#: middleware.py:117
+#: middleware.py:97
 msgid "Session timed out."
 msgstr "連線階段過期。"
 
@@ -56,23 +55,33 @@ msgstr "導覽項目"
 #: browsers/views.py:41
 #, python-format
 msgid "Select a %s to browse."
-msgstr "選擇要瀏覽的 %s。"
+msgstr "選擇 %s 來瀏覽。"
 
 #: conf/default.py:41
 msgid "Password is not accepted"
 msgstr "密碼不被允許"
 
-#: forms/fields.py:63
+#: forms/fields.py:64
 msgid "Incorrect format for IP address"
 msgstr "不正確的 IP 位址格式"
 
-#: forms/fields.py:64
+#: forms/fields.py:65
 msgid "Invalid version for IP address"
 msgstr "無效的 IP 位址版本"
 
-#: forms/fields.py:65
+#: forms/fields.py:66
 msgid "Invalid subnet mask"
 msgstr "無效的子網路遮罩"
+
+#: forms/views.py:81 templates/horizon/common/_usage_summary.html:16
+msgid "Submit"
+msgstr "提交"
+
+#: forms/views.py:82
+#: templates/horizon/common/_modal_form_update_metadata.html:239
+#: templates/horizon/common/_workflow.html:49
+msgid "Cancel"
+msgstr "取消"
 
 #: tables/actions.py:460
 #: templates/horizon/common/_data_table_table_actions.html:16
@@ -82,73 +91,73 @@ msgstr "無效的子網路遮罩"
 msgid "Filter"
 msgstr "篩選"
 
-#: tables/actions.py:752
+#: tables/actions.py:756
 #, python-format
 msgctxt "past"
 msgid "%(action)s %(data_type)s"
 msgstr "%(action)s %(data_type)s"
 
-#: tables/actions.py:754
+#: tables/actions.py:758
 #, python-format
 msgctxt "present"
 msgid "%(action)s %(data_type)s"
 msgstr "%(action)s %(data_type)s"
 
-#: tables/actions.py:782 tables/base.py:1533
+#: tables/actions.py:786 tables/base.py:1537
 msgid "N/A"
 msgstr "N/A"
 
-#: tables/actions.py:811
+#: tables/actions.py:815
 #, python-format
 msgid "You are not allowed to %(action)s: %(objs)s"
 msgstr "不允許您%(action)s：%(objs)s"
 
-#: tables/actions.py:818
+#: tables/actions.py:822
 #, python-format
 msgid "Unable to %(action)s: %(objs)s"
 msgstr "無法%(action)s：%(objs)s"
 
-#: tables/actions.py:824
+#: tables/actions.py:828
 #, python-format
 msgid "%(action)s: %(objs)s"
 msgstr "%(action)s：%(objs)s"
 
-#: tables/actions.py:867
+#: tables/actions.py:898
 msgid "Delete"
 msgstr "刪除"
 
-#: tables/actions.py:869
+#: tables/actions.py:900
 msgid "Deleted"
 msgstr "已刪除"
 
-#: tables/actions.py:900
+#: tables/actions.py:931
 msgid "Update"
 msgstr "更新"
 
-#: tables/actions.py:901
+#: tables/actions.py:932
 msgid "Updated"
 msgstr "已更新"
 
-#: tables/base.py:354
+#: tables/base.py:355
 #, python-format
 msgid "The attribute %(attr)s doesn't exist on %(obj)s."
 msgstr "%(obj)s 不存在 %(attr)s 屬性。"
 
-#: tables/base.py:966
+#: tables/base.py:967
 msgid "No items to display."
 msgstr "沒有項目可以列出。"
 
-#: tables/base.py:1073
+#: tables/base.py:1074
 #: templates/horizon/common/_data_table_table_actions.html:40
 msgid "Actions"
 msgstr "動作"
 
-#: tables/base.py:1298
+#: tables/base.py:1302
 #, python-format
 msgid "No match returned for the id \"%s\"."
 msgstr "沒有符合識別號「%s」的結果。"
 
-#: tables/base.py:1449
+#: tables/base.py:1453
 msgid "Please select a row before taking that action."
 msgstr "執行動作前請選擇一個欄位。"
 
@@ -212,7 +221,7 @@ msgstr "摘要"
 #, python-format
 msgid "Displaying %(counter)s item"
 msgid_plural "Displaying %(counter)s items"
-msgstr[0] "顯示 %(counter)s 個項目"
+msgstr[0] ""
 
 #: templates/horizon/common/_data_table.html:68
 msgid "&laquo;&nbsp;Prev"
@@ -251,7 +260,7 @@ msgstr "已使用 <span>%(available)s</span> 個中的 <span>%(used)s</span> 個
 
 #: templates/horizon/common/_limit_summary.html:14
 msgid "VCPUs"
-msgstr "虛擬處理器數"
+msgstr "虛擬 CPU 數"
 
 #: templates/horizon/common/_limit_summary.html:21
 msgid "RAM"
@@ -319,22 +328,17 @@ msgstr "\n          您可以從左欄移動項目到右欄來指定資源的描
 msgid "Save"
 msgstr "儲存"
 
-#: templates/horizon/common/_modal_form_update_metadata.html:239
-#: templates/horizon/common/_workflow.html:49
-msgid "Cancel"
-msgstr "取消"
-
 #: templates/horizon/common/_resource_browser.html:10
 #, python-format
 msgid "Displaying %(nav_items)s item"
 msgid_plural "Displaying %(nav_items)s items"
-msgstr[0] "顯示 %(nav_items)s 個項目"
+msgstr[0] ""
 
 #: templates/horizon/common/_resource_browser.html:11
 #, python-format
 msgid "Displaying %(content_items)s item"
 msgid_plural "Displaying %(content_items)s items"
-msgstr[0] "顯示 %(content_items)s 個項目"
+msgstr[0] ""
 
 #: templates/horizon/common/_usage_summary.html:3
 msgid "Usage Summary"
@@ -357,10 +361,6 @@ msgid ""
 "\n"
 "      <label>To:</label>%(end)s"
 msgstr "\n      <label>直到：</label>%(end)s"
-
-#: templates/horizon/common/_usage_summary.html:16
-msgid "Submit"
-msgstr "提交"
 
 #: templates/horizon/common/_usage_summary.html:17
 msgid "The date should be in YYYY-mm-dd format."
@@ -394,11 +394,11 @@ msgstr "下一步"
 msgid "Horizon"
 msgstr "Horizon"
 
-#: templatetags/horizon.py:126 templatetags/horizon.py:136
+#: templatetags/horizon.py:130 templatetags/horizon.py:141
 msgid "No Limit"
 msgstr "不限制"
 
-#: templatetags/horizon.py:128 templatetags/horizon.py:130
+#: templatetags/horizon.py:133 templatetags/horizon.py:135
 msgid "Available"
 msgstr "可用"
 
@@ -406,7 +406,7 @@ msgstr "可用"
 #, python-format
 msgid "%(size)d Byte"
 msgid_plural "%(size)d Bytes"
-msgstr[0] "%(size)d 位元組"
+msgstr[0] ""
 
 #: templatetags/sizeformat.py:57
 #, python-format
@@ -436,6 +436,16 @@ msgstr "%s PB"
 #: templatetags/sizeformat.py:77
 msgid "0 bytes"
 msgstr "0 位元組"
+
+#: test/test_dashboards/dogs/puppies/tables.py:31
+msgid "Sell Puppy"
+msgid_plural "Sell Puppies"
+msgstr[0] ""
+
+#: test/test_dashboards/dogs/puppies/tables.py:40
+msgid "Sold Puppy"
+msgid_plural "Sold Puppies"
+msgstr[0] ""
 
 #: utils/filters.py:49
 msgid "Never"

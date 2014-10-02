@@ -3,16 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Akihiro Motoki <amotoki@gmail.com>, 2014
-# yfukuda <fukuda.yuko@jp.fujitsu.com>, 2014
-# myamamot <myamamot@redhat.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Horizon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-17 11:13-0500\n"
-"PO-Revision-Date: 2014-09-18 04:31+0000\n"
-"Last-Translator: myamamot <myamamot@redhat.com>\n"
+"POT-Creation-Date: 2014-10-02 13:57-0500\n"
+"PO-Revision-Date: 2014-10-02 21:40+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/horizon/language/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -47,7 +44,7 @@ msgstr "権限がありません: %s"
 msgid "Unauthorized. Please try logging in again."
 msgstr "認証されていません。もう一度ログインしてください。"
 
-#: middleware.py:117
+#: middleware.py:97
 msgid "Session timed out."
 msgstr "セッションがタイムアウトしました。"
 
@@ -64,17 +61,27 @@ msgstr "表示する %s を選択してください。"
 msgid "Password is not accepted"
 msgstr "パスワードを受け付けられません"
 
-#: forms/fields.py:63
+#: forms/fields.py:64
 msgid "Incorrect format for IP address"
 msgstr "不正な形式の IP アドレス"
 
-#: forms/fields.py:64
+#: forms/fields.py:65
 msgid "Invalid version for IP address"
 msgstr "無効な IP アドレスのバージョン"
 
-#: forms/fields.py:65
+#: forms/fields.py:66
 msgid "Invalid subnet mask"
 msgstr "無効なサブネットマスク"
+
+#: forms/views.py:81 templates/horizon/common/_usage_summary.html:16
+msgid "Submit"
+msgstr "送信"
+
+#: forms/views.py:82
+#: templates/horizon/common/_modal_form_update_metadata.html:239
+#: templates/horizon/common/_workflow.html:49
+msgid "Cancel"
+msgstr "取り消し"
 
 #: tables/actions.py:460
 #: templates/horizon/common/_data_table_table_actions.html:16
@@ -84,50 +91,50 @@ msgstr "無効なサブネットマスク"
 msgid "Filter"
 msgstr "フィルター"
 
-#: tables/actions.py:752
+#: tables/actions.py:756
 #, python-format
 msgctxt "past"
 msgid "%(action)s %(data_type)s"
 msgstr "%(data_type)sの%(action)s"
 
-#: tables/actions.py:754
+#: tables/actions.py:758
 #, python-format
 msgctxt "present"
 msgid "%(action)s %(data_type)s"
 msgstr "%(data_type)sの%(action)s"
 
-#: tables/actions.py:782 tables/base.py:1537
+#: tables/actions.py:786 tables/base.py:1537
 msgid "N/A"
 msgstr "N/A"
 
-#: tables/actions.py:811
+#: tables/actions.py:815
 #, python-format
 msgid "You are not allowed to %(action)s: %(objs)s"
 msgstr "%(action)s は許可されていません： %(objs)s"
 
-#: tables/actions.py:818
+#: tables/actions.py:822
 #, python-format
 msgid "Unable to %(action)s: %(objs)s"
 msgstr "%(action)s を実行できません: %(objs)s"
 
-#: tables/actions.py:824
+#: tables/actions.py:828
 #, python-format
 msgid "%(action)s: %(objs)s"
 msgstr "%(action)s: %(objs)s"
 
-#: tables/actions.py:867
+#: tables/actions.py:898
 msgid "Delete"
 msgstr "削除"
 
-#: tables/actions.py:869
-msgid "Deleted"
-msgstr "削除しました"
-
 #: tables/actions.py:900
+msgid "Deleted"
+msgstr "削除"
+
+#: tables/actions.py:931
 msgid "Update"
 msgstr "更新"
 
-#: tables/actions.py:901
+#: tables/actions.py:932
 msgid "Updated"
 msgstr "更新日時"
 
@@ -214,7 +221,7 @@ msgstr "概要"
 #, python-format
 msgid "Displaying %(counter)s item"
 msgid_plural "Displaying %(counter)s items"
-msgstr[0] "%(counter)s件を表示"
+msgstr[0] ""
 
 #: templates/horizon/common/_data_table.html:68
 msgid "&laquo;&nbsp;Prev"
@@ -273,7 +280,7 @@ msgstr "ボリューム"
 
 #: templates/horizon/common/_limit_summary.html:49
 msgid "Volume Storage"
-msgstr "ボリュームストレージ"
+msgstr "ボリューム容量"
 
 #: templates/horizon/common/_modal_form_update_metadata.html:12
 msgid ""
@@ -321,22 +328,17 @@ msgstr "\n左の列から右の列にアイテムを移動して、リソース�
 msgid "Save"
 msgstr "保存"
 
-#: templates/horizon/common/_modal_form_update_metadata.html:239
-#: templates/horizon/common/_workflow.html:49
-msgid "Cancel"
-msgstr "取り消し"
-
 #: templates/horizon/common/_resource_browser.html:10
 #, python-format
 msgid "Displaying %(nav_items)s item"
 msgid_plural "Displaying %(nav_items)s items"
-msgstr[0] "%(nav_items)s件表示"
+msgstr[0] ""
 
 #: templates/horizon/common/_resource_browser.html:11
 #, python-format
 msgid "Displaying %(content_items)s item"
 msgid_plural "Displaying %(content_items)s items"
-msgstr[0] "%(content_items)s件表示"
+msgstr[0] ""
 
 #: templates/horizon/common/_usage_summary.html:3
 msgid "Usage Summary"
@@ -359,10 +361,6 @@ msgid ""
 "\n"
 "      <label>To:</label>%(end)s"
 msgstr "\n%(end)s <label>まで</label>"
-
-#: templates/horizon/common/_usage_summary.html:16
-msgid "Submit"
-msgstr "送信"
 
 #: templates/horizon/common/_usage_summary.html:17
 msgid "The date should be in YYYY-mm-dd format."
@@ -396,11 +394,11 @@ msgstr "次へ"
 msgid "Horizon"
 msgstr "Horizon"
 
-#: templatetags/horizon.py:126 templatetags/horizon.py:136
+#: templatetags/horizon.py:130 templatetags/horizon.py:141
 msgid "No Limit"
 msgstr "制限なし"
 
-#: templatetags/horizon.py:128 templatetags/horizon.py:130
+#: templatetags/horizon.py:133 templatetags/horizon.py:135
 msgid "Available"
 msgstr "利用可能"
 
@@ -408,7 +406,7 @@ msgstr "利用可能"
 #, python-format
 msgid "%(size)d Byte"
 msgid_plural "%(size)d Bytes"
-msgstr[0] "%(size)dB"
+msgstr[0] ""
 
 #: templatetags/sizeformat.py:57
 #, python-format
@@ -439,6 +437,16 @@ msgstr "%s PB"
 msgid "0 bytes"
 msgstr "0 バイト"
 
+#: test/test_dashboards/dogs/puppies/tables.py:31
+msgid "Sell Puppy"
+msgid_plural "Sell Puppies"
+msgstr[0] ""
+
+#: test/test_dashboards/dogs/puppies/tables.py:40
+msgid "Sold Puppy"
+msgid_plural "Sold Puppies"
+msgstr[0] ""
+
 #: utils/filters.py:49
 msgid "Never"
 msgstr "なし"
@@ -453,7 +461,7 @@ msgstr "有効な IP プロトコル番号ではありません"
 
 #: utils/validators.py:42
 msgid "One colon allowed in port range"
-msgstr "ポート範囲で使用できるコロンは一つだけです。"
+msgstr "ポート範囲で使用できるコロンは 1 つだけです。"
 
 #: utils/validators.py:49
 msgid "Port number must be integer"

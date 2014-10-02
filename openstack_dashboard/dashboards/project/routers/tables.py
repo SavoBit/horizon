@@ -24,12 +24,12 @@ from horizon import exceptions
 from horizon import messages
 from horizon import tables
 from openstack_dashboard import api
-
+from openstack_dashboard import policy
 
 LOG = logging.getLogger(__name__)
 
 
-class DeleteRouter(tables.DeleteAction):
+class DeleteRouter(policy.PolicyTargetMixin, tables.DeleteAction):
     @staticmethod
     def action_present(count):
         return ungettext_lazy(
@@ -48,12 +48,6 @@ class DeleteRouter(tables.DeleteAction):
 
     redirect_url = "horizon:project:routers:index"
     policy_rules = (("network", "delete_router"),)
-
-    def get_policy_target(self, request, datum=None):
-        project_id = None
-        if datum:
-            project_id = getattr(datum, 'tenant_id', None)
-        return {"project_id": project_id}
 
     def delete(self, request, obj_id):
         obj = self.table.get_object_by_id(obj_id)
@@ -84,7 +78,7 @@ class CreateRouter(tables.LinkAction):
     policy_rules = (("network", "create_router"),)
 
 
-class EditRouter(tables.LinkAction):
+class EditRouter(policy.PolicyTargetMixin, tables.LinkAction):
     name = "update"
     verbose_name = _("Edit Router")
     url = "horizon:project:routers:update"
@@ -92,14 +86,8 @@ class EditRouter(tables.LinkAction):
     icon = "pencil"
     policy_rules = (("network", "update_router"),)
 
-    def get_policy_target(self, request, datum=None):
-        project_id = None
-        if datum:
-            project_id = getattr(datum, 'tenant_id', None)
-        return {"project_id": project_id}
 
-
-class SetGateway(tables.LinkAction):
+class SetGateway(policy.PolicyTargetMixin, tables.LinkAction):
     name = "setgateway"
     verbose_name = _("Set Gateway")
     url = "horizon:project:routers:setgateway"
@@ -107,33 +95,33 @@ class SetGateway(tables.LinkAction):
     icon = "camera"
     policy_rules = (("network", "update_router"),)
 
-    def get_policy_target(self, request, datum=None):
-        project_id = None
-        if datum:
-            project_id = getattr(datum, 'tenant_id', None)
-        return {"project_id": project_id}
-
     def allowed(self, request, datum=None):
         if datum.external_gateway_info:
             return False
         return True
 
 
-class ClearGateway(tables.BatchAction):
+class ClearGateway(policy.PolicyTargetMixin, tables.BatchAction):
+    @staticmethod
+    def action_present(count):
+        return ungettext_lazy(
+            u"Clear Gateway",
+            u"Clear Gateways",
+            count
+        )
+
+    @staticmethod
+    def action_past(count):
+        return ungettext_lazy(
+            u"Cleared Gateway",
+            u"Cleared Gateways",
+            count
+        )
+
     name = "cleargateway"
-    action_present = _("Clear")
-    action_past = _("Cleared")
-    data_type_singular = _("Gateway")
-    data_type_plural = _("Gateways")
     classes = ('btn-danger', 'btn-cleargateway')
     redirect_url = "horizon:project:routers:index"
     policy_rules = (("network", "update_router"),)
-
-    def get_policy_target(self, request, datum=None):
-        project_id = None
-        if datum:
-            project_id = getattr(datum, 'tenant_id', None)
-        return {"project_id": project_id}
 
     def action(self, request, obj_id):
         obj = self.table.get_object_by_id(obj_id)
@@ -183,6 +171,10 @@ class RoutersTable(tables.DataTable):
     distributed = tables.Column("distributed",
                                 filters=(filters.yesno, filters.capfirst),
                                 verbose_name=_("Distributed"))
+    ha = tables.Column("ha",
+                       filters=(filters.yesno, filters.capfirst),
+                       # Translators: High Availability mode of Neutron router
+                       verbose_name=_("HA mode"))
     ext_net = tables.Column(get_external_network,
                             verbose_name=_("External Network"))
 
@@ -192,8 +184,10 @@ class RoutersTable(tables.DataTable):
             data=data,
             needs_form_wrapper=needs_form_wrapper,
             **kwargs)
-        if not api.neutron.get_dvr_permission(request, "get"):
+        if not api.neutron.get_feature_permission(request, "dvr", "get"):
             del self.columns["distributed"]
+        if not api.neutron.get_feature_permission(request, "l3-ha", "get"):
+            del self.columns["ha"]
 
     def get_object_display(self, obj):
         return obj.name

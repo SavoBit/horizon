@@ -116,7 +116,11 @@ def data(TEST):
                         'segment_range': '3000-3100',
                         'id':
                         '00000000-1111-1111-1111-000000000000',
-                        'project': network_dict['tenant_id']}
+#                        'project': network_dict['tenant_id'],
+                        'project': TEST.networks.get(name="net1")['tenant_id'],
+                        # vlan profiles have no sub_type or multicast_ip_range
+                        'multicast_ip_range': None,
+                        'sub_type': None}
 
     TEST.api_net_profiles.add(net_profile_dict)
     TEST.net_profiles.add(neutron.Profile(net_profile_dict))
@@ -176,6 +180,20 @@ def data(TEST):
     TEST.api_ports.add(port_dict)
     TEST.ports.add(neutron.Port(port_dict))
     assoc_port = port_dict
+
+    port_dict = {'admin_state_up': True,
+                 'device_id': '279989f7-54bb-41d9-ba42-0d61f12fda61',
+                 'device_owner': 'network:router_interface',
+                 'fixed_ips': [{'ip_address': '10.0.0.1',
+                                'subnet_id': subnet_dict['id']}],
+                 'id': '9036eedb-e7fa-458e-bc6e-d9d06d9d1bc4',
+                 'mac_address': 'fa:16:3e:9c:d5:7f',
+                 'name': '',
+                 'network_id': network_dict['id'],
+                 'status': 'ACTIVE',
+                 'tenant_id': network_dict['tenant_id']}
+    TEST.api_ports.add(port_dict)
+    TEST.ports.add(neutron.Port(port_dict))
 
     # 2nd network.
     network_dict = {'admin_state_up': True,
@@ -642,10 +660,14 @@ def data(TEST):
                    "alias": "dvr",
                    "description":
                    "Enables configuration of Distributed Virtual Routers."}
+    extension_5 = {"name": "HA Router extension",
+                   "alias": "l3-ha",
+                   "description": "Add HA capability to routers."}
     TEST.api_extensions.add(extension_1)
     TEST.api_extensions.add(extension_2)
     TEST.api_extensions.add(extension_3)
     TEST.api_extensions.add(extension_4)
+    TEST.api_extensions.add(extension_5)
 
     # 1st agent.
     agent_dict = {"binary": "neutron-openvswitch-agent",
@@ -971,7 +993,9 @@ def data(TEST):
                         'multicast_ip_range': '144.0.0.0-144.0.0.100',
                         'id':
                         '00000000-2222-2222-2222-000000000000',
-                        'project': '1'}
+                        'project': '1',
+                        # overlay profiles have no physical_network
+                        'physical_network': None}
 
     TEST.api_net_profiles.add(net_profile_dict)
     TEST.net_profiles.add(neutron.Profile(net_profile_dict))
