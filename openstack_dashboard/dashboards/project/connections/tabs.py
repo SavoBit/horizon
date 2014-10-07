@@ -148,6 +148,9 @@ class NetworkTemplateTab(tabs.TableTab):
     template_name = "horizon/common/_detail_table.html"
 
     def allowed(self, request):
+        # don't show tab to tenants if heat isn't installed
+        if not network_template_api.is_heat_available(request):
+            return False
         # don't show the regular template tab to admins
         return (not request.path_info.startswith('/admin/')
                 and super(NetworkTemplateTab, self).allowed(request))
