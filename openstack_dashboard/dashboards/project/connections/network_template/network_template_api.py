@@ -4,6 +4,14 @@ from openstack_dashboard.dashboards.project.connections import bsn_api
 from openstack_dashboard.dashboards.project.connections.network_template import network_template_db
 
 
+def is_heat_available(request):
+    try:
+        heat.heatclient(request)
+        return True
+    except:
+        return False
+
+
 def get_network_templates():
     return bsn_api.Session.query(network_template_db.NetworkTemplate).all()
 
