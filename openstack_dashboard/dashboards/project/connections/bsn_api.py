@@ -38,7 +38,10 @@ api._FACADE = session.EngineFacade.from_config(conf, sqlite_fk=True)
 controllers = [s.rsplit(':', 1)[0]
                for s in conf.RESTPROXY.servers]
 port = 8443
-username, password = conf.RESTPROXY.server_auth.split(':', 1)
+try:
+    username, password = conf.RESTPROXY.server_auth.split(':', 1)
+except:
+    username, password = '', ''
 #tenant_id = 'admin'
 
 Session = api.get_session()
