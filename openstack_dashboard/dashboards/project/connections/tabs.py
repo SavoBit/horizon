@@ -20,6 +20,7 @@
 #    under the License.
 
 import json
+import logging
 
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
@@ -47,13 +48,21 @@ import openstack_dashboard.dashboards.project.connections.bsn_api as bsn_api
 from openstack_dashboard.dashboards.project.connections.network_template \
     import network_template_api
 
+LOG = logging.getLogger(__name__)
+
 
 class DeleteTemplateAction(tables.DeleteAction):
     data_type_singular = _("Network Template")
     data_type_plural = _("Network Templates")
 
     def delete(self, request, obj_id):
-        network_template_api.delete_template_by_id(obj_id)
+        try:
+            network_template_api.delete_template_by_id(obj_id)
+        except Exception as e:
+            LOG.info(str(e))
+            messages.error(
+                request, _("Unable to delete template. Template may "
+                           "be in use by a tenant."))
 
 
 class CreateTemplateAction(tables.LinkAction):
