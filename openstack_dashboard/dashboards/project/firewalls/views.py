@@ -11,8 +11,6 @@
 #    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #    License for the specific language governing permissions and limitations
 #    under the License.
-#
-# @author: KC Wang, Big Switch Networks
 
 import re
 
@@ -147,6 +145,9 @@ class UpdateRuleView(forms.ModalFormView):
     def get_initial(self):
         rule = self._get_object()
         initial = rule.get_dict()
+        protocol = initial['protocol']
+        initial['protocol'] = protocol.upper() if protocol else 'ANY'
+        initial['action'] = initial['action'].upper()
         return initial
 
 
