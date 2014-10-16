@@ -165,7 +165,8 @@ def swift_get_container(request, container_name, with_data=True):
             swift_endpoint = base.url_for(request,
                                           'object-store',
                                           endpoint_type='publicURL')
-            public_url = swift_endpoint + '/' + urlparse.quote(container_name)
+            parameters = urlparse.quote(container_name.encode('utf8'))
+            public_url = swift_endpoint + '/' + parameters
         ts_float = float(headers.get('x-timestamp'))
         timestamp = timeutils.iso8601_from_timestamp(ts_float)
     except Exception:
@@ -219,7 +220,7 @@ def swift_get_objects(request, container_name, prefix=None, marker=None,
                   delimiter=FOLDER_DELIMITER,
                   full_listing=True)
     headers, objects = swift_api(request).get_container(container_name,
-                                                          **kwargs)
+                                                        **kwargs)
     object_objs = _objectify(objects, container_name)
 
     if(len(object_objs) > limit):

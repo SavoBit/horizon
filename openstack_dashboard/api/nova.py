@@ -575,7 +575,7 @@ def server_list(request, search_opts=None, all_tenants=False):
     else:
         search_opts['project_id'] = request.user.tenant_id
     servers = [Server(s, request)
-                for s in c.servers.list(True, search_opts)]
+               for s in c.servers.list(True, search_opts)]
 
     has_more_data = False
     if paginate and len(servers) > page_size:
@@ -701,13 +701,13 @@ def get_password(request, instance_id, private_key=None):
 
 def instance_volume_attach(request, volume_id, instance_id, device):
     return novaclient(request).volumes.create_server_volume(instance_id,
-                                                              volume_id,
-                                                              device)
+                                                            volume_id,
+                                                            device)
 
 
 def instance_volume_detach(request, instance_id, att_id):
     return novaclient(request).volumes.delete_server_volume(instance_id,
-                                                              att_id)
+                                                            att_id)
 
 
 def instance_volumes_list(request, instance_id):
@@ -853,3 +853,10 @@ def can_set_server_password():
 def instance_action_list(request, instance_id):
     return nova_instance_action.InstanceActionManager(
         novaclient(request)).list(instance_id)
+
+
+def can_set_mount_point():
+    """Return the Hypervisor's capability of setting mount points."""
+    hypervisor_features = getattr(
+        settings, "OPENSTACK_HYPERVISOR_FEATURES", {})
+    return hypervisor_features.get("can_set_mount_point", False)
