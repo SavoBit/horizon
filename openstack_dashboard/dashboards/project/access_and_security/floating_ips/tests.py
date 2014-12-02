@@ -256,7 +256,7 @@ class FloatingIpViewTests(test.TestCase):
                                  "Quota exceeded")
         expected_string = ("<a href='%s' title='%s' class='%s disabled' "
                            "id='floating_ips__action_allocate'>"
-                           "<span class='glyphicon glyphicon-download-alt'>"
+                           "<span class='fa fa-download'>"
                            "</span>%s</a>"
                            % (url, link_name, " ".join(classes), link_name))
         self.assertContains(res, expected_string, html=True,
@@ -298,7 +298,9 @@ class FloatingIpNeutronViewTests(FloatingIpViewTests):
             .AndReturn(self.quotas.first())
         api.nova.flavor_list(IsA(http.HttpRequest)) \
             .AndReturn(self.flavors.list())
-        api.nova.server_list(IsA(http.HttpRequest)) \
+        search_opts = {'tenant_id': self.request.user.tenant_id}
+        api.nova.server_list(IsA(http.HttpRequest), search_opts=search_opts,
+                             all_tenants=True) \
             .AndReturn([servers, False])
         api.neutron.is_extension_supported(
             IsA(http.HttpRequest), 'security-group').AndReturn(True)
