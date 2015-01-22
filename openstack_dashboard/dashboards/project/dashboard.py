@@ -48,7 +48,8 @@ class ObjectStorePanels(horizon.PanelGroup):
 class OrchestrationPanels(horizon.PanelGroup):
     name = _("Orchestration")
     slug = "orchestration"
-    panels = ('stacks',)
+    panels = ('stacks',
+              'stacks.resource_types',)
 
 
 class DatabasePanels(horizon.PanelGroup):
