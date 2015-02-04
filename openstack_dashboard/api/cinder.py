@@ -279,6 +279,10 @@ def volume_upload_to_image(request, volume_id, force, image_name,
                                                          disk_format)
 
 
+def volume_get_encryption_metadata(request, volume_id):
+    return cinderclient(request).volumes.get_encryption_metadata(volume_id)
+
+
 def volume_snapshot_get(request, snapshot_id):
     snapshot = cinderclient(request).volume_snapshots.get(snapshot_id)
     return VolumeSnapshot(snapshot)
@@ -364,6 +368,32 @@ def volume_backup_delete(request, backup_id):
 def volume_backup_restore(request, backup_id, volume_id):
     return cinderclient(request).restores.restore(backup_id=backup_id,
                                                   volume_id=volume_id)
+
+
+def volume_manage(request,
+                  host,
+                  identifier,
+                  id_type,
+                  name,
+                  description,
+                  volume_type,
+                  availability_zone,
+                  metadata,
+                  bootable):
+    source = {id_type: identifier}
+    return cinderclient(request).volumes.manage(
+        host=host,
+        ref=source,
+        name=name,
+        description=description,
+        volume_type=volume_type,
+        availability_zone=availability_zone,
+        metadata=metadata,
+        bootable=bootable)
+
+
+def volume_unmanage(request, volume_id):
+    return cinderclient(request).volumes.unmanage(volume=volume_id)
 
 
 def tenant_quota_get(request, tenant_id):

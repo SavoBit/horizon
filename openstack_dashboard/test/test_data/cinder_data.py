@@ -35,6 +35,7 @@ def data(TEST):
     TEST.cinder_volume_backups = utils.TestDataContainer()
     TEST.cinder_volume_encryption_types = utils.TestDataContainer()
     TEST.cinder_volume_types = utils.TestDataContainer()
+    TEST.cinder_volume_encryption = utils.TestDataContainer()
     TEST.cinder_bootable_volumes = utils.TestDataContainer()
     TEST.cinder_qos_specs = utils.TestDataContainer()
     TEST.cinder_qos_spec_associations = utils.TestDataContainer()
@@ -157,6 +158,7 @@ def data(TEST):
          'size': 20,
          'created_at': '2014-01-27 10:30:00',
          'volume_type': None,
+         'os-vol-host-attr:host': 'host@backend-name#pool',
          'bootable': 'true',
          'attachments': []})
     volume_v2.bootable = 'true'
@@ -229,6 +231,19 @@ def data(TEST):
 
     TEST.cinder_volume_backups.add(volume_backup1)
     TEST.cinder_volume_backups.add(volume_backup2)
+
+    # Volume Encryption
+    vol_enc_metadata1 = volumes.Volume(
+        volumes.VolumeManager(None),
+        {'cipher': 'test-cipher',
+         'key_size': 512,
+         'provider': 'test-provider',
+         'control_location': 'front-end'})
+    vol_unenc_metadata1 = volumes.Volume(
+        volumes.VolumeManager(None),
+        {})
+    TEST.cinder_volume_encryption.add(vol_enc_metadata1)
+    TEST.cinder_volume_encryption.add(vol_unenc_metadata1)
 
     # Quota Sets
     quota_data = dict(volumes='1',

@@ -19,6 +19,7 @@ from django.template import defaultfilters as filters
 from django.utils import html
 from django.utils.http import urlencode
 from django.utils import safestring
+from django.utils.translation import pgettext_lazy
 from django.utils.translation import string_concat  # noqa
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ungettext_lazy
@@ -366,6 +367,16 @@ class VolumesTableBase(tables.DataTable):
         ("error", False),
         ("error_extending", False),
     )
+    STATUS_DISPLAY_CHOICES = (
+        ("available", pgettext_lazy("Current status of a Volume",
+                                    u"Available")),
+        ("in-use", pgettext_lazy("Current status of a Volume", u"In-use")),
+        ("error", pgettext_lazy("Current status of a Volume", u"Error")),
+        ("creating", pgettext_lazy("Current status of a Volume",
+                                   u"Creating")),
+        ("error_extending", pgettext_lazy("Current status of a Volume",
+                                          u"Error Extending")),
+    )
     name = tables.Column("name",
                          verbose_name=_("Name"),
                          link="horizon:project:volumes:volumes:detail")
@@ -376,10 +387,10 @@ class VolumesTableBase(tables.DataTable):
                          verbose_name=_("Size"),
                          attrs={'data-type': 'size'})
     status = tables.Column("status",
-                           filters=(filters.title,),
                            verbose_name=_("Status"),
                            status=True,
-                           status_choices=STATUS_CHOICES)
+                           status_choices=STATUS_CHOICES,
+                           display_choices=STATUS_DISPLAY_CHOICES)
 
     def get_object_display(self, obj):
         return obj.name
@@ -408,7 +419,9 @@ class VolumesTable(VolumesTableBase):
                              verbose_name=_("Bootable"),
                              filters=(filters.yesno, filters.capfirst))
     encryption = tables.Column(get_encrypted_value,
-                               verbose_name=_("Encrypted"))
+                               verbose_name=_("Encrypted"),
+                               link="horizon:project:volumes:"
+                                    "volumes:encryption_detail")
 
     class Meta:
         name = "volumes"
