@@ -28,6 +28,8 @@ from openstack_dashboard.dashboards.project.data_processing.utils \
     import workflow_helpers
 from openstack_dashboard.dashboards.project.instances \
     import utils as nova_utils
+from openstack_dashboard.dashboards.project.volumes \
+    import utils as cinder_utils
 
 
 LOG = logging.getLogger(__name__)
@@ -68,6 +70,13 @@ class GeneralConfigAction(workflows.Action):
         required=False,
         initial=10,
         widget=forms.TextInput(attrs={"class": "volume_size_field"})
+    )
+
+    volumes_availability_zone = forms.ChoiceField(
+        label=_("Volumes Availability Zone"),
+        help_text=_("Create volumes in this availability zone."),
+        required=False,
+        widget=forms.Select(attrs={"class": "volumes_availability_zone_field"})
     )
 
     hidden_configure_field = forms.CharField(
@@ -137,6 +146,13 @@ class GeneralConfigAction(workflows.Action):
                         if az.zoneState['available']])
         return az_list
 
+    def populate_volumes_availability_zone_choices(self, request, context):
+        az_list = [(None, _('No availability zone specified'))]
+        az_list.extend([(az.zoneName, az.zoneName)
+                        for az in cinder_utils.availability_zone_list(request)
+                        if az.zoneState['available']])
+        return az_list
+
     def get_help_text(self):
         extra = dict()
         plugin, hadoop_version = (
@@ -145,7 +161,7 @@ class GeneralConfigAction(workflows.Action):
         extra["hadoop_version"] = hadoop_version
         return super(GeneralConfigAction, self).get_help_text(extra)
 
-    class Meta:
+    class Meta(object):
         name = _("Configure Node Group Template")
         help_text_template = (
             "project/data_processing.nodegroup_templates"
@@ -178,7 +194,7 @@ class SecurityConfigAction(workflows.Action):
             choices=security_group_list,
             required=False)
 
-    class Meta:
+    class Meta(object):
         name = _("Security")
         help_text = _("Control access to instances of the node group.")
 
@@ -275,10 +291,13 @@ class ConfigureNodegroupTemplate(workflow_helpers.ServiceParametersWorkflow,
 
             volumes_per_node = None
             volumes_size = None
+            volumes_availability_zone = None
 
             if context["general_storage"] == "cinder_volume":
                 volumes_per_node = context["general_volumes_per_node"]
                 volumes_size = context["general_volumes_size"]
+                volumes_availability_zone = \
+                    context["general_volumes_availability_zone"]
 
             saharaclient.nodegroup_template_create(
                 request,
@@ -289,6 +308,7 @@ class ConfigureNodegroupTemplate(workflow_helpers.ServiceParametersWorkflow,
                 flavor_id=context["general_flavor"],
                 volumes_per_node=volumes_per_node,
                 volumes_size=volumes_size,
+                volumes_availability_zone=volumes_availability_zone,
                 node_processes=processes,
                 node_configs=configs_dict,
                 floating_ip_pool=context.get("general_floating_ip_pool"),
@@ -315,7 +335,7 @@ class SelectPluginAction(workflows.Action,
         sahara = saharaclient.client(request)
         self._generate_plugin_version_fields(sahara)
 
-    class Meta:
+    class Meta(object):
         name = _("Select plugin and hadoop version")
         help_text_template = ("project/data_processing.nodegroup_templates"
                               "/_create_general_help.html")

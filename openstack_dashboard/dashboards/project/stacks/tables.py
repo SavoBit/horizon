@@ -13,7 +13,6 @@
 from django.core import urlresolvers
 from django.http import Http404  # noqa
 from django.template.defaultfilters import title  # noqa
-from django.utils.http import urlencode  # noqa
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ungettext_lazy
 
@@ -171,6 +170,15 @@ class StacksUpdateRow(tables.Row):
             raise
 
 
+class StacksFilterAction(tables.FilterAction):
+
+    def filter(self, table, stacks, filter_string):
+        """Naive case-insensitive search."""
+        query = filter_string.lower()
+        return [stack for stack in stacks
+                if query in stack.name.lower()]
+
+
 class StacksTable(tables.DataTable):
     STATUS_CHOICES = (
         ("Complete", True),
@@ -199,7 +207,7 @@ class StacksTable(tables.DataTable):
     def get_object_display(self, stack):
         return stack.stack_name
 
-    class Meta:
+    class Meta(object):
         name = "stacks"
         verbose_name = _("Stacks")
         pagination_param = 'stack_marker'
@@ -209,7 +217,8 @@ class StacksTable(tables.DataTable):
                          CheckStack,
                          SuspendStack,
                          ResumeStack,
-                         DeleteStack,)
+                         DeleteStack,
+                         StacksFilterAction,)
         row_actions = (CheckStack,
                        SuspendStack,
                        ResumeStack,
@@ -241,7 +250,7 @@ class EventsTable(tables.DataTable):
     statusreason = tables.Column("resource_status_reason",
                                  verbose_name=_("Status Reason"),)
 
-    class Meta:
+    class Meta(object):
         name = "events"
         verbose_name = _("Stack Events")
 
@@ -299,7 +308,7 @@ class ResourcesTable(tables.DataTable):
     def get_object_id(self, datum):
         return datum.resource_name
 
-    class Meta:
+    class Meta(object):
         name = "resources"
         verbose_name = _("Stack Resources")
         status_columns = ["status", ]

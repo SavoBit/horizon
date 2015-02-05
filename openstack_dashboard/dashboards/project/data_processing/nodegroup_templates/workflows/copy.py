@@ -64,14 +64,17 @@ class CopyNodegroupTemplate(create_flow.ConfigureNodegroupTemplate):
         g_fields["storage"].initial = storage
         g_fields["volumes_per_node"].initial = volumes_per_node
         g_fields["volumes_size"].initial = volumes_size
+        g_fields["volumes_availability_zone"].initial = \
+            template.volumes_availability_zone
 
         if template.floating_ip_pool:
             g_fields['floating_ip_pool'].initial = template.floating_ip_pool
 
         s_fields["security_autogroup"].initial = template.auto_security_group
 
-        s_fields["security_groups"].initial = dict(
-            [(sg, sg) for sg in template.security_groups])
+        if template.security_groups:
+            s_fields["security_groups"].initial = dict(
+                [(sg, sg) for sg in template.security_groups])
 
         processes_dict = dict()
         try:
