@@ -84,7 +84,6 @@ class Project(horizon.Dashboard):
         DatabasePanels,
         DataProcessingPanels,)
     default_panel = 'overview'
-    supports_tenants = True
 
 
 horizon.register(Project)
