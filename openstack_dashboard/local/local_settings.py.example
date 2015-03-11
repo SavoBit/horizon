@@ -7,6 +7,19 @@ from openstack_dashboard import exceptions
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+
+# WEBROOT is the location relative to Webserver root
+# should end with a slash.
+WEBROOT = '/'
+# LOGIN_URL = WEBROOT + 'auth/login/'
+# LOGOUT_URL = WEBROOT + 'auth/logout/'
+#
+# LOGIN_REDIRECT_URL can be used as an alternative for
+# HORIZON_CONFIG.user_home, if user_home is not set.
+# Do not set it to '/home/', as this will cause circular redirect loop
+# LOGIN_REDIRECT_URL = WEBROOT
+
+
 # Required for Django 1.5.
 # If horizon is running in production (DEBUG is False), set this
 # with the list of host/domain names that the application can serve.
@@ -277,6 +290,11 @@ TIME_ZONE = "UTC"
 #    'key': my_awesome_callback_method,
 #    'reverse': False,
 #}
+
+# Set this to True to display an 'Admin Password' field on the Change Password
+# form to verify that it is indeed the admin logged-in who wants to change
+# the password.
+# ENFORCE_PASSWORD_CHECK = False
 
 # The Horizon Policy Enforcement engine uses these values to load per service
 # policy rule files. The content of these files should match the files the
