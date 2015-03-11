@@ -122,8 +122,6 @@ class ReachabilityTestAPI(object):
         src['segment'] = self.resolve_segment(test.src_segment_id, request)
         src['ip'] = test.src_ip
         dst = {}
-        dst['tenant'] = test.dst_tenant_id
-        dst['segment'] = self.resolve_segment(test.dst_segment_id, request)
         dst['ip'] = test.dst_ip
         bcf = ControllerCluster()
         data = bcf.getTestPath(src, dst)

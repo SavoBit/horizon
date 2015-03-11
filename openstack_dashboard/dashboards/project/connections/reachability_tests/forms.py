@@ -43,7 +43,6 @@ import openstack_dashboard.dashboards.project.connections.bsn_api as bsn_api
 
 NEW_LINES = re.compile(r"\r|\n")
 EXPECTATION_CHOICES = [('default', _('--- Select Result ---')),
-                       ('reached destination', _('reached destination')),
                        ('dropped by route', _('dropped by route')),
                        ('dropped by policy', _('dropped by policy')),
                        ('dropped due to private segment',
@@ -51,9 +50,11 @@ EXPECTATION_CHOICES = [('default', _('--- Select Result ---')),
                        ('packet in', _('packet in')),
                        ('forwarded', _('forwarded')),
                        ('dropped', _('dropped')),
-                       ('multiple sources', _('multiple sources')),
+                       ('unspecified sources', _('unspecified sources')),
                        ('unsupported', _('unsupported')),
-                       ('invalid input', _('invalid input'))]
+                       ('invalid input', _('invalid input')),
+                       ('inconsistent status', _('inconsistent status')),
+                       ('no traffic detected', _('no traffic detected'))]
 
 
 class CreateReachabilityTest(forms.SelfHandlingForm):
@@ -65,7 +66,6 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
     def __init__(self, request, *args, **kwargs):
         super(CreateReachabilityTest, self).__init__(request, *args, **kwargs)
         self.fields['tenant_source'].initial = request.user.project_id
-        self.fields['tenant_destination'].initial = request.user.project_id
 
     tenant_source = forms.CharField(
         max_length="255",
@@ -96,26 +96,6 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
             attrs={'class': 'switched',
                    'data-connection_source_type-ip':
                    _('Specify source IP address')}))
-
-    tenant_destination = forms.CharField(
-        max_length="255",
-        label=_("Sepecify destination tenant"),
-        required=True,
-        initial="",
-        widget=forms.TextInput(
-            attrs={'class': 'switched',
-                   'data-connection_destination-tenant':
-                   _('Specify destination tenant')}))
-
-    segment_destination = forms.CharField(
-        max_length="255",
-        label=_("Sepecify destination segment"),
-        required=True,
-        initial="",
-        widget=forms.TextInput(
-            attrs={'class': 'switched',
-                   'data-connection_destination-segment':
-                   _('Specify destination segment')}))
 
     ip_destination = forms.CharField(
         max_length="255",
@@ -157,8 +137,6 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
             'src_tenant_id': data['tenant_source'].encode('ascii'),
             'src_segment_id': data['segment_source'].encode('ascii'),
             'src_ip': data['ip_source'].encode('ascii', 'ignore'),
-            'dst_tenant_id': data['tenant_destination'].encode('ascii'),
-            'dst_segment_id': data['segment_destination'].encode('ascii'),
             'dst_ip': data['ip_destination'].encode('ascii', 'ignore'),
             'expected_result': data['expected_connection'].encode('ascii',
                                                                   'ignore')
@@ -178,7 +156,6 @@ class RunQuickTestForm(forms.SelfHandlingForm):
     def __init__(self, request, *args, **kwargs):
         super(RunQuickTestForm, self).__init__(request, *args, **kwargs)
         self.fields['tenant_source'].initial = request.user.project_id
-        self.fields['tenant_destination'].initial = request.user.project_id
 
     tenant_source = forms.CharField(
         max_length="255",
@@ -209,26 +186,6 @@ class RunQuickTestForm(forms.SelfHandlingForm):
             attrs={'class': 'switched',
                    'data-connection_source_type-ip':
                    _('Specify source IP address')}))
-
-    tenant_destination = forms.CharField(
-        max_length="255",
-        label=_("Sepecify destination tenant"),
-        required=True,
-        initial="",
-        widget=forms.TextInput(
-            attrs={'class': 'switched',
-                   'data-connection_destination-tenant':
-                   _('Specify destination tenant')}))
-
-    segment_destination = forms.CharField(
-        max_length="255",
-        label=_("Sepecify destination segment"),
-        required=True,
-        initial="",
-        widget=forms.TextInput(
-            attrs={'class': 'switched',
-                   'data-connection_destination-segment':
-                   _('Specify destination segment')}))
 
     ip_destination = forms.CharField(
         max_length="255",
@@ -269,8 +226,6 @@ class RunQuickTestForm(forms.SelfHandlingForm):
             'src_tenant_id': data['tenant_source'].encode('ascii'),
             'src_segment_id': data['segment_source'].encode('ascii'),
             'src_ip': data['ip_source'].encode('ascii', 'ignore'),
-            'dst_tenant_id': data['tenant_destination'].encode('ascii'),
-            'dst_segment_id': data['segment_destination'].encode('ascii'),
             'dst_ip': data['ip_destination'].encode('ascii', 'ignore'),
             'expected_result': data['expected_connection'].encode('ascii',
                                                                   'ignore')
@@ -327,26 +282,6 @@ class UpdateForm(forms.SelfHandlingForm):
                    'data-connection_source_type-ip':
                    _('Specify source IP address')}))
 
-    tenant_destination = forms.CharField(
-        max_length="255",
-        label=_("Sepecify destination tenant"),
-        required=True,
-        initial="",
-        widget=forms.TextInput(
-            attrs={'class': 'switched',
-                   'data-connection_destination-tenant':
-                   _('Specify destination tenant')}))
-
-    segment_destination = forms.CharField(
-        max_length="255",
-        label=_("Sepecify destination segment"),
-        required=True,
-        initial="",
-        widget=forms.TextInput(
-            attrs={'class': 'switched',
-                   'data-connection_destination-segment':
-                   _('Specify destination segment')}))
-
     ip_destination = forms.CharField(
         max_length="255",
         label=_("Use ip address as destination"),
@@ -386,8 +321,6 @@ class UpdateForm(forms.SelfHandlingForm):
             'src_tenant_id': data['tenant_source'].encode('ascii'),
             'src_segment_id': data['segment_source'].encode('ascii'),
             'src_ip': data['ip_source'].encode('ascii', 'ignore'),
-            'dst_tenant_id': data['tenant_destination'].encode('ascii'),
-            'dst_segment_id': data['segment_destination'].encode('ascii'),
             'dst_ip': data['ip_destination'].encode('ascii', 'ignore'),
             'expected_result': data['expected_connection'].encode('ascii',
                                                                   'ignore')
