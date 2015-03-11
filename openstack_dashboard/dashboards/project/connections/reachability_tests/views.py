@@ -131,7 +131,6 @@ class UpdateView(forms.ModalFormView):
         try:
             src = json.loads(reachability_test.connection_source)
             dst = json.loads(reachability_test.connection_destination)
-            body['segment_destination'] = dst['segment']
             body['segment_source'] = src['segment']
             body['ip_destination'] = dst['ip']
             body['ip_source'] = src['ip']

@@ -9,9 +9,9 @@ from openstack_dashboard.dashboards.project.connections import bsn_api
 eventlet.monkey_patch()
 URL_TEST_PATH = ('applications/bcf/test/path/controller-view'
                  '[src-tenant=\"%(src-tenant)s\"]'
-                 '[src-segment=\"%(src-segment)s\"][src-ip=\"%(src-ip)s\"]'
-                 '[dst-tenant=\"%(dst-tenant)s\"]'
-                 '[dst-segment=\"%(dst-segment)s\"][dst-ip=\"%(dst-ip)s\"]')
+                 '[src-segment=\"%(src-segment)s\"]'
+                 '[src-ip=\"%(src-ip)s\"]'
+                 '[dst-ip=\"%(dst-ip)s\"]')
 
 
 class ControllerCluster(object):
@@ -100,8 +100,7 @@ class ControllerCluster(object):
                {'src-tenant': src['tenant'],
                 'src-segment': src['segment'],
                 'src-ip': src['ip'],
-                'dst-tenant': dst['tenant'],
-                'dst-segment': dst['segment'], 'dst-ip': dst['ip']})
+                'dst-ip': dst['ip']})
         controller = self.active_controller
         ret = rest_lib.get(self.cookie, url,
                            controller, self.port)

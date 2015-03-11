@@ -36,15 +36,14 @@ class ReachabilityTest(model_base.BASEV2):
     src_tenant_id = sa.Column(sa.String(64), nullable=False)
     src_segment_id = sa.Column(sa.String(64), nullable=False)
     src_ip = sa.Column(sa.String(16), nullable=False)
-    dst_tenant_id = sa.Column(sa.String(64), nullable=False)
-    dst_segment_id = sa.Column(sa.String(64), nullable=False)
     dst_ip = sa.Column(sa.String(16), nullable=False)
-    expected_result = sa.Column(Enum("reached destination", "dropped by route",
+    expected_result = sa.Column(Enum("dropped by route",
                                      "dropped by policy",
                                      "dropped due to private segment",
                                      "packet in", "forwarded", "dropped",
-                                     "multiple sources",
+                                     "unspecified sources",
                                      "unsupported", "invalid input",
+                                     "no traffic detected",
                                      name="expected_result"), nullable=False)
 
     def get_connection_source(self):
@@ -56,8 +55,6 @@ class ReachabilityTest(model_base.BASEV2):
 
     def get_connection_destination(self):
         destination = {}
-        destination['tenant'] = self.dst_tenant_id
-        destination['segment'] = self.dst_segment_id
         destination['ip'] = self.dst_ip
         return destination
 
@@ -91,15 +88,15 @@ class ReachabilityQuickTest(model_base.BASEV2):
     src_tenant_id = sa.Column(sa.String(64), nullable=False)
     src_segment_id = sa.Column(sa.String(64), nullable=False)
     src_ip = sa.Column(sa.String(16), nullable=False)
-    dst_tenant_id = sa.Column(sa.String(64), nullable=False)
-    dst_segment_id = sa.Column(sa.String(64), nullable=False)
     dst_ip = sa.Column(sa.String(16), nullable=False)
-    expected_result = sa.Column(Enum("reached destination", "dropped by route",
+    expected_result = sa.Column(Enum("dropped by route",
                                      "dropped by policy",
                                      "dropped due to private segment",
                                      "packet in", "forwarded", "dropped",
-                                     "multiple sources", "unsupported",
-                                     "invalid input", name="expected_result"),
+                                     "unspecified sources",
+                                     "unsupported", "invalid input",
+                                     "no traffic detected",
+                                     name="expected_result"),
                                      nullable=False)
 
     def get_connection_source(self):
@@ -111,8 +108,6 @@ class ReachabilityQuickTest(model_base.BASEV2):
 
     def get_connection_destination(self):
         destination = {}
-        destination['tenent'] = self.dst_tenant_id
-        destination['segment'] = self.dst_segment_id
         destination['ip'] = self.dst_ip
         return destination
 
