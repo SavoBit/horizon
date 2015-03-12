@@ -34,11 +34,13 @@
 <script src="{{ STATIC_URL }}horizon/lib/d3.js"></script>
 
 <script src='{{ STATIC_URL }}angular/widget.module.js'></script>
+<script src='{{ STATIC_URL }}angular/form/form.js'></script>
 <script src='{{ STATIC_URL }}angular/help-panel/help-panel.js'></script>
 <script src='{{ STATIC_URL }}angular/wizard/wizard.js'></script>
 <script src='{{ STATIC_URL }}angular/action-list/action-list.js'></script>
 <script src='{{ STATIC_URL }}angular/table/table.js'></script>
 <script src='{{ STATIC_URL }}angular/modal/modal.js'></script>
+<script src='{{ STATIC_URL }}angular/modal-wait-spinner/modal-wait-spinner.js'></script>
 <script src='{{ STATIC_URL }}angular/bind-scope/bind-scope.js'></script>
 <script src='{{ STATIC_URL }}angular/transfer-table/transfer-table.js'></script>
 <script src='{{ STATIC_URL }}angular/charts/charts.js'></script>
@@ -65,6 +67,7 @@
 <script src='{{ STATIC_URL }}horizon/js/horizon.instances.js'></script>
 <script src='{{ STATIC_URL }}horizon/js/horizon.messages.js'></script>
 <script src='{{ STATIC_URL }}horizon/js/horizon.modals.js'></script>
+
 <script type="text/javascript">
   horizon.modals.MODAL_BACKDROP = "{% firstof HORIZON_CONFIG.modal_backdrop 'static' %}";
 </script>
