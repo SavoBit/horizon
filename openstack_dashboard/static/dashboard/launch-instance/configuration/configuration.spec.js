@@ -17,7 +17,7 @@
 (function() {
   'use strict';
 
-  describe('Launch Instance Source Step', function() {
+  describe('Launch Instance Post-Creation Step', function() {
   });
 
 })();
