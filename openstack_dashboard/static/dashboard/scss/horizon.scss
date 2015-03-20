@@ -2,8 +2,14 @@
 @import "/horizon/lib/bootstrap_datepicker/datepicker3.css";
 @import "/horizon/lib/rickshaw.css";
 
+// Custom Theme Variables
+@import "/custom/variables";
+
 // Horizon Variables
 @import "variables";
+
+// Horizon Mixins
+@import "mixins";
 
 // Vendor Components
 @import "/bootstrap/scss/bootstrap";
@@ -19,6 +25,7 @@
 @import "components/network_topology";
 @import "/angular/styles";
 
+@import "/horizon/lib/magic_search/magic_search.scss";
 
 /* new clearfix */
 .clearfix:after {
@@ -1836,3 +1843,4 @@ textarea.key_text {
     right: 0px !important;
   }
 }
+
