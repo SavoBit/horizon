@@ -45,6 +45,7 @@ NEW_LINES = re.compile(r"\r|\n")
 EXPECTATION_CHOICES = [('default', _('--- Select Result ---')),
                        ('dropped by route', _('dropped by route')),
                        ('dropped by policy', _('dropped by policy')),
+                       ('dropped by security group', _('dropped by security group')),
                        ('dropped due to private segment',
                         _('dropped due to private segment')),
                        ('dropped due to loop', _('dropped due to loop')),
