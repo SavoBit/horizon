@@ -220,8 +220,13 @@ def get_format(image):
     format = getattr(image, "disk_format", "")
     # The "container_format" attribute can actually be set to None,
     # which will raise an error if you call upper() on it.
-    if format is not None:
-        return format.upper()
+    if not format:
+        return format
+    # Most image formats are untranslated acronyms, but raw is a word
+    # and should be translated
+    if format == "raw":
+        return pgettext_lazy("Image format for display in table", u"Raw")
+    return format.upper()
 
 
 class UpdateRow(tables.Row):
@@ -259,12 +264,16 @@ class ImagesTable(tables.DataTable):
         ("killed", pgettext_lazy("Current status of an Image", u"Killed")),
         ("deleted", pgettext_lazy("Current status of an Image", u"Deleted")),
     )
+    TYPE_CHOICES = (
+        ("image", pgettext_lazy("Type of an image", u"Image")),
+        ("snapshot", pgettext_lazy("Type of an image", u"Snapshot")),
+    )
     name = tables.Column(get_image_name,
                          link="horizon:project:images:images:detail",
                          verbose_name=_("Image Name"))
     image_type = tables.Column(get_image_type,
                                verbose_name=_("Type"),
-                               filters=(filters.title,))
+                               display_choices=TYPE_CHOICES)
     status = tables.Column("status",
                            verbose_name=_("Status"),
                            status=True,
