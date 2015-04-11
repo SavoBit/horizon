@@ -56,8 +56,6 @@ class ReachabilityTestAPI(object):
                                    src_tenant_id = quick_test.src_tenant_id,
                                    src_segment_id = quick_test.src_segment_id,
                                    src_ip = quick_test.src_ip,
-                                   dst_tenant_id = quick_test.dst_tenant_id,
-                                   dst_segment_id = quick_test.dst_segment_id,
                                    dst_ip = quick_test.dst_ip,
                                    expected_result = quick_test.expected_result)
         self.saveTest(tenant_id, test_id, test, session)
@@ -122,8 +120,6 @@ class ReachabilityTestAPI(object):
         src['segment'] = self.resolve_segment(test.src_segment_id, request)
         src['ip'] = test.src_ip
         dst = {}
-        dst['tenant'] = test.dst_tenant_id
-        dst['segment'] = self.resolve_segment(test.dst_segment_id, request)
         dst['ip'] = test.dst_ip
         bcf = ControllerCluster()
         data = bcf.getTestPath(src, dst)
