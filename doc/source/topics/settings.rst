@@ -321,7 +321,7 @@ to be shown per page if API pagination support for this exists.
 
 Default: ``None``
 
-A tuple of tuples which define multiple regions. The tuple format is
+A list of tuples which define multiple regions. The tuple format is
 ``('http://{{ keystone_host }}:5000/v2.0', '{{ region_name }}')``. If any regions
 are specified the login form will have a dropdown selector for authenticating
 to the appropriate region, and there will be a region switcher dropdown in
@@ -763,8 +763,8 @@ Default: ``True``
 
 Enable (True) or disable (False) the panels and menus related
 to router and Floating IP features. This option only affects
-when Neutron is enabled. If your neutron has no support for
-Layer-3 features, or you do no not wish to provide the Layer-3
+when Neutron is enabled. If your Neutron deployment has no support for
+Layer-3 features, or you do not wish to provide the Layer-3
 features through the Dashboard, this should be set to ``False``.
 
 ``enable_distributed_router``:
