@@ -2,8 +2,8 @@ import os
 
 from neutron.db import models_v2
 from neutron.db import model_base
-from oslo.config import cfg
-from oslo.db.sqlalchemy import session
+from oslo_config import cfg
+from oslo_db.sqlalchemy import session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import openstack_dashboard.dashboards.project.connections.network_template.network_template_db
