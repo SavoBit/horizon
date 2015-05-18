@@ -69,7 +69,7 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
 
     tenant_source = forms.CharField(
         max_length="255",
-        label=_("Sepecify source tenant"),
+        label=_("Specify source tenant"),
         required=True,
         initial="",
         widget=forms.TextInput(
@@ -79,7 +79,7 @@ class CreateReachabilityTest(forms.SelfHandlingForm):
 
     segment_source = forms.CharField(
         max_length="255",
-        label=_("Sepecify source segment"),
+        label=_("Specify source segment"),
         required=True,
         initial="",
         widget=forms.TextInput(
@@ -182,7 +182,7 @@ class RunQuickTestForm(forms.SelfHandlingForm):
 
     tenant_source = forms.CharField(
         max_length="255",
-        label=_("Sepecify source tenant"),
+        label=_("Specify source tenant"),
         required=True,
         initial="",
         widget=forms.TextInput(
@@ -192,7 +192,7 @@ class RunQuickTestForm(forms.SelfHandlingForm):
 
     segment_source = forms.CharField(
         max_length="255",
-        label=_("Sepecify source segment"),
+        label=_("Specify source segment"),
         required=True,
         initial="",
         widget=forms.TextInput(
@@ -299,7 +299,7 @@ class UpdateForm(forms.SelfHandlingForm):
 
     tenant_source = forms.CharField(
         max_length="255",
-        label=_("Sepecify source tenant"),
+        label=_("Specify source tenant"),
         required=True,
         initial="",
         widget=forms.TextInput(
@@ -309,7 +309,7 @@ class UpdateForm(forms.SelfHandlingForm):
 
     segment_source = forms.CharField(
         max_length="255",
-        label=_("Sepecify source segment"),
+        label=_("Specify source segment"),
         required=True,
         initial="",
         widget=forms.TextInput(
