@@ -21,13 +21,14 @@ class ServicesTests(test.JasmineTests):
         'horizon/js/angular/horizon.js',
         'horizon/js/angular/services/horizon.utils.js',
         'horizon/js/angular/hz.api.module.js',
-        'horizon/js/angular/services/hz.api.service.js',
+        'horizon/js/angular/services/hz.api.common.js',
         'horizon/js/angular/services/hz.api.config.js',
 
         'framework/framework.module.js',
 
         'framework/util/util.module.js',
         'framework/util/bind-scope/bind-scope.js',
+        'framework/util/filters/filters.js',
         'framework/util/form/form.js',
         'framework/util/i18n/i18n.js',
         'framework/util/validators/validators.js',
@@ -44,7 +45,7 @@ class ServicesTests(test.JasmineTests):
         'framework/widgets/metadata-tree/metadata-tree.js',
         'framework/widgets/metadata-tree/metadata-tree-service.js',
         'framework/widgets/modal/modal.js',
-        'framework/widgets/modal/modal-wait-spinner.js',
+        'framework/widgets/modal-wait-spinner/modal-wait-spinner.js',
         'framework/widgets/table/table.js',
         'framework/widgets/table/basic-table.js',
         'framework/widgets/transfer-table/transfer-table.js',
@@ -54,11 +55,12 @@ class ServicesTests(test.JasmineTests):
         'horizon/js/angular/filters/filters.js',
     ]
     specs = [
-        'horizon/js/angular/services/hz.api.service.spec.js',
+        'horizon/js/angular/services/hz.api.common.spec.js',
         'horizon/js/angular/services/hz.api.config.spec.js',
         'horizon/tests/jasmine/utils.spec.js',
 
         'framework/util/bind-scope/bind-scope.spec.js',
+        'framework/util/filters/filters.spec.js',
         'framework/util/form/form.spec.js',
         'framework/util/i18n/i18n.spec.js',
         'framework/util/validators/validators.spec.js',
@@ -69,7 +71,7 @@ class ServicesTests(test.JasmineTests):
         'framework/widgets/help-panel/help-panel.spec.js',
         'framework/widgets/login/login.spec.js',
         'framework/widgets/modal/modal.spec.js',
-        'framework/widgets/modal/modal-wait-spinner.spec.js',
+        'framework/widgets/modal-wait-spinner/modal-wait-spinner.spec.js',
         'framework/widgets/table/table.spec.js',
         'framework/widgets/table/basic-table.spec.js',
         'framework/widgets/transfer-table/transfer-table.spec.js',

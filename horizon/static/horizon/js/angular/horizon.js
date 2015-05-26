@@ -2,7 +2,7 @@
 (function () {
   'use strict';
 
-  var horizon_dependencies = ['hz.conf', 'hz.utils', 'hz.api', 'ngCookies', 'horizon.framework', 'hz.filters'];
+  var horizon_dependencies = ['hz.conf', 'hz.utils', 'hz.api', 'ngCookies', 'horizon.framework'];
   var dependencies = horizon_dependencies.concat(angularModuleExtension);
   angular.module('hz', dependencies)
     .config(['$interpolateProvider', '$httpProvider',
@@ -33,7 +33,7 @@
           };
         });
       }])
-    .run(['hzConfig', 'hzUtils', '$cookieStore', '$http', '$cookies',
+    .run(['hz.conf.hzConfig', 'hz.utils.hzUtils.service', '$cookieStore', '$http', '$cookies',
       function (hzConfig, hzUtils, $cookieStore, $http, $cookies) {
         $http.defaults.headers.post['X-CSRFToken'] = $cookies.csrftoken;
         //expose the configuration for horizon legacy variable
