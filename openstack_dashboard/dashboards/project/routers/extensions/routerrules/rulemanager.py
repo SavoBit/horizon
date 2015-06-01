@@ -25,7 +25,14 @@ class RuleObject(dict):
         # database ID from neutron changes on every update, making a list of
         # sequential operations based on the DB ID invalid after the first one
         # occurs (e.g. deleting multiple from the table
-        rule['id'] = rule['source'] + rule['destination']
+        v4_any_words = ['any', 'external']
+        src = rule['source']
+        dst = rule['destination']
+        if src not in v4_any_words:
+            src = src['cidr']
+        if dst not in v4_any_words:
+            dst = dst['cidr']
+        rule['id'] = src + dst
         super(RuleObject, self).__init__(rule)
         # Horizon references id property for table operations
         self.id = rule['id']
