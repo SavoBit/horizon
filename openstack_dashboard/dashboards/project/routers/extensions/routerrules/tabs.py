@@ -147,13 +147,13 @@ class RulesGridTab(tabs.Tab):
         for rule in rules:
             rd = rule['destination']
             if rule['destination'] in v4_any_words:
-                rd = '0.0.0.0/0'
+                rd = {'cidr': '0.0.0.0/0'}
             rs = rule['source']
             if rule['source'] in v4_any_words:
-                rs = '0.0.0.0/0'
-            rs = netaddr.IPNetwork(rs)
+                rs = {'cidr': '0.0.0.0/0'}
+            rs = netaddr.IPNetwork(rs['cidr'])
             src = netaddr.IPNetwork(src)
-            rd = netaddr.IPNetwork(rd)
+            rd = netaddr.IPNetwork(rd['cidr'])
             dst = netaddr.IPNetwork(dst)
             # check if cidrs are affected by rule first
             if (int(dst.network) >= int(rd.broadcast) or
