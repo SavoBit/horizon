@@ -29,11 +29,12 @@ class ServicesTests(test.JasmineTests):
         'horizon/js/angular/services/hz.api.policy.js',
         'horizon/js/angular/services/hz.api.security-group.js',
 
+        'auth/auth.module.js',
+        'auth/login/login.module.js',
+        'auth/login/login.controller.js',
+        'auth/login/login-finder.directive.js',
+
         'dashboard-app/dashboard-app.module.js',
-        'dashboard-app/login/login.js',
-        'dashboard-app/utils/utils.module.js',
-        'dashboard-app/utils/helper-functions.js',
-        'dashboard-app/utils/image-file-on-change.js',
 
         'framework/framework.module.js',
 
@@ -46,6 +47,9 @@ class ServicesTests(test.JasmineTests):
         'framework/util/i18n/i18n.js',
         'framework/util/validators/validators.js',
         'framework/util/workflow/workflow.js',
+        'framework/util/tech-debt/tech-debt.module.js',
+        'framework/util/tech-debt/helper-functions.js',
+        'framework/util/tech-debt/image-file-on-change.js',
 
         'framework/widgets/widgets.module.js',
         'framework/widgets/action-list/action-list.js',
@@ -67,28 +71,32 @@ class ServicesTests(test.JasmineTests):
         'framework/widgets/toast/toast.js',
     ]
     specs = [
+        'horizon/tests/jasmine/utils.spec.js',
+
         'horizon/js/angular/services/hz.api.common.spec.js',
         'horizon/js/angular/services/hz.api.common-test.spec.js',
         'horizon/js/angular/services/hz.api.cinder.spec.js',
         'horizon/js/angular/services/hz.api.config.spec.js',
-        'dashboard-app/login/login.spec.js',
-        'dashboard-app/utils/helper-functions.spec.js',
         'horizon/js/angular/services/hz.api.glance.spec.js',
         'horizon/js/angular/services/hz.api.keystone.spec.js',
         'horizon/js/angular/services/hz.api.neutron.spec.js',
         'horizon/js/angular/services/hz.api.nova.spec.js',
         'horizon/js/angular/services/hz.api.policy.spec.js',
         'horizon/js/angular/services/hz.api.security-group.spec.js',
-        'horizon/tests/jasmine/utils.spec.js',
+
+        'auth/login/login.spec.js',
 
         'framework/util/bind-scope/bind-scope.spec.js',
         'framework/util/filters/filters.spec.js',
         'framework/util/form/form.spec.js',
         'framework/util/i18n/i18n.spec.js',
+        'framework/util/tech-debt/helper-functions.spec.js',
         'framework/util/validators/validators.spec.js',
         'framework/util/workflow/workflow.spec.js',
 
         'framework/widgets/action-list/action-list.spec.js',
+        'framework/widgets/charts/charts.spec.js',
+        'framework/widgets/charts/chart-tooltip.spec.js',
         'framework/widgets/charts/pie-chart.spec.js',
         'framework/widgets/help-panel/help-panel.spec.js',
         'framework/widgets/magic-search/magic-search.spec.js',
