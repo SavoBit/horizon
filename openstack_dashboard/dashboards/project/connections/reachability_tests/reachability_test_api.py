@@ -117,7 +117,7 @@ class ReachabilityTestAPI(object):
     def getBcfTestResult(self, test, request):
         src = {}
         src['tenant'] = test.src_tenant_id
-        src['segment'] = self.resolve_segment(test.src_segment_id, request)
+        src['segment'] = test.src_segment_id
         src['ip'] = test.src_ip
         dst = {}
         dst['ip'] = test.dst_ip
