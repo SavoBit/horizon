@@ -39,11 +39,13 @@ class ReachabilityTest(model_base.BASEV2):
     dst_ip = sa.Column(sa.String(16), nullable=False)
     expected_result = sa.Column(Enum("dropped by route",
                                      "dropped by policy",
+                                     "dropped by security group",
                                      "dropped due to private segment",
                                      "dropped due to loop",
                                      "packet in", "forwarded", "dropped",
                                      "unspecified sources",
                                      "unsupported", "invalid input",
+                                     "inconsistent status",
                                      "no traffic detected",
                                      name="expected_result"), nullable=False)
 
@@ -92,11 +94,13 @@ class ReachabilityQuickTest(model_base.BASEV2):
     dst_ip = sa.Column(sa.String(16), nullable=False)
     expected_result = sa.Column(Enum("dropped by route",
                                      "dropped by policy",
+                                     "dropped by security group",
                                      "dropped due to private segment",
                                      "dropped due to loop",
                                      "packet in", "forwarded", "dropped",
                                      "unspecified sources",
                                      "unsupported", "invalid input",
+                                     "inconsistent status",
                                      "no traffic detected",
                                      name="expected_result"),
                                      nullable=False)
