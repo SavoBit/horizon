@@ -113,12 +113,6 @@ class RulesGridTab(tabs.Tab):
                         'networkname': 'external',
                         'networkid': 'external',
                         'cidr': '0.0.0.0/0'})
-        subnets.append({'ip': '0.0.0.0',
-                        'subnetid': 'any',
-                        'subnetname': '',
-                        'networkname': 'any',
-                        'networkid': 'any',
-                        'cidr': '0.0.0.0/0'})
         for source in subnets:
             row = {'source': dict(source),
                    'targets': []}
