@@ -63,11 +63,9 @@ class LaunchImageNG(LaunchImage):
     classes = ("btn-launch")
     ajax = False
 
-    def __init__(self,
-                 attrs={
-                     "ng-controller": "LaunchInstanceModalCtrl"
-                 },
-                 **kwargs):
+    def __init__(self, attrs=None, **kwargs):
+        if attrs is None:
+            attrs = {"ng-controller": "LaunchInstanceModalController"}
         kwargs['preempt'] = True
         super(LaunchImage, self).__init__(attrs, **kwargs)
 
@@ -222,9 +220,12 @@ def get_format(image):
     # which will raise an error if you call upper() on it.
     if not format:
         return format
-    # Most image formats are untranslated acronyms, but raw is a word
-    # and should be translated
     if format == "raw":
+        if getattr(image, "container_format") == 'docker':
+            return pgettext_lazy("Image format for display in table",
+                                 u"Docker")
+        # Most image formats are untranslated acronyms, but raw is a word
+        # and should be translated
         return pgettext_lazy("Image format for display in table", u"Raw")
     return format.upper()
 

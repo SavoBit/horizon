@@ -164,6 +164,27 @@ class CreateProjectInfoAction(workflows.Action):
             self.fields["domain_id"].widget = readonlyInput
             self.fields["domain_name"].widget = readonlyInput
 
+    def clean_name(self):
+        project_name = self.cleaned_data['name']
+        domain_id = self.cleaned_data['domain_id']
+
+        # Due to potential performance issues project name validation
+        # for the keystone.v2 is omitted
+        try:
+            if keystone.VERSIONS.active >= 3:
+                tenant = api.keystone.tenant_list(
+                    self.request,
+                    domain=domain_id,
+                    filters={'name': project_name})
+
+                if tenant:
+                    msg = _('Project name is already in use. Please use a '
+                            'different name.')
+                    raise forms.ValidationError(msg)
+        except Exception:
+            exceptions.handle(self.request, ignore=True)
+        return project_name
+
     class Meta(object):
         name = _("Project Information")
         help_text = _("Create a project to organize users.")
@@ -478,7 +499,7 @@ class CreateProject(CommonQuotaWorkflow):
                               % {'users_to_add': users_to_add,
                                  'group_msg': group_msg})
         finally:
-            auth_utils.remove_project_cache(request.user.token.id)
+            auth_utils.remove_project_cache(request.user.token.unscoped_token)
 
     def _update_project_groups(self, request, data, project_id):
         # update project groups
@@ -551,6 +572,12 @@ class UpdateProjectInfoAction(CreateProjectInfoAction):
         if self.fields['enabled'].widget.attrs.get('disabled', False):
             cleaned_data['enabled'] = True
         return cleaned_data
+
+    def clean_name(self):
+        project_name = self.cleaned_data['name']
+        if self.initial['name'] == project_name:
+            return project_name
+        return super(UpdateProjectInfoAction, self).clean_name()
 
     class Meta(object):
         name = _("Project Information")
@@ -735,7 +762,7 @@ class UpdateProject(CommonQuotaWorkflow):
                                  'group_msg': group_msg})
             return False
         finally:
-            auth_utils.remove_project_cache(request.user.token.id)
+            auth_utils.remove_project_cache(request.user.token.unscoped_token)
 
     def _update_project_groups(self, request, data, project_id, domain_id):
         # update project groups

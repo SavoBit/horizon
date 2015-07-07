@@ -1,6 +1,6 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# Translations template for PROJECT.
+# Copyright (C) 2015 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
 #
 # Translators:
 # Andre Campos Bezerra <andrecbezerra@gmail.com>, 2015
@@ -11,37 +11,41 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Horizon\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-27 03:01-0500\n"
-"PO-Revision-Date: 2015-05-27 03:11+0000\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2015-06-27 14:09+0000\n"
+"PO-Revision-Date: 2015-06-27 11:57+0000\n"
 "Last-Translator: openstackjenkins <jenkins@openstack.org>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/"
 "horizon/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.3\n"
 "Language: pt_BR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#, c-format
+#, python-format
 msgid "%s GB"
 msgstr "%s GB"
 
-#, c-format
+#, python-format
 msgid "%s KB"
 msgstr "%s KB"
 
-#, c-format
+#, python-format
 msgid "%s MB"
 msgstr "%s MB"
 
-#, c-format
+#, python-format
 msgid "%s TB"
 msgstr "%s TB"
 
-#, c-format
+#, python-format
 msgid "%s bytes"
 msgstr "%s bytes"
+
+msgid "Active"
+msgstr "Ativo"
 
 msgid "Add Interface"
 msgstr "Adicionar Interface"
@@ -70,12 +74,6 @@ msgstr "Voltar"
 msgid "Cancel"
 msgstr "Cancelar"
 
-msgid "Cannot get nova extension list."
-msgstr "Não é possível obter lista de extensão do nova."
-
-msgid "Cannot get service catalog from keystone."
-msgstr "Não é possível obter o catálogo de serviços a partir do keystone."
-
 msgid "Click here to expand the row and view the errors."
 msgstr "Clique aqui para expandir a linha e ver os erros."
 
@@ -91,7 +89,7 @@ msgstr "Encerrado"
 msgid "Closing"
 msgstr "Encerramento"
 
-#, c-format
+#, python-format
 msgid "Confirm %s"
 msgstr "Confirma %s"
 
@@ -131,7 +129,7 @@ msgstr "Excluir Roteador"
 msgid "Detail Information"
 msgstr "Informações delhadas"
 
-#, c-format
+#, python-format
 msgid "Displaying %s item"
 msgid_plural "Displaying %s items"
 msgstr[0] "Exibindo %s item"
@@ -155,17 +153,14 @@ msgstr "Expanda para ver os itens alocados"
 msgid "Expand to see available items"
 msgstr "Expanda para ver os itens disponíveis"
 
-msgid "Extension is not enabled: %(extension)s"
-msgstr "Extensão não está habilitada: %(extension)s"
-
 msgid "Filter"
 msgstr "Filtro"
 
 msgid "Finish"
 msgstr "Encerrar"
 
-msgid "Found %(found)s of %(total)s"
-msgstr "Encontrado %(found)s de %(total)s"
+msgid "Flavor"
+msgstr "Flavor"
 
 msgid "ID"
 msgstr "ID"
@@ -193,6 +188,9 @@ msgstr "Mín. "
 
 msgid "Min length"
 msgstr "Tamanho mínimo"
+
+msgid "Name"
+msgstr "Nome"
 
 msgid "Next"
 msgstr "Próximo"
@@ -242,14 +240,14 @@ msgstr "Incompatibilidade de padrão"
 msgid "Please confirm your selection. "
 msgstr "Por favor confirme a sua seleção."
 
-msgid "Policy check failed."
-msgstr "Verificação de política falhou."
-
 msgid "Re-order items using drag and drop"
 msgstr "reordene os itens clicando em um deles e arrastando-o"
 
 msgid "Remaining"
 msgstr "Restante"
+
+msgid "Remove"
+msgstr "Remover"
 
 msgid "Required"
 msgstr "Requerido"
@@ -266,13 +264,13 @@ msgstr "Selecione um item dentre os disponíveis abaixo"
 msgid "Select one"
 msgstr "Selecione"
 
-msgid "Service type is not enabled: %(desiredType)s"
-msgstr "Tipo de serviço não está habilitado: %(desiredType)s"
+msgid "Shutdown"
+msgstr "Desligar"
 
-msgid "Setting is not enabled: %(setting)s"
-msgstr "Configuração não está habilitada: %(setting)s"
+msgid "Status"
+msgstr "Status"
 
-#, c-format
+#, python-format
 msgid "Status: %s"
 msgstr "Status: %s"
 
@@ -287,6 +285,9 @@ msgstr "Sucesso:"
 
 msgid "Terminate Instance"
 msgstr "Terminar Instância"
+
+msgid "Text"
+msgstr "Texto"
 
 msgid ""
 "The action cannot be performed. The contents of this row have errors or are "
@@ -304,156 +305,6 @@ msgstr "Houve um erro ao enviar o formulário. Por favor tente novamente."
 
 msgid "Total"
 msgstr "Total"
-
-msgid "Unable to create the domain."
-msgstr "Não foi possível criar o domínio."
-
-msgid "Unable to create the keypair."
-msgstr "Não foi possível criar o par de chaves."
-
-msgid "Unable to create the network."
-msgstr "Não foi possível criar a rede"
-
-msgid "Unable to create the project."
-msgstr "Não foi possível criar o projeto."
-
-msgid "Unable to create the role."
-msgstr "Não foi possível criar o papel."
-
-msgid "Unable to create the server."
-msgstr "Não foi possível criar a instância"
-
-msgid "Unable to create the subnet."
-msgstr "Não foi possível criar sub-rede"
-
-msgid "Unable to create the user."
-msgstr "Não foi possível criar o usuário."
-
-msgid "Unable to delete the domain."
-msgstr "Não foi possível excluir o domínio."
-
-msgid "Unable to delete the domains."
-msgstr "Não foi possível excluir os domínios."
-
-msgid "Unable to delete the project."
-msgstr "Não foi possível excluir o projeto."
-
-msgid "Unable to delete the projects."
-msgstr "Não foi possível excluir os projetos."
-
-msgid "Unable to delete the role."
-msgstr "Não foi possível excluir o papel."
-
-msgid "Unable to delete the roles."
-msgstr "Não foi possível excluir os papéis."
-
-msgid "Unable to delete the user."
-msgstr "Não foi possível excluir o usuário."
-
-msgid "Unable to delete the users."
-msgstr "Não foi possível excluir os usuários."
-
-msgid "Unable to edit the domain."
-msgstr "Não foi possível editar o domínio."
-
-msgid "Unable to edit the project."
-msgstr "Não foi possível editar o projeto."
-
-msgid "Unable to edit the role."
-msgstr "Não foi possível editar o papel."
-
-msgid "Unable to edit the user."
-msgstr "Não foi possível editar o usuário."
-
-msgid "Unable to fetch the service catalog."
-msgstr "Não é possível obter o catálogo de serviços."
-
-msgid "Unable to grant the role."
-msgstr "Não foi possível permitir o papel."
-
-msgid "Unable to import the keypair."
-msgstr "Não é possível importar o par de chaves."
-
-msgid "Unable to retrieve availability zones."
-msgstr "Não é possível recuperar todas zonas de disponibilidade."
-
-msgid "Unable to retrieve domains"
-msgstr "Não foi possível obter os domínios"
-
-msgid "Unable to retrieve extensions."
-msgstr "Não é possível recuperar extensões."
-
-msgid "Unable to retrieve flavor extra specs."
-msgstr "Não é possível recuperar especificações extras do flavor."
-
-msgid "Unable to retrieve flavor."
-msgstr "Não é possível recuperar flavor."
-
-msgid "Unable to retrieve flavors."
-msgstr "Não foi possível recuperar flavors."
-
-msgid "Unable to retrieve image."
-msgstr "Não foi possível recuperar a imagem."
-
-msgid "Unable to retrieve images."
-msgstr "Não foi possível obter as imagems"
-
-msgid "Unable to retrieve keypairs."
-msgstr "Não é possível recuperar pares de chaves."
-
-msgid "Unable to retrieve limits."
-msgstr "Não foi possível obter informações de limite."
-
-msgid "Unable to retrieve namespaces."
-msgstr "Não é possível recuperar namespaces."
-
-msgid "Unable to retrieve networks."
-msgstr "Não é possível recuperar redes."
-
-msgid "Unable to retrieve ports."
-msgstr "Não foi possível obter lista de portas."
-
-msgid "Unable to retrieve projects"
-msgstr "Não foi possível obter os projetos"
-
-msgid "Unable to retrieve role"
-msgstr "Não foi possível obter o papel"
-
-msgid "Unable to retrieve security groups."
-msgstr "Não é possível recuperar grupos de segurança"
-
-msgid "Unable to retrieve server."
-msgstr "Não é possível recuperar servidor."
-
-msgid "Unable to retrieve settings."
-msgstr "Não é possível recuperar as configurações."
-
-msgid "Unable to retrieve subnets."
-msgstr "Não é possível recuperar a subredes."
-
-msgid "Unable to retrieve the current user session."
-msgstr "Não é possível recuperar a sessão atual do usuário."
-
-msgid "Unable to retrieve the domain"
-msgstr "Não foi possível obter o domínio"
-
-msgid "Unable to retrieve the project"
-msgstr "Não foi possível obter o projeto"
-
-msgid "Unable to retrieve the role"
-msgstr "Não foi possível obter o papel"
-
-msgid "Unable to retrieve the user"
-msgstr "Não foi possível obter o usuário"
-
-msgid "Unable to retrieve users"
-msgstr "Não foi possível obter os usuários"
-
-msgid "Unable to retrieve volume snapshots."
-msgstr "Não é possível recuperar snapshots de volume."
-
-msgid "Unable to retrieve volumes."
-msgstr "Não foi possível obter a lista de volumes."
 
 msgid "View Details"
 msgstr "Ver Detalhes"
@@ -487,6 +338,9 @@ msgstr ""
 "definições de metadados do catálogo de metadados do Glance. Utilize a opção "
 "\"Outros\" para adicionar metadados com a chave de sua escolha."
 
-#, c-format
+#, python-format
 msgid "You have selected %s. "
 msgstr "Você selecionou %s."
+
+msgid "m1.small"
+msgstr "m1.small"

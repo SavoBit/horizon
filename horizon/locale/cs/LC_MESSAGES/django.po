@@ -1,21 +1,22 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# Translations template for PROJECT.
+# Copyright (C) 2015 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
 #
 # Translators:
-# Zbyněk Schwarz <zbynek.schwarz@gmail.com>, 2014
+# Zbyněk Schwarz <zbynek.schwarz@gmail.com>, 2014-2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Horizon\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-27 03:00-0500\n"
-"PO-Revision-Date: 2015-05-15 09:43+0000\n"
-"Last-Translator: Akihiro Motoki <amotoki@gmail.com>\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2015-06-23 01:20+0000\n"
+"PO-Revision-Date: 2015-06-15 15:01+0000\n"
+"Last-Translator: openstackjenkins <jenkins@openstack.org>\n"
 "Language-Team: Czech (http://www.transifex.com/projects/p/horizon/language/"
 "cs/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.3\n"
 "Language: cs\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
@@ -106,6 +107,9 @@ msgstr "%s nedokončeno"
 msgid "&laquo;&nbsp;Prev"
 msgstr "&laquo;&nbsp;Zpět"
 
+msgid "(No Limit)"
+msgstr "(Bez limitu)"
+
 msgid "-"
 msgstr "-"
 
@@ -130,10 +134,6 @@ msgstr "Přidat řádek"
 
 msgid "All available"
 msgstr "Vše dostupné"
-
-#, python-format
-msgid "Allocated <span> %(used)s </span> of <span> %(available)s </span>"
-msgstr "Přiděleno <span> %(used)s </span> z <span> %(available)s </span>"
 
 msgid "Available"
 msgstr "Dostupné"
@@ -183,12 +183,6 @@ msgstr "Falešné"
 msgid "Filter"
 msgstr "Filtr"
 
-msgid "Floating IPs"
-msgstr "Plovoucí IP adresy"
-
-msgid "Help"
-msgstr "Nápověda"
-
 msgid "Horizon"
 msgstr "Horizon"
 
@@ -198,8 +192,9 @@ msgstr "Nesprávný formát IP adresy"
 msgid "Info: "
 msgstr "Informace:"
 
-msgid "Instances"
-msgstr "Instance"
+msgid "Invalid metadata entry. Use comma-separated key=value pairs"
+msgstr ""
+"Neplatná položka popisných dat. Použijte čárkou oddělené páry klíč=hodnota"
 
 msgid "Invalid subnet mask"
 msgstr "Neplatná maska podsítě"
@@ -212,10 +207,6 @@ msgstr "Omezit souhrn"
 
 msgid "Log In"
 msgstr "Přihlásit"
-
-#, python-format
-msgid "Logged in as: %(username)s"
-msgstr "Přihlášen jako: %(username)s"
 
 msgid "Login"
 msgstr "Přihlášení"
@@ -247,9 +238,6 @@ msgstr "Další"
 
 msgid "Next&nbsp;&raquo;"
 msgstr "Další&nbsp;&raquo;"
-
-msgid "No Limit"
-msgstr "Bez limitu"
 
 msgid "No items to display."
 msgstr "Žádné položky k zobrazení."
@@ -291,14 +279,8 @@ msgstr "Číslo portu musí být celé číslo"
 msgid "Processing..."
 msgstr "Zpracovávaní..."
 
-msgid "RAM"
-msgstr "RAM"
-
 msgid "Save"
 msgstr "Uložit"
-
-msgid "Security Groups"
-msgstr "Bezpečnostní skupiny"
 
 #, python-format
 msgid "Select a %s to browse."
@@ -312,9 +294,6 @@ msgstr "Relace vypršela."
 
 msgid "Sign In"
 msgstr "Přihlásit"
-
-msgid "Sign Out"
-msgstr "Odhlásit"
 
 msgid "Submit"
 msgstr "Odeslat"
@@ -367,18 +346,8 @@ msgstr "Aktualizováno"
 msgid "Usage Summary"
 msgstr "Souhrn využití"
 
-#, python-format
-msgid "Used <span> %(used)s </span> of <span> %(available)s </span>"
-msgstr "Využito  <span> %(used)s </span> z <span> %(available)s </span>"
-
-msgid "VCPUs"
-msgstr "VCPU"
-
-msgid "Volume Storage"
-msgstr "Úložiště svazků"
-
-msgid "Volumes"
-msgstr "Svazky"
+msgid "Used"
+msgstr "Využito"
 
 msgid "Warning: "
 msgstr "Varování:"
@@ -393,3 +362,6 @@ msgstr "Nemá oprávnění k přístupu %s"
 
 msgid "You do not have permission to access the resource:"
 msgstr "Nemáte oprávnění k přístupu do zdroje:"
+
+msgid "of"
+msgstr "z"

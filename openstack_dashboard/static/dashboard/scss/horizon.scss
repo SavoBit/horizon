@@ -217,6 +217,11 @@ a.current_item:hover h4 {
   padding: 0 0 0 1px;
 }
 
+.table_wrapper > form.wait,
+.table_wrapper > form.wait * {
+  cursor: wait !important;
+}
+
 .table-bordered {
   border: none;
 }
@@ -614,6 +619,11 @@ td.loading {
 
 
 /* Forms */
+
+.datepicker {
+  z-index: $zindex-popover !important;
+}
+
 .datepicker input{
   @extend .form-control;
 }
@@ -623,6 +633,10 @@ form label {
     color: $gray;
     font-weight: bold;
     display: inline-block;
+}
+
+.login.modal .modal-dialog {
+  width: 390px;
 }
 
 .modal.fullscreen .modal-dialog {
@@ -1129,6 +1143,13 @@ iframe {
   margin-bottom: 8px;
 }
 
+.quota-heading {
+  font-family: anivers;
+  font-weight: normal;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
 .quota_title {
   color: $gray-light;
   padding-bottom: 0;
@@ -1336,30 +1357,53 @@ label.log-length {
       display: block;
     }
     ul.btn-group {
-      margin-left:0px;
-      padding: 3px;
-      margin-bottom: 0px;
-      border: 1px solid $gray-light;
+      margin-left:0;
+      padding: $members-list-padding;
+      margin-bottom: 0;
+      border: $members-list-border;
       border-bottom: none;
       &.last_stripe {
         border-bottom: 1px solid $table-border-color;
       }
       &.light_stripe {
-        background-color: white;
+        background-color: $table-bg;
       }
       &.dark_stripe {
-        background-color: $table-bg-odd;
+        background-color: $table-bg-accent;
       }
       &:hover {
         background-color: $border-color;
-      }
-      li.member {
-        padding: 6px 10px 5px 10px;
       }
       li.active {
         float: right;
         a:hover {
           background-color: $link-hover-color;
+        }
+      }
+      .member,
+      .role_options .roles_display {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .member {
+        padding: $nav-link-padding;
+        padding-right: 0;
+        padding-left: $padding-base-vertical;
+        max-width: $members-list-item-width;
+      }
+      .role_options {
+        margin-left: 0;
+        & > a {
+          padding: nth($nav-link-padding, 1) $padding-small-horizontal;
+          .roles_display {
+            display: inline-block;
+            max-width: $members-list-roles-width;
+            line-height: 1;
+            padding-right: $padding-base-vertical;
+          }
+        }
+        .role_dropdown > li {
+          word-break: break-all;
         }
       }
     }

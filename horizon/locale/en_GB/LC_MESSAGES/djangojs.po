@@ -1,6 +1,6 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# Translations template for PROJECT.
+# Copyright (C) 2015 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
 #
 # Translators:
 # Andi Chandler <andi@gowling.com>, 2014
@@ -8,37 +8,41 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Horizon\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-27 03:01-0500\n"
-"PO-Revision-Date: 2015-05-27 03:11+0000\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2015-06-27 14:09+0000\n"
+"PO-Revision-Date: 2015-06-27 11:57+0000\n"
 "Last-Translator: openstackjenkins <jenkins@openstack.org>\n"
 "Language-Team: English (United Kingdom) (http://www.transifex.com/projects/p/"
 "horizon/language/en_GB/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.3\n"
 "Language: en_GB\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, c-format
+#, python-format
 msgid "%s GB"
 msgstr "%s GB"
 
-#, c-format
+#, python-format
 msgid "%s KB"
 msgstr "%s KB"
 
-#, c-format
+#, python-format
 msgid "%s MB"
 msgstr "%s MB"
 
-#, c-format
+#, python-format
 msgid "%s TB"
 msgstr "%s TB"
 
-#, c-format
+#, python-format
 msgid "%s bytes"
 msgstr "%s bytes"
+
+msgid "Active"
+msgstr "Active"
 
 msgid "Add Interface"
 msgstr "Add Interface"
@@ -67,12 +71,6 @@ msgstr "Back"
 msgid "Cancel"
 msgstr "Cancel"
 
-msgid "Cannot get nova extension list."
-msgstr "Cannot get nova extension list."
-
-msgid "Cannot get service catalog from keystone."
-msgstr "Cannot get service catalogue from keystone."
-
 msgid "Click here to expand the row and view the errors."
 msgstr "Click here to expand the row and view the errors."
 
@@ -88,7 +86,7 @@ msgstr "Closed"
 msgid "Closing"
 msgstr "Closing"
 
-#, c-format
+#, python-format
 msgid "Confirm %s"
 msgstr "Confirm %s"
 
@@ -128,7 +126,7 @@ msgstr "Delete Router"
 msgid "Detail Information"
 msgstr "Detail Information"
 
-#, c-format
+#, python-format
 msgid "Displaying %s item"
 msgid_plural "Displaying %s items"
 msgstr[0] "Displaying %s item"
@@ -152,17 +150,14 @@ msgstr "Expand to see allocated items"
 msgid "Expand to see available items"
 msgstr "Expand to see available items"
 
-msgid "Extension is not enabled: %(extension)s"
-msgstr "Extension is not enabled: %(extension)s"
-
 msgid "Filter"
 msgstr "Filter"
 
 msgid "Finish"
 msgstr "Finish"
 
-msgid "Found %(found)s of %(total)s"
-msgstr "Found %(found)s of %(total)s"
+msgid "Flavor"
+msgstr "Flavour"
 
 msgid "ID"
 msgstr "ID"
@@ -190,6 +185,9 @@ msgstr "Min"
 
 msgid "Min length"
 msgstr "Min length"
+
+msgid "Name"
+msgstr "Name"
 
 msgid "Next"
 msgstr "Next"
@@ -239,14 +237,14 @@ msgstr "Pattern mismatch"
 msgid "Please confirm your selection. "
 msgstr "Please confirm your selection. "
 
-msgid "Policy check failed."
-msgstr "Policy check failed."
-
 msgid "Re-order items using drag and drop"
 msgstr "Re-order items using drag and drop"
 
 msgid "Remaining"
 msgstr "Remaining"
+
+msgid "Remove"
+msgstr "Remove"
 
 msgid "Required"
 msgstr "Required"
@@ -263,13 +261,13 @@ msgstr "Select an item from Available items below"
 msgid "Select one"
 msgstr "Select one"
 
-msgid "Service type is not enabled: %(desiredType)s"
-msgstr "Service type is not enabled: %(desiredType)s"
+msgid "Shutdown"
+msgstr "Shutdown"
 
-msgid "Setting is not enabled: %(setting)s"
-msgstr "Setting is not enabled: %(setting)s"
+msgid "Status"
+msgstr "Status"
 
-#, c-format
+#, python-format
 msgid "Status: %s"
 msgstr "Status: %s"
 
@@ -300,156 +298,6 @@ msgstr "There was an error submitting the form. Please try again."
 
 msgid "Total"
 msgstr "Total"
-
-msgid "Unable to create the domain."
-msgstr "Unable to create the domain."
-
-msgid "Unable to create the keypair."
-msgstr "Unable to create the keypair."
-
-msgid "Unable to create the network."
-msgstr "Unable to create the network."
-
-msgid "Unable to create the project."
-msgstr "Unable to create the project."
-
-msgid "Unable to create the role."
-msgstr "Unable to create the role."
-
-msgid "Unable to create the server."
-msgstr "Unable to create the server."
-
-msgid "Unable to create the subnet."
-msgstr "Unable to create the subnet."
-
-msgid "Unable to create the user."
-msgstr "Unable to create the user."
-
-msgid "Unable to delete the domain."
-msgstr "Unable to delete the domain."
-
-msgid "Unable to delete the domains."
-msgstr "Unable to delete the domains."
-
-msgid "Unable to delete the project."
-msgstr "Unable to delete the project."
-
-msgid "Unable to delete the projects."
-msgstr "Unable to delete the projects."
-
-msgid "Unable to delete the role."
-msgstr "Unable to delete the role."
-
-msgid "Unable to delete the roles."
-msgstr "Unable to delete the roles."
-
-msgid "Unable to delete the user."
-msgstr "Unable to delete the user."
-
-msgid "Unable to delete the users."
-msgstr "Unable to delete the users."
-
-msgid "Unable to edit the domain."
-msgstr "Unable to edit the domain."
-
-msgid "Unable to edit the project."
-msgstr "Unable to edit the project."
-
-msgid "Unable to edit the role."
-msgstr "Unable to edit the role."
-
-msgid "Unable to edit the user."
-msgstr "Unable to edit the user."
-
-msgid "Unable to fetch the service catalog."
-msgstr "Unable to fetch the service catalogue."
-
-msgid "Unable to grant the role."
-msgstr "Unable to grant the role."
-
-msgid "Unable to import the keypair."
-msgstr "Unable to import the keypair."
-
-msgid "Unable to retrieve availability zones."
-msgstr "Unable to retrieve availability zones."
-
-msgid "Unable to retrieve domains"
-msgstr "Unable to retrieve domains"
-
-msgid "Unable to retrieve extensions."
-msgstr "Unable to retrieve extensions."
-
-msgid "Unable to retrieve flavor extra specs."
-msgstr "Unable to retrieve flavour extra specs."
-
-msgid "Unable to retrieve flavor."
-msgstr "Unable to retrieve flavour."
-
-msgid "Unable to retrieve flavors."
-msgstr "Unable to retrieve flavours."
-
-msgid "Unable to retrieve image."
-msgstr "Unable to retrieve image."
-
-msgid "Unable to retrieve images."
-msgstr "Unable to retrieve images."
-
-msgid "Unable to retrieve keypairs."
-msgstr "Unable to retrieve keypairs."
-
-msgid "Unable to retrieve limits."
-msgstr "Unable to retrieve limits."
-
-msgid "Unable to retrieve namespaces."
-msgstr "Unable to retrieve namespaces."
-
-msgid "Unable to retrieve networks."
-msgstr "Unable to retrieve networks."
-
-msgid "Unable to retrieve ports."
-msgstr "Unable to retrieve ports."
-
-msgid "Unable to retrieve projects"
-msgstr "Unable to retrieve projects"
-
-msgid "Unable to retrieve role"
-msgstr "Unable to retrieve role"
-
-msgid "Unable to retrieve security groups."
-msgstr "Unable to retrieve security groups."
-
-msgid "Unable to retrieve server."
-msgstr "Unable to retrieve server."
-
-msgid "Unable to retrieve settings."
-msgstr "Unable to retrieve settings."
-
-msgid "Unable to retrieve subnets."
-msgstr "Unable to retrieve subnets."
-
-msgid "Unable to retrieve the current user session."
-msgstr "Unable to retrieve the current user session."
-
-msgid "Unable to retrieve the domain"
-msgstr "Unable to retrieve the domain"
-
-msgid "Unable to retrieve the project"
-msgstr "Unable to retrieve the project"
-
-msgid "Unable to retrieve the role"
-msgstr "Unable to retrieve the role"
-
-msgid "Unable to retrieve the user"
-msgstr "Unable to retrieve the user"
-
-msgid "Unable to retrieve users"
-msgstr "Unable to retrieve users"
-
-msgid "Unable to retrieve volume snapshots."
-msgstr "Unable to retrieve volume snapshots."
-
-msgid "Unable to retrieve volumes."
-msgstr "Unable to retrieve volumes."
 
 msgid "View Details"
 msgstr "View Details"
@@ -483,6 +331,6 @@ msgstr ""
 "the Glance Metadata Catalog. Use the \"Other\" option to add metadata with "
 "the key of your choice."
 
-#, c-format
+#, python-format
 msgid "You have selected %s. "
 msgstr "You have selected %s. "

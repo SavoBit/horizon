@@ -1,21 +1,22 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# Translations template for PROJECT.
+# Copyright (C) 2015 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
 #
 # Translators:
 # Frans Thamura <frans@meruvian.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Horizon\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-27 03:00-0500\n"
-"PO-Revision-Date: 2015-05-13 19:11+0000\n"
-"Last-Translator: Akihiro Motoki <amotoki@gmail.com>\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2015-06-23 01:20+0000\n"
+"PO-Revision-Date: 2015-06-15 15:01+0000\n"
+"Last-Translator: openstackjenkins <jenkins@openstack.org>\n"
 "Language-Team: Indonesian (http://www.transifex.com/projects/p/horizon/"
 "language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.3\n"
 "Language: id\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
@@ -118,10 +119,6 @@ msgstr "Tambah baris"
 msgid "All available"
 msgstr "Semua yang tersed1a"
 
-#, python-format
-msgid "Allocated <span> %(used)s </span> of <span> %(available)s </span>"
-msgstr "Teralokasi <span> %(used)s </span> of <span> %(available)s </span>"
-
 msgid "Available"
 msgstr "Tersedia"
 
@@ -161,12 +158,6 @@ msgstr "Bohongan"
 msgid "Filter"
 msgstr "Penyaring"
 
-msgid "Floating IPs"
-msgstr "Floating IPs"
-
-msgid "Help"
-msgstr "Bantuan"
-
 msgid "Horizon"
 msgstr "Horizon"
 
@@ -175,9 +166,6 @@ msgstr "Format alamat IP salah."
 
 msgid "Info: "
 msgstr "Informasi:"
-
-msgid "Instances"
-msgstr "Instances"
 
 msgid "Invalid subnet mask"
 msgstr "Subnet mask alamat IP tidak benar."
@@ -190,10 +178,6 @@ msgstr "Ringkasan Batasan"
 
 msgid "Log In"
 msgstr "Masuk"
-
-#, python-format
-msgid "Logged in as: %(username)s"
-msgstr "Anda login sebagai: %(username)s"
 
 msgid "Login"
 msgstr "Login"
@@ -224,9 +208,6 @@ msgstr "Berikutnya"
 
 msgid "Next&nbsp;&raquo;"
 msgstr "Berikut&nbsp;&raquo;"
-
-msgid "No Limit"
-msgstr "Tidak Terbatas"
 
 msgid "No items to display."
 msgstr "Tidak ada yang ditampilkan"
@@ -268,14 +249,8 @@ msgstr "Nomor port harus bilangan bulat"
 msgid "Processing..."
 msgstr "Sedang di proses..."
 
-msgid "RAM"
-msgstr "RAM"
-
 msgid "Save"
 msgstr "Simpan"
-
-msgid "Security Groups"
-msgstr "Kelompok Keamanan"
 
 #, python-format
 msgid "Select a %s to browse."
@@ -284,7 +259,6 @@ msgstr "Pilih sebuah %s untuk menelusuri."
 msgid "Select a period of time to query its usage:"
 msgstr "Pilih sebuah periode waktu untuk mencari kegunaannya:"
 
-#. Translators: test code, don't really have to translate
 msgid "Sell Puppy"
 msgid_plural "Sell Puppies"
 msgstr[0] "Menjual Puppies"
@@ -295,10 +269,6 @@ msgstr "Sesi sudah berakhir."
 msgid "Sign In"
 msgstr "Mendaftar"
 
-msgid "Sign Out"
-msgstr "Keluar"
-
-#. Translators: test code, don't really have to translate
 msgid "Sold Puppy"
 msgid_plural "Sold Puppies"
 msgstr[0] "Puppies terjual"
@@ -350,19 +320,6 @@ msgstr "Sudah di perbaharui"
 
 msgid "Usage Summary"
 msgstr "Ringkasan Penggunaan"
-
-#, python-format
-msgid "Used <span> %(used)s </span> of <span> %(available)s </span>"
-msgstr "Digunakan <span> %(used)s </span> dari <span> %(available)s </span>"
-
-msgid "VCPUs"
-msgstr "VCPUs"
-
-msgid "Volume Storage"
-msgstr "Volume Penyimpanan"
-
-msgid "Volumes"
-msgstr "Volumes"
 
 msgid "Warning: "
 msgstr "Peringatan:"

@@ -1,48 +1,53 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# Translations template for PROJECT.
+# Copyright (C) 2015 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
 #
 # Translators:
 # Ainur Shakirov <ainur.shakirov.tt@gmail.com>, 2015
+# Andreas Jaeger <jaegerandi@gmail.com>, 2015
 # Fedor Tarasenko <feodor.tarasenko@gmail.com>, 2015
 # Ilya Alekseyev <ilyaalekseyev@acm.org>, 2015
 # Yury Sakarinen, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Horizon\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-27 03:01-0500\n"
-"PO-Revision-Date: 2015-05-27 03:11+0000\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2015-06-27 14:09+0000\n"
+"PO-Revision-Date: 2015-06-27 11:57+0000\n"
 "Last-Translator: openstackjenkins <jenkins@openstack.org>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/horizon/language/"
 "ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.3\n"
 "Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#, c-format
+#, python-format
 msgid "%s GB"
 msgstr "%s ГБ"
 
-#, c-format
+#, python-format
 msgid "%s KB"
 msgstr "%s кБ"
 
-#, c-format
+#, python-format
 msgid "%s MB"
 msgstr "%s МБ"
 
-#, c-format
+#, python-format
 msgid "%s TB"
 msgstr "%s ТБ"
 
-#, c-format
+#, python-format
 msgid "%s bytes"
 msgstr "%s байт"
+
+msgid "Active"
+msgstr "Активный"
 
 msgid "Add Interface"
 msgstr "Добавить Интерфейс"
@@ -71,12 +76,6 @@ msgstr "Назад"
 msgid "Cancel"
 msgstr "Отмена"
 
-msgid "Cannot get nova extension list."
-msgstr "Не удалось получить список расширений nova."
-
-msgid "Cannot get service catalog from keystone."
-msgstr "Не удалось получить службу каталогов с Keystone."
-
 msgid "Click here to expand the row and view the errors."
 msgstr "Нажмите для показа ошибок."
 
@@ -92,7 +91,7 @@ msgstr "Закрыт"
 msgid "Closing"
 msgstr "Закрытие"
 
-#, c-format
+#, python-format
 msgid "Confirm %s"
 msgstr "Подтвердите %s"
 
@@ -129,12 +128,12 @@ msgstr "Удалить маршрутизатор"
 msgid "Detail Information"
 msgstr "Подробная информация"
 
-#, c-format
+#, python-format
 msgid "Displaying %s item"
 msgid_plural "Displaying %s items"
 msgstr[0] "Отображено %s значение"
 msgstr[1] "Отображено %s значений"
-msgstr[2] ""
+msgstr[2] "Отображено %s значений"
 msgstr[3] "Отображено %s значений"
 
 msgid "Duplicate keys are not allowed"
@@ -155,17 +154,14 @@ msgstr "Показать выделенные элементы"
 msgid "Expand to see available items"
 msgstr "Показать все доступные элементы"
 
-msgid "Extension is not enabled: %(extension)s"
-msgstr "Расширение не включено: %(extension)s"
-
 msgid "Filter"
 msgstr "Фильтр"
 
 msgid "Finish"
 msgstr "Закончить"
 
-msgid "Found %(found)s of %(total)s"
-msgstr "Найдено %(found)s из %(total)s"
+msgid "Flavor"
+msgstr "Тип инстанса"
 
 msgid "ID"
 msgstr "ID"
@@ -193,6 +189,9 @@ msgstr "Мин."
 
 msgid "Min length"
 msgstr "Мин. длина"
+
+msgid "Name"
+msgstr "Название"
 
 msgid "Next"
 msgstr "Вперёд"
@@ -242,11 +241,11 @@ msgstr "Несоответствие шаблону"
 msgid "Please confirm your selection. "
 msgstr "Подтвердите свой выбор."
 
-msgid "Policy check failed."
-msgstr "Проверка политики не удалась."
-
 msgid "Re-order items using drag and drop"
 msgstr "Переопределите элементы перемещением"
+
+msgid "Remove"
+msgstr "Удалить"
 
 msgid "Required"
 msgstr "Требуется"
@@ -263,13 +262,13 @@ msgstr "Выберите элемент из доступных элементо
 msgid "Select one"
 msgstr "Выберите один"
 
-msgid "Service type is not enabled: %(desiredType)s"
-msgstr "Тип службы не включен: %(desiredType)s"
+msgid "Shutdown"
+msgstr "Выключение"
 
-msgid "Setting is not enabled: %(setting)s"
-msgstr "Настройка не включена: %(setting)s"
+msgid "Status"
+msgstr "Статус"
 
-#, c-format
+#, python-format
 msgid "Status: %s"
 msgstr "Статус: %s"
 
@@ -297,156 +296,6 @@ msgstr "Обнаружена проблема при соединении с с�
 
 msgid "There was an error submitting the form. Please try again."
 msgstr "При отправке формы произошла ошибка. Повторите попытку."
-
-msgid "Unable to create the domain."
-msgstr "Не удалось создать домен."
-
-msgid "Unable to create the keypair."
-msgstr "Не удалось создать пару ключей."
-
-msgid "Unable to create the network."
-msgstr "Не удалось создать сеть."
-
-msgid "Unable to create the project."
-msgstr "Не удалось создать проект"
-
-msgid "Unable to create the role."
-msgstr "Не удалось создать роль."
-
-msgid "Unable to create the server."
-msgstr "Не удалось создать сервер."
-
-msgid "Unable to create the subnet."
-msgstr "Не удалось создать подсеть."
-
-msgid "Unable to create the user."
-msgstr "Не удалось создать пользователя."
-
-msgid "Unable to delete the domain."
-msgstr "Не удалось удалить домен."
-
-msgid "Unable to delete the domains."
-msgstr "Не удалось удалить домены."
-
-msgid "Unable to delete the project."
-msgstr "Не удалось удалить проект."
-
-msgid "Unable to delete the projects."
-msgstr "Не удалось удалить проекты."
-
-msgid "Unable to delete the role."
-msgstr "Не удалось удалить роль."
-
-msgid "Unable to delete the roles."
-msgstr "Не удалось удалить роли."
-
-msgid "Unable to delete the user."
-msgstr "Не удалось удалить пользователя."
-
-msgid "Unable to delete the users."
-msgstr "Не удалось удалить пользователя."
-
-msgid "Unable to edit the domain."
-msgstr "Не удалось изменить домен."
-
-msgid "Unable to edit the project."
-msgstr "Не удалось изменить проект."
-
-msgid "Unable to edit the role."
-msgstr "Не удалось изменить роль."
-
-msgid "Unable to edit the user."
-msgstr "Не удалось изменить пользователя."
-
-msgid "Unable to fetch the service catalog."
-msgstr "Не удалось получить службу каталогов."
-
-msgid "Unable to grant the role."
-msgstr "Не удалось предоставить роль."
-
-msgid "Unable to import the keypair."
-msgstr "Не удалось импортировать пару ключей."
-
-msgid "Unable to retrieve availability zones."
-msgstr "Не удалось получить зоны доступности."
-
-msgid "Unable to retrieve domains"
-msgstr "Не удалось получить домены."
-
-msgid "Unable to retrieve extensions."
-msgstr "Не удалось получить расширения."
-
-msgid "Unable to retrieve flavor extra specs."
-msgstr "Не удалось получить доп. параметры типа интанса."
-
-msgid "Unable to retrieve flavor."
-msgstr "Не удалось получить тип инстанса."
-
-msgid "Unable to retrieve flavors."
-msgstr "Не удалось получить типы инстанса."
-
-msgid "Unable to retrieve image."
-msgstr "Не удалось получить образ."
-
-msgid "Unable to retrieve images."
-msgstr "Не удалось получить образы."
-
-msgid "Unable to retrieve keypairs."
-msgstr "Не удалось получить пары ключей."
-
-msgid "Unable to retrieve limits."
-msgstr "Не удалось получить лимиты."
-
-msgid "Unable to retrieve namespaces."
-msgstr "Не удалось получить пространство имён."
-
-msgid "Unable to retrieve networks."
-msgstr "Не удалось получить сети."
-
-msgid "Unable to retrieve ports."
-msgstr "Не удалось получить порты."
-
-msgid "Unable to retrieve projects"
-msgstr "Не удалось получить проекты"
-
-msgid "Unable to retrieve role"
-msgstr "Не удалось получить роль."
-
-msgid "Unable to retrieve security groups."
-msgstr "Не удалось получить группы безопасности."
-
-msgid "Unable to retrieve server."
-msgstr "Не удалось получить сервер."
-
-msgid "Unable to retrieve settings."
-msgstr "Не удалось получить настройки."
-
-msgid "Unable to retrieve subnets."
-msgstr "Не удалось получить подсети."
-
-msgid "Unable to retrieve the current user session."
-msgstr "Не удалось получить текущую сессию пользователя."
-
-msgid "Unable to retrieve the domain"
-msgstr "Не удалось получить домен."
-
-msgid "Unable to retrieve the project"
-msgstr "Не удалось получить проект"
-
-msgid "Unable to retrieve the role"
-msgstr "Не удалось получить роль"
-
-msgid "Unable to retrieve the user"
-msgstr "Не удалось получить пользователя."
-
-msgid "Unable to retrieve users"
-msgstr "Не удалось получить пользователей."
-
-msgid "Unable to retrieve volume snapshots."
-msgstr "Не удалось получить снимки диска."
-
-msgid "Unable to retrieve volumes."
-msgstr "Не удалось получить диски."
 
 msgid "View Details"
 msgstr "Просмотреть детали"
@@ -480,6 +329,6 @@ msgstr ""
 "метаданных Glance. Используйте опцию \"Другой\" для добавления выбранных "
 "вами ключей."
 
-#, c-format
+#, python-format
 msgid "You have selected %s. "
 msgstr "Выбрано %s."

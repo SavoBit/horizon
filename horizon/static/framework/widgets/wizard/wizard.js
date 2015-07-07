@@ -1,8 +1,8 @@
 (function () {
   'use strict';
 
-  var extend = angular.extend,
-      forEach = angular.forEach;
+  var extend = angular.extend;
+  var forEach = angular.forEach;
 
   angular.module('horizon.framework.widgets.wizard', ['ui.bootstrap'])
 
@@ -29,19 +29,21 @@
           'horizon.framework.widgets.wizard.labels',
           'horizon.framework.widgets.wizard.events',
           function ($scope, $q, wizardLabels, wizardEvents) {
-            $scope.currentIndex = -1;
-            $scope.openHelp = false;
-            $scope.workflow = $scope.workflow || {};
-            $scope.btnText = extend({}, wizardLabels, $scope.workflow.btnText);
-            $scope.btnIcon = $scope.workflow.btnIcon || {};
-            $scope.steps = $scope.workflow.steps || [];
-            $scope.wizardForm = {};
-            $scope.initTask = $q.defer();
-            $scope.initPromise = $scope.initTask.promise;
-            $scope.showSpinner = false;
-            $scope.hasError = false;
+            var viewModel = $scope.viewModel = {};
+            var initTask = $q.defer();
 
-            $scope.switchTo = function (index) {
+            $scope.initPromise = initTask.promise;
+            $scope.currentIndex = -1;
+            $scope.workflow = $scope.workflow || {};
+            var steps = $scope.steps = $scope.workflow.steps || [];
+            $scope.wizardForm = {};
+
+            viewModel.btnText = extend({}, wizardLabels, $scope.workflow.btnText);
+            viewModel.btnIcon = $scope.workflow.btnIcon || {};
+            viewModel.showSpinner = false;
+            viewModel.hasError = false;
+
+            function switchTo(index) {
               /**
                * In each step's controller, $scope.$index can be used by the step
                * to identify itself. For example:
@@ -54,23 +56,32 @@
               });
               $scope.currentIndex = index;
               $scope.openHelp = false;
-            };
-            $scope.showError = function (errorMessage) {
-              $scope.showSpinner = false;
-              $scope.errorMessage = errorMessage;
-              $scope.hasError = true;
-            };
-            $scope.beforeSubmit = function () {
+            }
+
+            function showError(errorMessage) {
+              viewModel.showSpinner = false;
+              viewModel.errorMessage = errorMessage;
+              viewModel.hasError = true;
+            }
+
+            function beforeSubmit() {
               $scope.$broadcast(wizardEvents.BEFORE_SUBMIT);
-            };
-            $scope.afterSubmit = function () {
+            }
+
+            function afterSubmit() {
               $scope.$broadcast(wizardEvents.AFTER_SUBMIT);
               $scope.close();
-            };
-            $scope.onClickFinishBtn = function () {
-              $scope.beforeSubmit();
-              $scope.submit().then($scope.afterSubmit, $scope.showError);
-            };
+            }
+
+            function onClickFinishBtn() {
+              beforeSubmit();
+              $scope.submit().then(afterSubmit, showError);
+            }
+
+            $scope.switchTo = switchTo;
+            $scope.showError = showError;
+            viewModel.onClickFinishBtn = onClickFinishBtn;
+
             $scope.initPromise.then(
               function () {
                 $scope.$broadcast(wizardEvents.ON_INIT_SUCCESS);
@@ -125,7 +136,7 @@
             function checkAllReadiness() {
               var stepReadyPromises = [];
 
-              forEach($scope.steps, function (step, index) {
+              forEach(steps, function (step, index) {
                 step.ready = !step.checkReadiness;
 
                 if (step.checkReadiness) {
@@ -142,12 +153,12 @@
                 }
               });
 
-              $scope.ready = (stepReadyPromises.length === 0);
+              viewModel.ready = (stepReadyPromises.length === 0);
               return $q.all(stepReadyPromises);
             }
 
             function switchToFirstReadyStep() {
-              forEach($scope.steps, function (step, index) {
+              forEach(steps, function (step, index) {
                 if ($scope.currentIndex < 0 && step.ready) {
                   $scope.currentIndex = index;
                   return;
@@ -158,16 +169,16 @@
             // angular promise doesn't have #always method right now,
             // this is a simple workaround.
             function always() {
-              $scope.ready = true;
-              $scope.initTask.resolve();
+              initTask.resolve();
+              viewModel.ready = true;
               switchToFirstReadyStep();
             }
 
             checkAllReadiness().then(always, always);
           }],
-          templateUrl: path + 'wizard/wizard.html'
-        };
-      }
+        templateUrl: path + 'wizard/wizard.html'
+      };
+    }
     ])
 
     .controller('ModalContainerCtrl', ['$scope', '$modalInstance', 'launchContext',
