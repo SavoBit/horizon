@@ -28,10 +28,6 @@ class RuleObject(dict):
         v4_any_words = ['any', 'external']
         src = rule['source']
         dst = rule['destination']
-        if src not in v4_any_words:
-            src = src['cidr']
-        if dst not in v4_any_words:
-            dst = dst['cidr']
         rule['id'] = src + dst
         super(RuleObject, self).__init__(rule)
         # Horizon references id property for table operations
