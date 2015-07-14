@@ -18,19 +18,11 @@
 
   /**
    * @ngdoc overview
-   * @name hz.dashboard.workflow
+   * @name horizon.framework.util.filters
    * @description
-   *
-   * # hz.dashboard.workflow
-   *
-   * This module provides utility function factory `dashboardWorkflow` and
-   * `dashboardWorkflowDecorator`.
-   *
-   * | Factories                                                                                      |
-   * |------------------------------------------------------------------------------------------------|
-   * | {@link hz.dashboard.workflow.factory:dashboardWorkflowDecorator `dashboardWorkflowDecorator`}  |
+   * horizon.framework.util.filters provides common filters to be used within Horizon.
    *
    */
-  angular.module('hz.dashboard.workflow', []);
-
+  angular
+    .module('horizon.framework.util.filters', ['horizon.framework.util.i18n']);
 })();

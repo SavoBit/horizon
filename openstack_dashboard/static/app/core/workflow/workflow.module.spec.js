@@ -16,19 +16,10 @@
 (function () {
   'use strict';
 
-  /**
-   * @ngdoc overview
-   * @name horizon.app.core
-   * @description
-   *
-   * # horizon.app.core
-   *
-   * This module hosts modules of core functionality and services that supports
-   * components added to Horizon via its plugin mechanism.
-   */
-  angular
-    .module('horizon.app.core', [
-      'horizon.app.core.workflow'
-    ]);
+  describe('horizon.app.core.workflow module', function () {
+    it('should have been defined', function () {
+      expect(angular.module('horizon.app.core.workflow')).toBeDefined();
+    });
+  });
 
 })();

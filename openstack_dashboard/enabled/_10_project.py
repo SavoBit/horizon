@@ -21,7 +21,9 @@ ADD_EXCEPTIONS = {}
 # A list of applications to be added to INSTALLED_APPS.
 ADD_INSTALLED_APPS = ['openstack_dashboard.dashboards.project']
 
-ADD_ANGULAR_MODULES = []
+ADD_ANGULAR_MODULES = [
+    'hz.dashboard.project',
+]
 
 AUTO_DISCOVER_STATIC_FILES = True
 
@@ -29,9 +31,6 @@ LAUNCH_INST = 'dashboard/launch-instance/'
 
 ADD_JS_FILES = [
     'dashboard/dashboard.module.js',
-    'dashboard/workflow/workflow.module.js',
-    'dashboard/workflow/decorator.service.js',
-    'dashboard/workflow/workflow.service.js',
     'dashboard/cloud-services/cloud-services.js',
     LAUNCH_INST + 'launch-instance.module.js',
     LAUNCH_INST + 'launch-instance-workflow.service.js',
@@ -58,7 +57,6 @@ ADD_JS_FILES = [
 
 ADD_JS_SPEC_FILES = [
     'dashboard/dashboard.module.spec.js',
-    'dashboard/workflow/workflow.module.spec.js',
     'dashboard/cloud-services/cloud-services.spec.js',
     LAUNCH_INST + 'launch-instance.module.spec.js',
     LAUNCH_INST + 'launch-instance-workflow.service.spec.js',
