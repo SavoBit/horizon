@@ -108,10 +108,10 @@ class RulesGridTab(tabs.Tab):
                        'cidr': subnetmap[ip['subnet_id']]['cidr']}
                 subnets.append(sub)
         subnets.append({'ip': '0.0.0.0',
-                        'subnetid': 'external',
+                        'subnetid': 'any',
                         'subnetname': '',
-                        'networkname': 'external',
-                        'networkid': 'external',
+                        'networkname': 'any',
+                        'networkid': 'any',
                         'cidr': '0.0.0.0/0'})
         for source in subnets:
             row = {'source': dict(source),
