@@ -398,17 +398,23 @@ This example sorts flavors by vcpus in descending order::
 
 .. versionadded:: 2015.1(Kilo)
 
-Default: ``"static/themes/default"``
+Default: ``"themes/default"``
 
 This setting allows Horizon to use a custom theme. The theme folder
 should contain one _variables.scss file and one _styles.scss file.
-_variables.scss contains all the bootstrap and horizon specific variables
-which are used to style the GUI. Whereas _styles.scss contains extra styling.
-For example themes, see: /horizon/openstack_dashboard/static/themes/
+_variables.scss contains or must import all the bootstrap and horizon
+specific variables which are used to style the GUI. Whereas _styles.scss
+contains extra styling. For example themes, see:
+/horizon/openstack_dashboard/themes/
 
 If the static theme folder also contains a sub-folder 'templates', then
 the path to that sub-folder will be prepended to TEMPLATE_DIRS tuple
 to allow for theme specific template customizations.
+
+If the theme folder (or its static folder) contain an 'img' directory,
+then all images contained within dashboard/img can be overridden by providing
+a file with the same name.  This makes it very easy to customize logo.png,
+logo-splash.png and favicon.ico.
 
 ``DROPDOWN_MAX_ITEMS``
 ----------------------
@@ -1042,7 +1048,7 @@ Make sure you run ``python manage.py collectstatic`` and
 ``python manage.py compress`` after you change the ``_variables.scss`` file.
 
 For your convenience, a custom theme for only setting the web root has been
-provided see: ``"/horizon/openstack_dashboard/static/themes/webroot"``
+provided see: ``"/horizon/openstack_dashboard/themes/webroot"``
 
 .. note::
 
