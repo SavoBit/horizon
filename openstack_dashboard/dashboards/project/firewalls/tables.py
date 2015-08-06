@@ -285,6 +285,9 @@ class RulesTable(tables.DataTable):
     action = tables.Column("action",
                            display_choices=ACTION_DISPLAY_CHOICES,
                            verbose_name=_("Action"))
+    shared = tables.Column("shared",
+                           verbose_name=_("Shared"),
+                           filters=(filters.yesno, filters.capfirst))
     enabled = tables.Column("enabled",
                             verbose_name=_("Enabled"),
                             filters=(filters.yesno, filters.capfirst))
@@ -306,6 +309,9 @@ class PoliciesTable(tables.DataTable):
     description = tables.Column('description', verbose_name=_('Description'))
     firewall_rules = tables.Column(get_rules_name,
                                    verbose_name=_("Rules"))
+    shared = tables.Column("shared",
+                           verbose_name=_("Shared"),
+                           filters=(filters.yesno, filters.capfirst))
     audited = tables.Column("audited",
                             verbose_name=_("Audited"),
                             filters=(filters.yesno, filters.capfirst))

@@ -38,6 +38,7 @@ from django.utils.functional import SimpleLazyObject  # noqa
 from django.utils.importlib import import_module  # noqa
 from django.utils.module_loading import module_has_submodule  # noqa
 from django.utils.translation import ugettext_lazy as _
+import six
 
 from horizon import conf
 from horizon.decorators import _current_component  # noqa
@@ -254,6 +255,18 @@ class Panel(HorizonComponent):
         The ``name`` argument for the URL pattern which corresponds to
         the index view for this ``Panel``. This is the view that
         :meth:`.Panel.get_absolute_url` will attempt to reverse.
+
+    .. staticmethod:: can_register
+
+        This optional static method can be used to specify conditions that
+        need to be satisfied to load this panel. Unlike ``permissions`` and
+        ``allowed`` this method is intended to handle settings based
+        conditions rather than user based permission and policy checks.
+        The return value is boolean. If the method returns ``True``, then the
+        panel will be registered and available to user (if ``permissions`` and
+        ``allowed`` runtime checks are also satisfied). If the method returns
+        ``False``, then the panel will not be registered and will not be
+        available via normal navigation or direct URL access.
     """
     name = ''
     slug = ''
@@ -537,7 +550,7 @@ class Dashboard(Registry, HorizonComponent):
         panel_groups = []
         # If we have a flat iterable of panel names, wrap it again so
         # we have a consistent structure for the next step.
-        if all([isinstance(i, basestring) for i in self.panels]):
+        if all([isinstance(i, six.string_types) for i in self.panels]):
             self.panels = [self.panels]
 
         # Now iterate our panel sets.
@@ -769,7 +782,7 @@ class Site(Registry, HorizonComponent):
         if user_home:
             if callable(user_home):
                 return user_home(user)
-            elif isinstance(user_home, basestring):
+            elif isinstance(user_home, six.string_types):
                 # Assume we've got a URL if there's a slash in it
                 if '/' in user_home:
                     return user_home
@@ -921,6 +934,14 @@ class Site(Registry, HorizonComponent):
                     LOG.warning("Could not load panel: %s", mod_path)
                     return
                 panel = getattr(mod, panel_cls)
+                # test is can_register method is present and call method if
+                # it is to determine if the panel should be loaded
+                if hasattr(panel, 'can_register') and \
+                   callable(getattr(panel, 'can_register')):
+                    if not panel.can_register():
+                        LOG.debug("Load condition failed for panel: %(panel)s",
+                                  {'panel': panel_slug})
+                        return
                 dashboard_cls.register(panel)
                 if panel_group:
                     dashboard_cls.get_panel_group(panel_group).\

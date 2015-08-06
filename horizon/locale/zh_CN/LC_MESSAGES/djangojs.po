@@ -1,6 +1,6 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# Translations template for PROJECT.
+# Copyright (C) 2015 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
 #
 # Translators:
 # Alfred <alfredhuang211@qq.com>, 2015
@@ -8,39 +8,41 @@
 # Tom Fifield <tom@openstack.org>, 2015
 # Xiao Xi LIU <liuxx@cn.ibm.com>, 2014
 # Ying Chun Guo <daisy.ycguo@gmail.com>, 2015
+# 刘俊朋 <liujunpeng@inspur.com>, 2015
 # 颜海峰 <yanheven@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Horizon\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-04 21:20-0500\n"
-"PO-Revision-Date: 2015-06-04 15:51+0000\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2015-08-04 04:10+0000\n"
+"PO-Revision-Date: 2015-06-27 11:57+0000\n"
 "Last-Translator: openstackjenkins <jenkins@openstack.org>\n"
-"Language-Team: Chinese (China) (http://www.transifex.com/projects/p/horizon/"
+"Language-Team: Chinese (China) (http://www.transifex.com/openstack/horizon/"
 "language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.0\n"
 "Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#, c-format
+#, python-format
 msgid "%s GB"
 msgstr "%s GB"
 
-#, c-format
+#, python-format
 msgid "%s KB"
 msgstr "%s KB"
 
-#, c-format
+#, python-format
 msgid "%s MB"
 msgstr "%s MB"
 
-#, c-format
+#, python-format
 msgid "%s TB"
 msgstr "%s TB"
 
-#, c-format
+#, python-format
 msgid "%s bytes"
 msgstr "%s 字节"
 
@@ -74,9 +76,6 @@ msgstr "返回"
 msgid "Cancel"
 msgstr "取消"
 
-msgid "Cannot get service catalog from keystone."
-msgstr "无法由keystone获取服务目录。"
-
 msgid "Click here to expand the row and view the errors."
 msgstr "点击此处展开,并可浏览错误。"
 
@@ -92,7 +91,7 @@ msgstr "已关闭"
 msgid "Closing"
 msgstr "关闭中"
 
-#, c-format
+#, python-format
 msgid "Confirm %s"
 msgstr "确认 %s"
 
@@ -132,7 +131,7 @@ msgstr "删除路由"
 msgid "Detail Information"
 msgstr "详细信息"
 
-#, c-format
+#, python-format
 msgid "Displaying %s item"
 msgid_plural "Displaying %s items"
 msgstr[0] "正在显示 %s 项"
@@ -155,9 +154,6 @@ msgstr "展开可见已分配项"
 msgid "Expand to see available items"
 msgstr "展开可见可选项"
 
-msgid "Extension is not enabled: %(extension)s"
-msgstr "扩展没有启动: %(extension)s"
-
 msgid "Filter"
 msgstr "筛选"
 
@@ -166,9 +162,6 @@ msgstr "结束"
 
 msgid "Flavor"
 msgstr "云主机类型"
-
-msgid "Found %(found)s of %(total)s"
-msgstr "共有%(total)s已找到%(found)s"
 
 msgid "ID"
 msgstr "ID"
@@ -248,8 +241,8 @@ msgstr "模式不匹配"
 msgid "Please confirm your selection. "
 msgstr "请确认您的选择。"
 
-msgid "Policy check failed."
-msgstr "策略检查失败"
+msgid "Prompt"
+msgstr "提示"
 
 msgid "Re-order items using drag and drop"
 msgstr "使用拖放重新排序"
@@ -275,19 +268,13 @@ msgstr "从以下可选项中选择一项"
 msgid "Select one"
 msgstr "选择一个"
 
-msgid "Service type is not enabled: %(desiredType)s"
-msgstr "服务类型未激活：%(desiredType)s"
-
-msgid "Setting is not enabled: %(setting)s"
-msgstr "配置没有启用: %(setting)s"
-
 msgid "Shutdown"
 msgstr "关闭"
 
 msgid "Status"
 msgstr "状态"
 
-#, c-format
+#, python-format
 msgid "Status: %s"
 msgstr "状态: %s"
 
@@ -303,6 +290,9 @@ msgstr "成功："
 msgid "Terminate Instance"
 msgstr "终止实例"
 
+msgid "Text"
+msgstr "文本"
+
 msgid ""
 "The action cannot be performed. The contents of this row have errors or are "
 "missing information."
@@ -316,84 +306,6 @@ msgstr "在提交表单的时候出现错误，请再次尝试。"
 
 msgid "Total"
 msgstr "总共"
-
-msgid "Unable to create the domain."
-msgstr "无法创建域"
-
-msgid "Unable to create the keypair."
-msgstr "无法创建密匙对"
-
-msgid "Unable to create the network."
-msgstr "无法创建网络"
-
-msgid "Unable to create the project."
-msgstr "无法创建项目"
-
-msgid "Unable to create the role."
-msgstr "无法创建角色。"
-
-msgid "Unable to create the server."
-msgstr "无法创建服务器"
-
-msgid "Unable to create the subnet."
-msgstr "无法创建子网"
-
-msgid "Unable to create the user."
-msgstr "无法创建用户。"
-
-msgid "Unable to delete the domain."
-msgstr "无法删除域"
-
-msgid "Unable to delete the domains."
-msgstr "无法删除域"
-
-msgid "Unable to delete the project."
-msgstr "无法删除项目"
-
-msgid "Unable to delete the projects."
-msgstr "无法删除项目"
-
-msgid "Unable to delete the role."
-msgstr "无法删除角色"
-
-msgid "Unable to delete the roles."
-msgstr "无法删除角色"
-
-msgid "Unable to delete the user."
-msgstr "无法删除用户"
-
-msgid "Unable to delete the users."
-msgstr "无法删除用户"
-
-msgid "Unable to edit the domain."
-msgstr "无法编辑域"
-
-msgid "Unable to edit the project."
-msgstr "无法编辑项目"
-
-msgid "Unable to edit the role."
-msgstr "无法编辑角色"
-
-msgid "Unable to edit the user."
-msgstr "无法编辑用户"
-
-msgid "Unable to fetch the service catalog."
-msgstr "无法取得服务目录"
-
-msgid "Unable to grant the role."
-msgstr "无法授予角色"
-
-msgid "Unable to import the keypair."
-msgstr "无法导入密钥对"
-
-msgid "Unable to retrieve settings."
-msgstr "无法获取配置"
-
-msgid "Unable to retrieve the current user session."
-msgstr "无法获取当前用户会话。"
-
-msgid "Unable to retrieve users."
-msgstr "无法获取用户。"
 
 msgid "View Details"
 msgstr "查看详情"
@@ -425,9 +337,12 @@ msgstr ""
 "你可以通过从左边栏目目录选择到右边栏目来指定资源的元数据。在左边栏目是按照"
 "glance 元数据目录来定义的元数据。使用\"其他\"选项来增加元数据。"
 
-#, c-format
+#, python-format
 msgid "You have selected %s. "
 msgstr "你已经选择了 %s 。 "
 
 msgid "m1.small"
 msgstr "m1.small"
+
+msgid "m1.tiny"
+msgstr "m1.tiny"

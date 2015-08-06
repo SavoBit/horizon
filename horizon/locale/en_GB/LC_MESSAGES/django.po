@@ -1,6 +1,6 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# Translations template for PROJECT.
+# Copyright (C) 2015 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
 #
 # Translators:
 # Andi Chandler <andi@gowling.com>, 2014
@@ -8,15 +8,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Horizon\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-01 19:48-0500\n"
-"PO-Revision-Date: 2015-06-01 21:38+0000\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2015-08-04 04:10+0000\n"
+"PO-Revision-Date: 2015-06-15 15:01+0000\n"
 "Last-Translator: openstackjenkins <jenkins@openstack.org>\n"
-"Language-Team: English (United Kingdom) (http://www.transifex.com/projects/p/"
+"Language-Team: English (United Kingdom) (http://www.transifex.com/openstack/"
 "horizon/language/en_GB/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.0\n"
 "Language: en_GB\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
@@ -131,10 +132,6 @@ msgstr "Add a row"
 msgid "All available"
 msgstr "All available"
 
-#, python-format
-msgid "Allocated <span> %(used)s </span> of <span> %(available)s </span>"
-msgstr "Allocated <span> %(used)s </span> of <span> %(available)s </span>"
-
 msgid "Available"
 msgstr "Available"
 
@@ -180,12 +177,6 @@ msgstr "Fake"
 msgid "Filter"
 msgstr "Filter"
 
-msgid "Floating IPs"
-msgstr "Floating IPs"
-
-msgid "Help"
-msgstr "Help"
-
 msgid "Horizon"
 msgstr "Horizon"
 
@@ -194,9 +185,6 @@ msgstr "Incorrect format for IP address"
 
 msgid "Info: "
 msgstr "Info: "
-
-msgid "Instances"
-msgstr "Instances"
 
 msgid "Invalid metadata entry. Use comma-separated key=value pairs"
 msgstr "Invalid metadata entry. Use comma-separated key=value pairs"
@@ -212,10 +200,6 @@ msgstr "Limit Summary"
 
 msgid "Log In"
 msgstr "Log In"
-
-#, python-format
-msgid "Logged in as: %(username)s"
-msgstr "Logged in as: %(username)s"
 
 msgid "Login"
 msgstr "Login"
@@ -246,9 +230,6 @@ msgstr "Next"
 
 msgid "Next&nbsp;&raquo;"
 msgstr "Next&nbsp;&raquo;"
-
-msgid "No Limit"
-msgstr "No Limit"
 
 msgid "No items to display."
 msgstr "No items to display."
@@ -290,14 +271,8 @@ msgstr "Port number must be integer"
 msgid "Processing..."
 msgstr "Processing..."
 
-msgid "RAM"
-msgstr "RAM"
-
 msgid "Save"
 msgstr "Save"
-
-msgid "Security Groups"
-msgstr "Security Groups"
 
 #, python-format
 msgid "Select a %s to browse."
@@ -311,9 +286,6 @@ msgstr "Session timed out."
 
 msgid "Sign In"
 msgstr "Sign In"
-
-msgid "Sign Out"
-msgstr "Sign Out"
 
 msgid "Submit"
 msgstr "Submit"
@@ -365,19 +337,6 @@ msgstr "Updated"
 
 msgid "Usage Summary"
 msgstr "Usage Summary"
-
-#, python-format
-msgid "Used <span> %(used)s </span> of <span> %(available)s </span>"
-msgstr "Used <span> %(used)s </span> of <span> %(available)s </span>"
-
-msgid "VCPUs"
-msgstr "VCPUs"
-
-msgid "Volume Storage"
-msgstr "Volume Storage"
-
-msgid "Volumes"
-msgstr "Volumes"
 
 msgid "Warning: "
 msgstr "Warning: "

@@ -1,20 +1,21 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# Translations template for PROJECT.
+# Copyright (C) 2015 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
 #
 # Translators:
 msgid ""
 msgstr ""
 "Project-Id-Version: Horizon\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-27 03:00-0500\n"
-"PO-Revision-Date: 2015-05-13 19:11+0000\n"
-"Last-Translator: Akihiro Motoki <amotoki@gmail.com>\n"
-"Language-Team: Italian (http://www.transifex.com/projects/p/horizon/language/"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2015-08-04 04:10+0000\n"
+"PO-Revision-Date: 2015-06-15 15:01+0000\n"
+"Last-Translator: openstackjenkins <jenkins@openstack.org>\n"
+"Language-Team: Italian (http://www.transifex.com/openstack/horizon/language/"
 "it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.0\n"
 "Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
@@ -97,12 +98,6 @@ msgstr "Errore:"
 msgid "Filter"
 msgstr "Filtro"
 
-msgid "Floating IPs"
-msgstr "Floating IPs"
-
-msgid "Help"
-msgstr "Aiuto"
-
 msgid "Horizon"
 msgstr "Horizon"
 
@@ -111,9 +106,6 @@ msgstr "Formato incorretto per l'indirizzo IP"
 
 msgid "Info: "
 msgstr "Info: "
-
-msgid "Instances"
-msgstr "Istanze"
 
 msgid "Invalid subnet mask"
 msgstr "Maschera sottorete non valida."
@@ -126,10 +118,6 @@ msgstr "Riepilogo dei Limiti"
 
 msgid "Log In"
 msgstr "Log In"
-
-#, python-format
-msgid "Logged in as: %(username)s"
-msgstr "Autenticato come: %(username)s"
 
 msgid "Login"
 msgstr "Login"
@@ -155,9 +143,6 @@ msgstr "Mai"
 
 msgid "Next"
 msgstr "Prossimo"
-
-msgid "No Limit"
-msgstr "Nessun Limite"
 
 msgid "No items to display."
 msgstr "Nessun elemento da visualizzare"
@@ -199,14 +184,8 @@ msgstr "Il numero porta deve essere un intero"
 msgid "Processing..."
 msgstr "Attendere prego..."
 
-msgid "RAM"
-msgstr "RAM"
-
 msgid "Save"
 msgstr "Salva"
-
-msgid "Security Groups"
-msgstr "Gruppi di Protezione"
 
 #, python-format
 msgid "Select a %s to browse."
@@ -217,9 +196,6 @@ msgstr "Sessione scaduta."
 
 msgid "Sign In"
 msgstr "Accesso"
-
-msgid "Sign Out"
-msgstr "Disconnessione"
 
 msgid "Submit"
 msgstr "Invia"
@@ -256,19 +232,6 @@ msgstr "Aggiornato"
 
 msgid "Usage Summary"
 msgstr "Riepilogo dell'Utilizzo"
-
-#, python-format
-msgid "Used <span> %(used)s </span> of <span> %(available)s </span>"
-msgstr "Utilizzati <span> %(used)s </span> di <span> %(available)s </span>"
-
-msgid "VCPUs"
-msgstr "VCPUs"
-
-msgid "Volume Storage"
-msgstr "Volume Storage"
-
-msgid "Volumes"
-msgstr "Volumi"
 
 msgid "Warning: "
 msgstr "Attenzione:"

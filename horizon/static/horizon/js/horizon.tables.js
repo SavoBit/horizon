@@ -1,4 +1,3 @@
-/* global STATIC_URL */
 /* Namespace for core functionality related to DataTables. */
 horizon.datatables = {
   update: function () {
@@ -56,7 +55,7 @@ horizon.datatables = {
                 horizon.datatables.update_actions();
                 break;
               default:
-                horizon.utils.log(gettext("An error occurred while updating."));
+                console.log(gettext("An error occurred while updating."));
                 $row.removeClass("ajax-update");
                 $row.find("i.ajax-updating").remove();
                 break;
@@ -70,7 +69,8 @@ horizon.datatables = {
               var imagePath = $new_row.find('.btn-action-required').length > 0 ?
                 "dashboard/img/action_required.png":
                 "dashboard/img/loading.gif";
-              imagePath = STATIC_URL + imagePath;
+
+              imagePath = window.STATIC_URL + imagePath;
               spinner_elm.prepend(
                 $("<div>")
                   .addClass("loading_gif")
@@ -127,7 +127,7 @@ horizon.datatables = {
       horizon.ajax.queue({
         url: $action.attr('data-update-url'),
         error: function () {
-          horizon.utils.log(gettext("An error occurred while updating."));
+          console.log(gettext("An error occurred while updating."));
         },
         success: function (data) {
           var $new_action = $(data);
@@ -145,8 +145,9 @@ horizon.datatables = {
     // Enable or disable table batch action buttons based on row selection.
     $form = $form || $(".table_wrapper > form");
     $form.each(function () {
-      var checkboxes = $(this).find(".table-row-multi-select:checkbox");
-      var action_buttons = $(this).find('.table_actions button[data-batch-action="true"]');
+      var $this = $(this);
+      var checkboxes = $this.find(".table-row-multi-select:checkbox");
+      var action_buttons = $this.find('.table_actions button[data-batch-action="true"]');
       action_buttons.toggleClass("disabled", !checkboxes.filter(":checked").length);
     });
   },
@@ -183,15 +184,16 @@ horizon.datatables = {
     // submit is completed to remove these changes.
     $form = $form || $(".table_wrapper > form");
     $form.on("submit", function () {
+      var $this = $(this);
       // Add the 'submitted' flag to the form so the row update interval knows
       // not to update the row and therefore re-enable the actions that we are
       // disabling here.
-      $(this).attr('data-submitted', 'true');
+      $this.attr('data-submitted', 'true');
       // Disable row action buttons. This prevents multiple form submission.
-      $(this).find('td.actions_column button[type="submit"]').addClass("disabled");
+      $this.find('td.actions_column button[type="submit"]').addClass("disabled");
       // Use CSS to update the cursor so it's very clear that an action is
       // in progress.
-      $(this).addClass('wait');
+      $this.addClass('wait');
     });
   }
 };
@@ -240,7 +242,11 @@ horizon.datatables.confirm = function (action) {
   }
   modal.find('.btn-primary').click(function () {
     form = $action.closest('form');
-    form.append("<input type='hidden' name='" + $action.attr('name') + "' value='" + $action.attr('value') + "'/>");
+    var el = document.createElement("input");
+    el.type='hidden';
+    el.name = $action.attr('name');
+    el.value = $action.attr('value');
+    form.append(el);
     form.submit();
     modal.modal('hide');
     horizon.modals.modal_spinner(gettext("Working"));
@@ -592,7 +598,9 @@ horizon.addInitFunction(horizon.datatables.init = function() {
   horizon.modals.addModalInitFunction(horizon.datatables.set_table_query_filter);
   horizon.modals.addModalInitFunction(horizon.datatables.set_table_fixed_filter);
   horizon.modals.addModalInitFunction(horizon.datatables.initialize_table_tooltips);
-  horizon.modals.addModalInitFunction(horizon.datatables.disable_actions_on_submit);
+  horizon.modals.addModalInitFunction(function modalInitActionDisable(modal) {
+    horizon.datatables.disable_actions_on_submit($(modal).find(".table_wrapper > form"));
+  });
 
   // Also apply on tables in tabs views for lazy-loaded data.
   horizon.tabs.addTabLoadFunction(horizon.datatables.add_table_checkboxes);

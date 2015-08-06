@@ -193,6 +193,8 @@ class LiveMigrateView(forms.ModalFormView):
 
 class DetailView(views.DetailView):
     redirect_url = 'horizon:admin:instances:index'
+    image_url = 'horizon:admin:images:detail'
+    volume_url = 'horizon:admin:volumes:volumes:detail'
 
     def _get_actions(self, instance):
         table = project_tables.AdminInstancesTable(self.request)

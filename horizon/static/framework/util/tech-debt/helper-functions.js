@@ -1,28 +1,16 @@
 (function () {
   'use strict';
 
-  angular.module('horizon.framework.util.tech-debt')
-    .service('horizon.framework.util.tech-debt.helper-functions', utils);
+  angular
+    .module('horizon.framework.util.tech-debt')
+    .factory('horizon.framework.util.tech-debt.helper-functions', utils);
 
   // An example of using the John Papa recommended $inject instead of in-line
   // array syntax
-  utils.$inject = [
-      'horizon.dashboard-app.conf',
-      '$log',
-      '$rootScope',
-      '$compile'];
+  utils.$inject = ['$rootScope', '$compile'];
 
-  function utils(hzConfig, $log, $rootScope, $compile) {
+  function utils($rootScope, $compile) {
     return {
-      /*
-       Use the log levels of http://docs.angularjs.org/api/ng.$log
-       default to log level.
-       */
-      log: function (msg, lvl) {
-        if (hzConfig.debug) {
-          ($log[lvl] || $log.log)(msg);
-        }
-      },
       capitalize: function (string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
       },
@@ -65,9 +53,7 @@
          Compilation fails when it could not find a directive,
          fails silently on this, it is an angular behaviour.
          */
-
-      },
-
+      }
     };
   }
 }());

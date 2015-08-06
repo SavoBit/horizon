@@ -519,6 +519,16 @@ class FilterAction(BaseAction):
         return False
 
 
+class NameFilterAction(FilterAction):
+    """A filter action for name property."""
+
+    def filter(self, table, items, filter_string):
+        """Naive case-insensitive search."""
+        query = filter_string.lower()
+        return [item for item in items
+                if query in item.name.lower()]
+
+
 class FixedFilterAction(FilterAction):
     """A filter action with fixed buttons."""
 
@@ -763,9 +773,9 @@ class BatchAction(Action):
             msgstr = action
         else:
             if action_type == "past":
-                msgstr = pgettext_lazy("past", "%(action)s %(data_type)s")
+                msgstr = pgettext_lazy(u"past", "%(action)s %(data_type)s")
             else:
-                msgstr = pgettext_lazy("present", "%(action)s %(data_type)s")
+                msgstr = pgettext_lazy(u"present", "%(action)s %(data_type)s")
         return msgstr % {'action': action, 'data_type': data_type}
 
     def action(self, request, datum_id):
@@ -819,9 +829,11 @@ class BatchAction(Action):
                 # an aggregate error message later. Otherwise we'd get
                 # multiple error messages displayed to the user.
                 action_failure.append(datum_display)
-                LOG.warning('Action %s Failed for %s' %
-                            (self._get_action_name(past=True).lower(),
-                             datum_display), ex)
+                action_description = (
+                    self._get_action_name(past=True).lower(), datum_display)
+                LOG.warning(
+                    'Action %(action)s Failed for %(reason)s', {
+                        'action': action_description, 'reason': ex})
 
         # Begin with success message class, downgrade to info if problems.
         success_message_level = messages.success

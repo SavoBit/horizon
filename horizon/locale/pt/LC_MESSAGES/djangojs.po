@@ -1,36 +1,37 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# Translations template for PROJECT.
+# Copyright (C) 2015 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
 #
 # Translators:
 msgid ""
 msgstr ""
 "Project-Id-Version: Horizon\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-04 21:20-0500\n"
-"PO-Revision-Date: 2015-06-04 15:51+0000\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2015-08-04 04:10+0000\n"
+"PO-Revision-Date: 2015-06-27 11:57+0000\n"
 "Last-Translator: openstackjenkins <jenkins@openstack.org>\n"
-"Language-Team: Portuguese (http://www.transifex.com/projects/p/horizon/"
+"Language-Team: Portuguese (http://www.transifex.com/openstack/horizon/"
 "language/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.0\n"
 "Language: pt\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, c-format
+#, python-format
 msgid "%s GB"
 msgstr "%s GB"
 
-#, c-format
+#, python-format
 msgid "%s KB"
 msgstr "%s KB"
 
-#, c-format
+#, python-format
 msgid "%s MB"
 msgstr "%s MB"
 
-#, c-format
+#, python-format
 msgid "%s TB"
 msgstr "%s TB"
 
@@ -55,7 +56,7 @@ msgstr "Voltar"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#, c-format
+#, python-format
 msgid "Confirm %s"
 msgstr "Confirmar %s"
 
@@ -156,9 +157,6 @@ msgstr ""
 msgid "There was an error submitting the form. Please try again."
 msgstr "Ocorreu um erro ao enviar o formulário. Por favor, tente novamente."
 
-msgid "Unable to retrieve users."
-msgstr "Não é possível obter os utilizadores."
-
 msgid "View Details"
 msgstr "Ver Detalhes"
 
@@ -171,6 +169,6 @@ msgstr "A processar"
 msgid "Yes"
 msgstr "Sim"
 
-#, c-format
+#, python-format
 msgid "You have selected %s. "
 msgstr "Seleccionou %s."

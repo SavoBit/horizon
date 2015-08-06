@@ -22,64 +22,6 @@
     });
   });
 
-  describe("Filters", function() {
-    var filter;
-
-    beforeEach(module('horizon.framework.widgets.transfer-table'));
-
-    describe("warningText", function() {
-
-      beforeEach(inject(function(warningTextFilter) {
-        filter = warningTextFilter;
-      }));
-
-      it('returns value if present', function() {
-        expect(filter({ thing: 'stuff'}, 'thing')).toBe('stuff');
-      });
-
-      it('returns empty string if not present', function() {
-        expect(filter({ thing: 'stuff'}, 'other')).toBe('');
-      });
-
-    });
-
-    describe("rowFilter", function() {
-
-      beforeEach(inject(function(rowFilterFilter) {
-        filter = rowFilterFilter;
-      }));
-
-      it('returns item if field is falsy', function() {
-        expect(filter({ hi: 'there' }, false)).toEqual({ hi: 'there' });
-      });
-
-      it('returns items only where field property is falsy', function() {
-        var items = [
-          {hi: 'there'},
-          {},
-          {hi: true},
-          {hi: false}
-        ];
-        expect(filter(items, 'hi')).toEqual([{}, {hi: false}]);
-      });
-
-    });
-
-    describe("foundText", function() {
-
-      beforeEach(inject(function(foundTextFilter) {
-        filter = foundTextFilter;
-      }));
-
-      it('returns expected text', function() {
-        var items = [1,2,3];
-        expect(filter(items, 6)).toBe('Found 3 of 6');
-      });
-
-    });
-
-  });
-
   describe('transfer-table directive', function() {
 
     var $scope, $timeout, $element;
@@ -112,6 +54,7 @@
           displayedAllocated: []
         };
 
+        /*eslint-disable max-len */
         var markup = '<transfer-table tr-model="tableData">' +
           '<allocated>' +
           '<table st-table="tableData.displayedAllocated" st-safe-src="tableData.allocated" hz-table>' +
@@ -138,11 +81,12 @@
           '</table>' +
           '</available>' +
           '</transfer-table>';
+        /*eslint-enable max-len */
 
         $element = angular.element(markup);
         $compile($element)($scope);
 
-        $scope.$digest();
+        $scope.$apply();
       }));
 
       it('should have 0 allocated rows', function() {
@@ -209,6 +153,7 @@
           maxAllocation: 2
         };
 
+        /*eslint-disable max-len */
         var markup = '<transfer-table tr-model="tableData" limits="limits">' +
           '<available>' +
           '<table st-table="tableData.available" hz-table>' +
@@ -235,11 +180,12 @@
           '</table>' +
           '</allocated>' +
           '</transfer-table>';
+        /*eslint-enable max-len */
 
         $element = angular.element(markup);
         $compile($element)($scope);
 
-        $scope.$digest();
+        $scope.$apply();
       }));
 
       it('should have 0 allocated rows', function() {

@@ -1,6 +1,6 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# Translations template for PROJECT.
+# Copyright (C) 2015 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
 #
 # Translators:
 # Ian Y. Choi <ianyrchoi@gmail.com>, 2015
@@ -9,35 +9,36 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Horizon\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-05 01:49-0500\n"
-"PO-Revision-Date: 2015-06-07 15:39+0000\n"
-"Last-Translator: Sungjin Kang <potopro@gmail.com>\n"
-"Language-Team: Korean (Korea) (http://www.transifex.com/projects/p/horizon/"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2015-08-04 04:10+0000\n"
+"PO-Revision-Date: 2015-07-07 11:52+0000\n"
+"Last-Translator: openstackjenkins <jenkins@openstack.org>\n"
+"Language-Team: Korean (Korea) (http://www.transifex.com/openstack/horizon/"
 "language/ko_KR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.0\n"
 "Language: ko_KR\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#, c-format
+#, python-format
 msgid "%s GB"
 msgstr "%s GB"
 
-#, c-format
+#, python-format
 msgid "%s KB"
 msgstr "%s KB"
 
-#, c-format
+#, python-format
 msgid "%s MB"
 msgstr "%s MB"
 
-#, c-format
+#, python-format
 msgid "%s TB"
 msgstr "%s TB"
 
-#, c-format
+#, python-format
 msgid "%s bytes"
 msgstr "%s 바이트"
 
@@ -71,9 +72,6 @@ msgstr "뒤로"
 msgid "Cancel"
 msgstr "취소"
 
-msgid "Cannot get service catalog from keystone."
-msgstr "Keystone으로부터 서비스 목록을 가져올 수 없습니다."
-
 msgid "Click here to expand the row and view the errors."
 msgstr "클릭하여 열을 확장하고 에러를 확인할 수 있습니다."
 
@@ -89,7 +87,7 @@ msgstr "닫음"
 msgid "Closing"
 msgstr "닫는중"
 
-#, c-format
+#, python-format
 msgid "Confirm %s"
 msgstr "%s를 확인하세요."
 
@@ -129,7 +127,7 @@ msgstr "라우터 삭제"
 msgid "Detail Information"
 msgstr "상세 정보"
 
-#, c-format
+#, python-format
 msgid "Displaying %s item"
 msgid_plural "Displaying %s items"
 msgstr[0] "%s 항목 표시"
@@ -152,9 +150,6 @@ msgstr "할당된 항목을 볼 수 있도록 확장"
 msgid "Expand to see available items"
 msgstr "사용 가능한 항목을 볼 수 있도록 확장"
 
-msgid "Extension is not enabled: %(extension)s"
-msgstr "확장을 활성화하지 못 했습니다: %(extension)s"
-
 msgid "Filter"
 msgstr "필터"
 
@@ -163,9 +158,6 @@ msgstr "완료"
 
 msgid "Flavor"
 msgstr "Flavor"
-
-msgid "Found %(found)s of %(total)s"
-msgstr "%(total)s 의 %(found)s 찾기"
 
 msgid "ID"
 msgstr "ID"
@@ -245,9 +237,6 @@ msgstr "패턴 불일치"
 msgid "Please confirm your selection. "
 msgstr "선택 사항을 확인하십시오."
 
-msgid "Policy check failed."
-msgstr "정책 확인 실패함."
-
 msgid "Prompt"
 msgstr "프롬프트"
 
@@ -275,19 +264,13 @@ msgstr "아래의 사용 가능한 항목에서 항목을 선택"
 msgid "Select one"
 msgstr "하나 선택"
 
-msgid "Service type is not enabled: %(desiredType)s"
-msgstr "서비스 타입을 활성화하지 못 했습니다: %(desiredType)s"
-
-msgid "Setting is not enabled: %(setting)s"
-msgstr "설정을 활성하지 못했습니다: %(setting)s"
-
 msgid "Shutdown"
 msgstr "Shutdown"
 
 msgid "Status"
 msgstr "상태"
 
-#, c-format
+#, python-format
 msgid "Status: %s"
 msgstr "상태: %s"
 
@@ -322,90 +305,6 @@ msgstr "양식을 제출하는 동안 오류가 발생하였습니다. 다시 �
 msgid "Total"
 msgstr "총합"
 
-msgid "Unable to create the domain."
-msgstr "도메인을 만들지 못했습니다."
-
-msgid "Unable to create the keypair."
-msgstr "Keypair를 생성하지 못했습니다."
-
-msgid "Unable to create the network."
-msgstr "네트워크를 생성하지 못했습니다."
-
-msgid "Unable to create the project."
-msgstr "프로젝트를 만들지 못했습니다."
-
-msgid "Unable to create the role."
-msgstr "Role을 만들지 못했습니다."
-
-msgid "Unable to create the server."
-msgstr "서버를 생성하지 못했습니다."
-
-msgid "Unable to create the subnet."
-msgstr "서브넷을 생성하지 못했습니다."
-
-msgid "Unable to create the user."
-msgstr "사용자를 만들지 못했습니다."
-
-msgid "Unable to delete the domain."
-msgstr "도메인을 삭제하지 못했습니다."
-
-msgid "Unable to delete the domains."
-msgstr "도메인을 삭제하지 못했습니다."
-
-msgid "Unable to delete the project."
-msgstr "프로젝트를 삭제하지 못했습니다."
-
-msgid "Unable to delete the projects."
-msgstr "프로젝트를 삭제하지 못했습니다."
-
-msgid "Unable to delete the role."
-msgstr "Role을 삭제하지 못했습니다."
-
-msgid "Unable to delete the roles."
-msgstr "Role을 삭제하지 못했습니다."
-
-msgid "Unable to delete the user."
-msgstr "사용자를 삭제하지 못했습니다."
-
-msgid "Unable to delete the users."
-msgstr "사용자를 삭제하지 못했습니다."
-
-msgid "Unable to edit the domain."
-msgstr "도메인을 수정하지 못했습니다."
-
-msgid "Unable to edit the project."
-msgstr "프로젝트를 수정하지 못했습니다."
-
-msgid "Unable to edit the role."
-msgstr "Role을 수정하지 못했습니다."
-
-msgid "Unable to edit the user."
-msgstr "사용자를 수정하지 못했습니다."
-
-msgid "Unable to fetch the service catalog."
-msgstr "서비스 카탈로그를 가져올 수 없습니다."
-
-msgid "Unable to grant the role."
-msgstr "Role을 부여하지 못했습니다."
-
-msgid "Unable to import the keypair."
-msgstr "키페어를 가져올 수 없습니다."
-
-msgid "Unable to retrieve settings."
-msgstr "설정을 찾지 못했습니다."
-
-msgid "Unable to retrieve the current user session."
-msgstr "현재 사용자 섹션을 찾을 수 없습니다."
-
-msgid "Unable to retrieve the volume snapshots."
-msgstr "볼륨 스냅샷을 찾지 못했습니다."
-
-msgid "Unable to retrieve the volumes."
-msgstr "볼륨을 찾지 못했습니다."
-
-msgid "Unable to retrieve users."
-msgstr "사용자를 찾지 못 했습니다."
-
 msgid "View Details"
 msgstr "세부 정보 보기"
 
@@ -437,7 +336,7 @@ msgstr ""
 "다. 왼쪽 열에서 Glance 메타데이터 카탈로그에서 메타데이터를 정의할 수 있습니"
 "다. \"Other\" 옵션을 사용하여 선택한 키를 메타데이터에 추가할 수 있습니다."
 
-#, c-format
+#, python-format
 msgid "You have selected %s. "
 msgstr "%s를 선택하였습니다. "
 

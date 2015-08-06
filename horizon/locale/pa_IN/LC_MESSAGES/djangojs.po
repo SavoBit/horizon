@@ -1,43 +1,47 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# Translations template for PROJECT.
+# Copyright (C) 2015 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
 #
 # Translators:
 # Amandeep Singh Saini <jimidar@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Horizon\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-04 21:20-0500\n"
-"PO-Revision-Date: 2015-06-04 15:47+0000\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2015-08-04 04:10+0000\n"
+"PO-Revision-Date: 2015-07-09 06:23+0000\n"
 "Last-Translator: openstackjenkins <jenkins@openstack.org>\n"
-"Language-Team: Panjabi (Punjabi) (India) (http://www.transifex.com/projects/"
-"p/horizon/language/pa_IN/)\n"
+"Language-Team: Panjabi (Punjabi) (India) (http://www.transifex.com/openstack/"
+"horizon/language/pa_IN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.0\n"
 "Language: pa_IN\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, c-format
+#, python-format
 msgid "%s GB"
 msgstr "%s GB"
 
-#, c-format
+#, python-format
 msgid "%s KB"
 msgstr "%s KB"
 
-#, c-format
+#, python-format
 msgid "%s MB"
 msgstr "%s MB"
 
-#, c-format
+#, python-format
 msgid "%s TB"
 msgstr "%s TB"
 
-#, c-format
+#, python-format
 msgid "%s bytes"
 msgstr "%s ਬਾਈਟਾਂ"
+
+msgid "Active"
+msgstr "فعال كریں"
 
 msgid "Add Interface"
 msgstr "ਇੰਟਰਫੇਸ ਜੋੜ੍ਹੋ"
@@ -63,9 +67,6 @@ msgstr "ਪਿੱਛੇ"
 msgid "Cancel"
 msgstr "ਰੱਦ ਕਰੋ"
 
-msgid "Cannot get service catalog from keystone."
-msgstr "ਕੀਅਸਟੋਨ ਤੋਂ ਸੇਵਾ ਕੈਟਾਲੌਗ ਨਹੀਂ ਲੈ ਸਕਦਾ।"
-
 msgid "Click here to expand the row and view the errors."
 msgstr "ਸਤਰ੍ਹ ਨੂੰ ਫੈਲਾਉਣ ਤੇ ਗਲਤੀਆਂ ਨੂੰ ਵੇਖਣ ਲਈ ਇੱਥੇ ਕਲਿੱਕ ਕਰੋ।"
 
@@ -81,7 +82,7 @@ msgstr "ਬੰਦ ਹੋਇਆ"
 msgid "Closing"
 msgstr "ਬੰਦ ਕਰ ਰਿਹਾ"
 
-#, c-format
+#, python-format
 msgid "Confirm %s"
 msgstr "%s ਦੀ ਪੁਸ਼ਟੀ ਕਰੋ"
 
@@ -136,17 +137,14 @@ msgstr "ਵੰਡ ਹੋ ਚੁੱਕੀਆਂ ਚੀਜ਼ਾਂ ਵੇਖਣ �
 msgid "Expand to see available items"
 msgstr "ਉਪਲੱਬਧ ਚੀਜ਼ਾਂ ਵੇਖਣ ਲਈ ਫੈਲਾਉ"
 
-msgid "Extension is not enabled: %(extension)s"
-msgstr "ਐਕਸਟੈਂਸ਼ਨ ਯੋਗ ਨਹੀਂ ਕੀਤੀ ਹੋਈ ਹੈ: %(extension)s"
-
 msgid "Filter"
 msgstr "ਛਾਣਨੀ (ਫਿਲਟਰ)"
 
 msgid "Finish"
 msgstr "ਮੁਕੰਮਲ"
 
-msgid "Found %(found)s of %(total)s"
-msgstr "%(found)s ਲੱਭੇ %(total)s ਵਿੱਚੋਂ"
+msgid "Flavor"
+msgstr "فلیور"
 
 msgid "ID"
 msgstr "ID"
@@ -226,11 +224,11 @@ msgstr "ਬੇਮੇਲ ਨਮੂਨਾ"
 msgid "Please confirm your selection. "
 msgstr "ਕਿਰਪਾ ਕਰ ਕੇ ਆਪਣੀ ਚੋਣ ਦੀ ਪੁਸ਼ਟੀ ਕਰੋ।"
 
-msgid "Policy check failed."
-msgstr "ਨੀਤੀ ਪੜਤਾਲ ਅਸਫਲ ਹੋਈ।"
-
 msgid "Re-order items using drag and drop"
 msgstr "ਧੂਹ ਕੇ ਸੁੱਟਣ (ਡਰੈਗ ਐੰਡ ਡਰੌਪ) ਨਾਲ ਚੀਜ਼ਾਂ ਨੂੰ ਮੁੜ ਤਰਤੀਬ ਦਿਉ"
+
+msgid "Remove"
+msgstr "نكالیں"
 
 msgid "Required"
 msgstr "ਲੋੜੀਂਦਾ"
@@ -247,16 +245,10 @@ msgstr "ਹੇਠਾਂ ਉਪਲੱਬਧ ਚੀਜ਼ਾਂ ਵਿੱਚੋਂ
 msgid "Select one"
 msgstr "ਇੱਕ ਚੁਣੋ"
 
-msgid "Service type is not enabled: %(desiredType)s"
-msgstr "ਸੇਵਾ ਕਿਸਮ ਯੋਗ ਨਹੀਂ ਕੀਤੀ ਹੋਈ ਹੈ: %(desiredType)s"
-
-msgid "Setting is not enabled: %(setting)s"
-msgstr "ਸੈਟਿੰਗ ਯੋਗ ਨਹੀਂ ਕੀਤੀ ਹੋਈ ਹੈ: %(setting)s"
-
 msgid "Status"
 msgstr "ਹਾਲਾਤ"
 
-#, c-format
+#, python-format
 msgid "Status: %s"
 msgstr "ਹਾਲਾਤ: %s"
 
@@ -282,81 +274,6 @@ msgstr "ਸਰਵਰ ਨਾਲ ਸੰਚਾਰ ਕਰਨ ਵੇਲੇ ਇੱਕ 
 
 msgid "There was an error submitting the form. Please try again."
 msgstr "ਫਾਰਮ ਸਮਰਪਣ ਵੇਲੇ ਇੱਕ ਗਲਤੀ ਸੀ। ਕਿਰਪਾ ਕਰ ਕੇ ਫਿਰ ਕੋਸ਼ਿਸ਼ ਕਰੋ।"
-
-msgid "Unable to create the domain."
-msgstr "ਡੋਮੇਨ ਨੂੰ ਬਣਾਉਣ ਤੋਂ ਅਸਮਰੱਥ।"
-
-msgid "Unable to create the keypair."
-msgstr "ਚਾਬੀ-ਜੋੜੀ ਨੂੰ ਬਣਾਉਣ ਤੋਂ ਅਸਮਰੱਥ।"
-
-msgid "Unable to create the network."
-msgstr "ਨੈੱਟਵਰਕ ਨੂੰ ਬਣਾਉਣ ਤੋਂ ਅਸਮਰੱਥ।"
-
-msgid "Unable to create the project."
-msgstr "ਪ੍ਰੋਜੈਕਟ ਨੂੰ ਬਣਾਉਣ ਤੋਂ ਅਸਮਰੱਥ।"
-
-msgid "Unable to create the role."
-msgstr "ਰੋਲ ਨੂੰ ਬਣਾਉਣ ਤੋਂ ਅਸਮਰੱਥ।"
-
-msgid "Unable to create the server."
-msgstr "ਸਰਵਰ ਬਣਾਉਣ ਤੋਂ ਅਸਮਰੱਥ।"
-
-msgid "Unable to create the subnet."
-msgstr "ਉਪ-ਨੈੱਟ (ਸਬ-ਨੈੱਟ) ਬਣਾਉਣ ਤੋਂ ਅਸਮਰੱਥ।"
-
-msgid "Unable to create the user."
-msgstr "ਵਰਤੋਂਕਾਰ ਨੂੰ ਬਣਾਉਣ ਤੋਂ ਅਸਮਰੱਥ।"
-
-msgid "Unable to delete the domain."
-msgstr "ਡੋਮੇਨ ਨੂੰ ਮਿਟਾਉਣ ਤੋਂ ਅਸਮਰੱਥ।"
-
-msgid "Unable to delete the domains."
-msgstr "ਡੋਮੇਨਾਂ ਨੂੰ ਮਿਟਾਉਣ ਤੋਂ ਅਸਮਰੱਥ।"
-
-msgid "Unable to delete the project."
-msgstr "ਪ੍ਰੋਜੈਕਟ ਨੂੰ ਮਿਟਾਉਣ ਤੋਂ ਅਸਮਰੱਥ।"
-
-msgid "Unable to delete the projects."
-msgstr "ਪ੍ਰੋਜੈਕਟਾਂ ਨੂੰ ਮਿਟਾਉਣ ਤੋਂ ਅਸਮਰੱਥ।"
-
-msgid "Unable to delete the role."
-msgstr "ਰੋਲ ਨੂੰ ਮਿਟਾਉਣ ਤੋਂ ਅਸਮਰੱਥ।"
-
-msgid "Unable to delete the roles."
-msgstr "ਰੋਲਾਂ ਨੂੰ ਮਿਟਾਉਣ ਤੋਂ ਅਸਮਰੱਥ।"
-
-msgid "Unable to delete the user."
-msgstr "ਵਰਤੋਂਕਾਰ ਨੂੰ ਮਿਟਾਉਣ ਤੋਂ ਅਸਮਰੱਥ।"
-
-msgid "Unable to delete the users."
-msgstr "ਵਰਤੋਂਕਾਰਾਂ ਨੂੰ ਮਿਟਾਉਣ ਤੋਂ ਅਸਮਰੱਥ।"
-
-msgid "Unable to edit the domain."
-msgstr "ਡੋਮੇਨ ਵਿੱਚ ਸੋਧ ਕਰਨ ਤੋਂ ਅਸਮਰੱਥ।"
-
-msgid "Unable to edit the project."
-msgstr "ਪ੍ਰੋਜੈਕਟ ਵਿੱਚ ਸੋਧ ਕਰਨ ਤੋਂ ਅਸਮਰੱਥ।"
-
-msgid "Unable to edit the role."
-msgstr "ਰੋਲ ਵਿੱਚ ਸੋਧ ਕਰਨ ਤੋਂ ਅਸਮਰੱਥ।"
-
-msgid "Unable to edit the user."
-msgstr "ਵਰਤੋਂਕਾਰ ਵਿੱਚ ਸੋਧ ਕਰਨ ਤੋਂ ਅਸਮਰੱਥ।"
-
-msgid "Unable to fetch the service catalog."
-msgstr "ਸੇਵਾ ਕਿਤਾਬਚਾ ਹਾਸਲ ਕਰਨ ਤੋਂ ਅਸਮਰੱਥ।"
-
-msgid "Unable to grant the role."
-msgstr "ਰੋਲ ਦੀ ਮਨਜ਼ੂਰੀ ਦੇਣ ਤੋਂ ਅਸਮਰੱਥ।"
-
-msgid "Unable to import the keypair."
-msgstr "ਕੀਅ-ਪੇਅਰ ਨੂੰ ਆਯਾਤ ਕਰਨ ਤੋਂ ਅਸਮਰੱਥ।"
-
-msgid "Unable to retrieve settings."
-msgstr "ਸੈਟਿੰਗਾਂ ਨੂੰ ਮੁੜ ਪ੍ਰਾਪਤ ਕਰਨ ਤੋਂ ਅਸਮਰੱਥ।"
-
-msgid "Unable to retrieve the current user session."
-msgstr "ਮੌਜੂਦਾ ਵਰਤੋਂਕਾਰ ਸੈਸ਼ਨ ਨੂੰ ਮੁੜ ਪ੍ਰਾਪਤ ਕਰਨ ਤੋਂ ਅਸਮਰੱਥ।"
 
 msgid "View Details"
 msgstr "ਵੇਰਵੇ ਵੇਖੋ"
@@ -389,6 +306,6 @@ msgstr ""
 "ਪੱਟੀਆਂ ਵਿੱਚ ਗਲਾਂਸ ਮੈਟਾਡਾਟਾ ਕੈਟਾਲੌਗ ਤੋਂ ਮੈਟਾਡਾਟਾ ਪਰਿਭਾਸ਼ਾਵਾਂ ਦਿੱਤੀਆਂ ਹੋਈਆਂ ਹਨ। ਆਪਣੀ ਪਸੰਦ ਦੀ "
 "ਚਾਬੀ ਦੇ ਨਾਲ ਮੈਟਾਡਾਟਾ ਜੋੜਨ ਲਈ \"ਹੋਰ\" ਚੋਣ ਨੂੰ ਵਰਤੋ।"
 
-#, c-format
+#, python-format
 msgid "You have selected %s. "
 msgstr "ਤੁਸੀਂ %s ਦੀ ਚੋਣ ਕੀਤੀ ਹੈ।"

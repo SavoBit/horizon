@@ -4,7 +4,7 @@
  *  Taken from default i18n file provided by Django.
  */
 
-var angularModuleExtension = [];
+var horizonPlugInModules = [];
 
 
 (function (globals) {
@@ -90,9 +90,7 @@ var angularModuleExtension = [];
   globals.npgettext = django.npgettext;
   globals.interpolate = django.interpolate;
   globals.get_format = django.get_format;
+  globals.STATIC_URL = '/static/';
+  globals.WEBROOT = '/';
 
 }(this));
-
-
-
-

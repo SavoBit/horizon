@@ -113,11 +113,10 @@
       {% with formatted_default_key_name="<em>"|add:default_key_name|add:"</em>" %}
         <dd>{{ instance.key_name|default:formatted_default_key_name }}</dd>
       {% endwith %}
-      {% url 'horizon:project:images:images:detail' instance.image.id as image_url %}
       <dt>{% trans "Image Name" %}</dt>
       <dd>
         {% if instance.image %}
-          <a href="{{ image_url }}">{{ instance.image_name }}</a>
+          <a href="{{ instance.image_url }}">{{ instance.image_name }}</a>
         {% else %}
           <em>{% trans "None" %}</em>
         {% endif %}
@@ -138,7 +137,7 @@
     {% for volume in instance.volumes %}
         <dt>{% trans "Attached To" %}</dt>
         <dd>
-            {% url 'horizon:project:volumes:volumes:detail' volume.id as volume_url %}
+            {% url instance.volume_url volume.id as volume_url %}
             {% blocktrans with volume_label=volume.name|default:volume.id volume_device=volume.device %}
             <a href="{{ volume_url }}">{{ volume_label }}</a> on {{ volume_device }}
             {% endblocktrans %}

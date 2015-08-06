@@ -1,4 +1,4 @@
-<div ng-controller="LaunchInstanceNetworkCtrl as ctrl">
+<div ng-controller="LaunchInstanceNetworkController as ctrl">
   <h1>{$ ::ctrl.label.title $}</h1>
   <div class="content">
     <div class="subtitle">{$ ::ctrl.label.subtitle $}</div>
@@ -99,18 +99,18 @@
         <thead>
           <tr>
             <th class="search-header" colspan="8">
-              <search-bar group-classes="input-group-sm" icon-classes="fa-search">
-              </search-bar>
+              <hz-search-bar group-classes="input-group-sm" icon-classes="fa-search">
+              </hz-search-bar>
             </th>
           </tr>
           <tr>
             <th class="reorder"></th>
             <th class="expander"></th>
-            <th st-sort-default class="rsp-p1">{$ ::ctrl.label.network $}</th>
+            <th st-sort="name" st-sort-default class="rsp-p1">{$ ::ctrl.label.network $}</th>
             <th class="rsp-p2">{$ ::ctrl.label.subnet_associated $}</th>
-            <th class="rsp-p1">{$ ::ctrl.label.shared $}</th>
-            <th class="rsp-p1">{$ ::ctrl.label.admin_state $}</th>
-            <th class="rsp-p1">{$ ::ctrl.label.status $}</th>
+            <th st-sort="shared" class="rsp-p1">{$ ::ctrl.label.shared $}</th>
+            <th st-sort="admin_state" class="rsp-p1">{$ ::ctrl.label.admin_state $}</th>
+            <th st-sort="status" class="rsp-p1">{$ ::ctrl.label.status $}</th>
             <th></th>
           </tr>
         </thead>

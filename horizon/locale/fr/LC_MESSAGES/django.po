@@ -1,24 +1,27 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# Translations template for PROJECT.
+# Copyright (C) 2015 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
 #
 # Translators:
 # Bruno Cornec <bruno.cornec@hp.com>, 2015
 # François Bureau, 2015
+# François Bureau, 2015
 # Frédéric <frosmont@free.fr>, 2014
+# JF Taltavull <jftalta@gmail.com>, 2015
 # Maxime COQUEREL <max.coquerel@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Horizon\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-01 19:48-0500\n"
-"PO-Revision-Date: 2015-06-01 21:38+0000\n"
-"Last-Translator: openstackjenkins <jenkins@openstack.org>\n"
-"Language-Team: French (http://www.transifex.com/projects/p/horizon/language/"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2015-08-04 04:10+0000\n"
+"PO-Revision-Date: 2015-08-02 19:41+0000\n"
+"Last-Translator: JF Taltavull <jftalta@gmail.com>\n"
+"Language-Team: French (http://www.transifex.com/openstack/horizon/language/"
 "fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.0\n"
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
@@ -107,6 +110,9 @@ msgstr "%s ne s'est pas terminé."
 msgid "&laquo;&nbsp;Prev"
 msgstr "&laquo;&nbsp;Aperçu"
 
+msgid "(No Limit)"
+msgstr "(Pas de limite)"
+
 msgid "-"
 msgstr "-"
 
@@ -115,7 +121,7 @@ msgstr "0 Octets"
 
 #, python-format
 msgid "A %(resource)s with the name \"%(name)s\" already exists."
-msgstr "Des %(resource)s avec le nom \"%(name)s\" existent déjà."
+msgstr "Un(e) %(resource)s avec le nom \"%(name)s\" existe déjà."
 
 msgid "Actions"
 msgstr "Actions"
@@ -131,10 +137,6 @@ msgstr "Ajouter une ligne"
 
 msgid "All available"
 msgstr "Disponibles"
-
-#, python-format
-msgid "Allocated <span> %(used)s </span> of <span> %(available)s </span>"
-msgstr "Alloué <span> %(used)s </span> de <span> %(available)s </span>"
 
 msgid "Available"
 msgstr "disponible(s)"
@@ -181,12 +183,6 @@ msgstr "Faux"
 msgid "Filter"
 msgstr "Filtrer"
 
-msgid "Floating IPs"
-msgstr "IP flottantes"
-
-msgid "Help"
-msgstr "Aide"
-
 msgid "Horizon"
 msgstr "Horizon"
 
@@ -195,9 +191,6 @@ msgstr "Format d'adresse IP incorrect"
 
 msgid "Info: "
 msgstr "Information :"
-
-msgid "Instances"
-msgstr "Instances"
 
 msgid "Invalid metadata entry. Use comma-separated key=value pairs"
 msgstr ""
@@ -215,10 +208,6 @@ msgstr "Synthèse  des Quotas"
 
 msgid "Log In"
 msgstr "Se connecter"
-
-#, python-format
-msgid "Logged in as: %(username)s"
-msgstr "Utilisateur connecté : %(username)s"
 
 msgid "Login"
 msgstr "Identifiant"
@@ -250,9 +239,6 @@ msgstr "Suivant"
 
 msgid "Next&nbsp;&raquo;"
 msgstr "Suivant&nbsp;&raquo;"
-
-msgid "No Limit"
-msgstr "Pas de limite"
 
 msgid "No items to display."
 msgstr "Aucun élément à afficher."
@@ -294,14 +280,8 @@ msgstr "Le numéro de port doit être un nombre entier"
 msgid "Processing..."
 msgstr "Traitement en cours..."
 
-msgid "RAM"
-msgstr "RAM"
-
 msgid "Save"
 msgstr "Enregistrer"
-
-msgid "Security Groups"
-msgstr "Groupes de sécurité"
 
 #, python-format
 msgid "Select a %s to browse."
@@ -310,7 +290,6 @@ msgstr "Sélectionner une %s à parcourir."
 msgid "Select a period of time to query its usage:"
 msgstr "Sélectionnez une période de temps pour interroger son utilisation :"
 
-#. Translators: test code, don't really have to translate
 msgid "Sell Puppy"
 msgid_plural "Sell Puppies"
 msgstr[0] "Chiot à vendre"
@@ -322,10 +301,6 @@ msgstr "La session a expiré."
 msgid "Sign In"
 msgstr "Se connecter"
 
-msgid "Sign Out"
-msgstr "Se déconnecter"
-
-#. Translators: test code, don't really have to translate
 msgid "Sold Puppy"
 msgid_plural "Sold Puppies"
 msgstr[0] "Chiot vendu"
@@ -382,18 +357,8 @@ msgstr "Mis à jour"
 msgid "Usage Summary"
 msgstr "Résumé de l'Utilisation"
 
-#, python-format
-msgid "Used <span> %(used)s </span> of <span> %(available)s </span>"
-msgstr "<span> %(used)s </span> utilisé(es) sur <span> %(available)s </span>"
-
-msgid "VCPUs"
-msgstr "VCPUs"
-
-msgid "Volume Storage"
-msgstr "Stockage de volumes"
-
-msgid "Volumes"
-msgstr "Volumes"
+msgid "Used"
+msgstr "Utilisé"
 
 msgid "Warning: "
 msgstr "Avertissement :"
@@ -408,3 +373,6 @@ msgstr "Vous n'êtes pas autorisé à accéder à %s"
 
 msgid "You do not have permission to access the resource:"
 msgstr "Vous n'avez pas la permission d'accéder à la ressource :"
+
+msgid "of"
+msgstr "de"

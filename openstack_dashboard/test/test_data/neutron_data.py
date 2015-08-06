@@ -28,6 +28,7 @@ def data(TEST):
     TEST.agents = utils.TestDataContainer()
     TEST.networks = utils.TestDataContainer()
     TEST.subnets = utils.TestDataContainer()
+    TEST.subnetpools = utils.TestDataContainer()
     TEST.ports = utils.TestDataContainer()
     TEST.routers = utils.TestDataContainer()
     TEST.routers_with_rules = utils.TestDataContainer()
@@ -57,6 +58,7 @@ def data(TEST):
     TEST.api_agents = utils.TestDataContainer()
     TEST.api_networks = utils.TestDataContainer()
     TEST.api_subnets = utils.TestDataContainer()
+    TEST.api_subnetpools = utils.TestDataContainer()
     TEST.api_ports = utils.TestDataContainer()
     TEST.api_routers = utils.TestDataContainer()
     TEST.api_routers_with_routes = utils.TestDataContainer()
@@ -534,6 +536,40 @@ def data(TEST):
             TEST.q_secgroup_rules.add(
                 neutron.SecurityGroupRule(copy.copy(rule), sg_name_dict))
 
+    # Subnetpools
+
+    # 1st subnetpool
+    subnetpool_dict = {'default_prefixlen': 24,
+                       'default_quota': None,
+                       'id': '419eb314-e244-4088-aed7-851af9d9500d',
+                       'ip_version': 4,
+                       'max_prefixlen': 32,
+                       'min_prefixlen': 12,
+                       'name': 'mysubnetpool1',
+                       'prefixes': ['172.16.0.0/12'],
+                       'shared': False,
+                       'tenant_id': '1'}
+
+    TEST.api_subnetpools.add(subnetpool_dict)
+    subnetpool = neutron.SubnetPool(subnetpool_dict)
+    TEST.subnetpools.add(subnetpool)
+
+    # 2nd subnetpool (v6)
+    subnetpool_dict = {'default_prefixlen': 64,
+                       'default_quota': None,
+                       'id': 'dcdad289-46f3-4298-bec6-41d91c942efa',
+                       'ip_version': 6,
+                       'max_prefixlen': 64,
+                       'min_prefixlen': 60,
+                       'name': 'mysubnetpool2',
+                       'prefixes': ['2001:db8:42::/48'],
+                       'shared': False,
+                       'tenant_id': '1'}
+
+    TEST.api_subnetpools.add(subnetpool_dict)
+    subnetpool = neutron.SubnetPool(subnetpool_dict)
+    TEST.subnetpools.add(subnetpool)
+
     # LBaaS.
 
     # 1st pool.
@@ -586,6 +622,7 @@ def data(TEST):
                 'admin_state_up': True}
     TEST.api_vips.add(vip_dict)
     TEST.vips.add(lbaas.Vip(vip_dict))
+    setattr(TEST.pools.first(), 'vip', TEST.vips.first())
 
     # 2nd vip.
     vip_dict = {'id': 'f0881d38-c3eb-4fee-9763-12de3338041d',
@@ -986,7 +1023,6 @@ def data(TEST):
                 'router_ids': [TEST.routers.first().id],
                 'description': 'firewall description',
                 'status': 'PENDING_CREATE',
-                'shared': True,
                 'admin_state_up': True}
     TEST.api_firewalls.add(fw1_dict)
 
@@ -1003,7 +1039,6 @@ def data(TEST):
                 'name': '',
                 'description': '',
                 'status': 'PENDING_CREATE',
-                'shared': True,
                 'admin_state_up': True}
     TEST.api_firewalls.add(fw1_dict)
 

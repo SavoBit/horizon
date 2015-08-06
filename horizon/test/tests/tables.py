@@ -19,7 +19,7 @@ from django import http
 from django import shortcuts
 from django.template import defaultfilters
 
-from mox import IsA  # noqa
+from mox3.mox import IsA  # noqa
 
 from horizon import tables
 from horizon.tables import formset as table_formset
@@ -780,6 +780,40 @@ class DataTableTests(test.TestCase):
                             'Verbose Name</label>',
                             count=1, html=True)
 
+    def test_table_search_action(self):
+        class TempTable(MyTable):
+            class Meta(object):
+                name = "my_table"
+                table_actions = (tables.NameFilterAction,)
+
+        # with the filter string 2, it should return 2nd item
+        action_string = "my_table__filter__q"
+        req = self.factory.post('/my_url/', {action_string: '2'})
+        self.table = TempTable(req, TEST_DATA)
+        self.assertQuerysetEqual(self.table.get_table_actions(),
+                                 ['<NameFilterAction: filter>'])
+        handled = self.table.maybe_handle()
+        self.assertIsNone(handled)
+        self.assertQuerysetEqual(self.table.filtered_data,
+                                 ['<FakeObject: object_2>'])
+
+        # with empty filter string, it should return all data
+        req = self.factory.post('/my_url/', {action_string: ''})
+        self.table = TempTable(req, TEST_DATA)
+        handled = self.table.maybe_handle()
+        self.assertIsNone(handled)
+        self.assertQuerysetEqual(self.table.filtered_data,
+                                 ['<FakeObject: object_1>',
+                                  '<FakeObject: object_2>',
+                                  '<FakeObject: object_3>'])
+
+        # with unknown value it should return empty list
+        req = self.factory.post('/my_url/', {action_string: 'horizon'})
+        self.table = TempTable(req, TEST_DATA)
+        handled = self.table.maybe_handle()
+        self.assertIsNone(handled)
+        self.assertQuerysetEqual(self.table.filtered_data, [])
+
     def test_inline_edit_mod_textarea(self):
         class TempTable(MyTable):
             name = tables.Column(get_name,
@@ -876,6 +910,14 @@ class DataTableTests(test.TestCase):
         self.assertEqual("/my_url/", handled["location"])
         self.assertEqual(u"Upped Item: object_2",
                          list(req._messages)[0].message)
+
+        # there are underscore in object-id.
+        # (because swift support custom object id)
+        action_string = "my_table__toggle__2__33__$$"
+        req = self.factory.post('/my_url/', {'action': action_string})
+        self.table = MyTable(req, TEST_DATA)
+        self.assertEqual(('my_table', 'toggle', '2__33__$$'),
+                         self.table.parse_action(action_string))
 
         # Multiple object action
         action_string = "my_table__delete"

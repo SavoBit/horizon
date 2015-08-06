@@ -1,6 +1,6 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# Translations template for PROJECT.
+# Copyright (C) 2015 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
 #
 # Translators:
 # Chen, Shang-Pin <dreamerwolf.tw@gmail.com>, 2015
@@ -11,35 +11,36 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Horizon\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-05 01:49-0500\n"
-"PO-Revision-Date: 2015-06-05 16:19+0000\n"
-"Last-Translator: Lucas H. Xu <xuh@bu.edu>\n"
-"Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/horizon/"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2015-08-04 04:10+0000\n"
+"PO-Revision-Date: 2015-06-27 11:57+0000\n"
+"Last-Translator: openstackjenkins <jenkins@openstack.org>\n"
+"Language-Team: Chinese (Taiwan) (http://www.transifex.com/openstack/horizon/"
 "language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.0\n"
 "Language: zh_TW\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#, c-format
+#, python-format
 msgid "%s GB"
 msgstr "%s GB"
 
-#, c-format
+#, python-format
 msgid "%s KB"
 msgstr "%s KB"
 
-#, c-format
+#, python-format
 msgid "%s MB"
 msgstr "%s MB"
 
-#, c-format
+#, python-format
 msgid "%s TB"
 msgstr "%s TB"
 
-#, c-format
+#, python-format
 msgid "%s bytes"
 msgstr "%s 位元組"
 
@@ -73,9 +74,6 @@ msgstr "上一步"
 msgid "Cancel"
 msgstr "取消"
 
-msgid "Cannot get service catalog from keystone."
-msgstr "不能從 Keystone 獲得伺服器類別。"
-
 msgid "Click here to expand the row and view the errors."
 msgstr "展開這列來檢視錯誤。"
 
@@ -91,7 +89,7 @@ msgstr "已關閉"
 msgid "Closing"
 msgstr "關閉中"
 
-#, c-format
+#, python-format
 msgid "Confirm %s"
 msgstr "確認 %s"
 
@@ -128,7 +126,7 @@ msgstr "刪除路由器"
 msgid "Detail Information"
 msgstr "詳細的資訊"
 
-#, c-format
+#, python-format
 msgid "Displaying %s item"
 msgid_plural "Displaying %s items"
 msgstr[0] "顯示 %s 項"
@@ -151,9 +149,6 @@ msgstr "展開來顯示已分配的項目"
 msgid "Expand to see available items"
 msgstr "展開來顯示可用的項目"
 
-msgid "Extension is not enabled: %(extension)s"
-msgstr "未啟用擴充套件：%(extension)s"
-
 msgid "Filter"
 msgstr "篩選"
 
@@ -162,9 +157,6 @@ msgstr "完成"
 
 msgid "Flavor"
 msgstr "虛擬硬體樣板"
-
-msgid "Found %(found)s of %(total)s"
-msgstr "已找到 %(total)s 中的 %(found)s 個"
 
 msgid "ID"
 msgstr "識別號"
@@ -244,9 +236,6 @@ msgstr "不符合的樣式"
 msgid "Please confirm your selection. "
 msgstr "請確認您的選擇。"
 
-msgid "Policy check failed."
-msgstr "檢查政策時失敗。"
-
 msgid "Re-order items using drag and drop"
 msgstr "使用拖拉來重新排列"
 
@@ -271,19 +260,13 @@ msgstr "從下列可用的項目中選擇"
 msgid "Select one"
 msgstr "擇一"
 
-msgid "Service type is not enabled: %(desiredType)s"
-msgstr "未啟用伺服器類型：%(desiredType)s"
-
-msgid "Setting is not enabled: %(setting)s"
-msgstr "未啟用設定：%(setting)s"
-
 msgid "Shutdown"
 msgstr "關機中"
 
 msgid "Status"
 msgstr "狀態"
 
-#, c-format
+#, python-format
 msgid "Status: %s"
 msgstr "狀態：%s"
 
@@ -312,96 +295,6 @@ msgstr "提交表單時有錯誤。請再試一次。"
 
 msgid "Total"
 msgstr "總共"
-
-msgid "Unable to create the domain."
-msgstr "無法新增地域。"
-
-msgid "Unable to create the keypair."
-msgstr "無法新增密鑰對。"
-
-msgid "Unable to create the network."
-msgstr "無法新增網路。"
-
-msgid "Unable to create the project."
-msgstr "無法新增專案。"
-
-msgid "Unable to create the role."
-msgstr "無法新增角色。"
-
-msgid "Unable to create the server."
-msgstr "無法新增伺服器。"
-
-msgid "Unable to create the subnet."
-msgstr "無法新增子網路。"
-
-msgid "Unable to create the user."
-msgstr "無法新增用戶。"
-
-msgid "Unable to delete the domain."
-msgstr "無法刪除地域。"
-
-msgid "Unable to delete the domains."
-msgstr "無法刪除地域。"
-
-msgid "Unable to delete the project."
-msgstr "無法刪除專案。"
-
-msgid "Unable to delete the projects."
-msgstr "無法刪除專案。"
-
-msgid "Unable to delete the role."
-msgstr "無法刪除角色"
-
-msgid "Unable to delete the roles."
-msgstr "無法刪除角色"
-
-msgid "Unable to delete the user."
-msgstr "無法刪除用戶。"
-
-msgid "Unable to delete the users."
-msgstr "無法刪除用戶。"
-
-msgid "Unable to edit the domain."
-msgstr "無法編輯地域。"
-
-msgid "Unable to edit the project."
-msgstr "無法編輯專案。"
-
-msgid "Unable to edit the role."
-msgstr "無法編輯角色"
-
-msgid "Unable to edit the user."
-msgstr "無法編輯用戶。"
-
-msgid "Unable to fetch the service catalog."
-msgstr "無法獲得伺服器類別。"
-
-msgid "Unable to grant the role."
-msgstr "無法賦予角色權力。"
-
-msgid "Unable to import the keypair."
-msgstr "無法匯入密鑰對。"
-
-msgid "Unable to retrieve settings."
-msgstr "無法設定。"
-
-msgid "Unable to retrieve the current user session."
-msgstr "無法獲得目前用戶連線階段。"
-
-msgid "Unable to retrieve the keypairs."
-msgstr "無法獲取密鑰對"
-
-msgid "Unable to retrieve the ports."
-msgstr "無法獲取端口"
-
-msgid "Unable to retrieve the security groups."
-msgstr "無法獲取安全組"
-
-msgid "Unable to retrieve the server."
-msgstr "無法獲得端口"
-
-msgid "Unable to retrieve users."
-msgstr "無法獲得用戶。"
 
 msgid "View Details"
 msgstr "檢視詳細資訊"
@@ -433,6 +326,6 @@ msgstr ""
 "您可以從左欄移動項目到右欄來指定資源詮釋資料。左欄是來自 Glance 詮釋資料類別"
 "的詮釋檔定義。使用「其他」選項來加入您的選擇到詮釋資料裡。"
 
-#, c-format
+#, python-format
 msgid "You have selected %s. "
 msgstr "您選擇了 %s。"
