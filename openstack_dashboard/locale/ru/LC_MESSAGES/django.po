@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Horizon\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-08-04 04:10+0000\n"
-"PO-Revision-Date: 2015-08-04 00:51+0000\n"
+"POT-Creation-Date: 2015-08-06 03:02+0000\n"
+"PO-Revision-Date: 2015-08-05 14:56+0000\n"
 "Last-Translator: openstackjenkins <jenkins@openstack.org>\n"
 "Language-Team: Russian (http://www.transifex.com/openstack/horizon/language/"
 "ru/)\n"
@@ -5147,9 +5147,6 @@ msgstr "Необязательная материнская резервная �
 msgid "Optional: Next Hop Addresses (comma delimited)"
 msgstr "Опционально: Адреса следующих переходов (разделенные запятой)"
 
-msgid "Orchestration"
-msgstr "Оркестрация"
-
 msgid "Orchestration Services"
 msgstr "Службы оркестрации"
 
@@ -9091,7 +9088,7 @@ msgid "User ID"
 msgstr "ID пользователя"
 
 msgid "User Name"
-msgstr "Название пользователя"
+msgstr "Имя пользователя"
 
 msgid "User Settings"
 msgstr "Настройки пользователя"
@@ -9107,7 +9104,7 @@ msgid "User password has been updated successfully."
 msgstr "Пароль пользователя успешно изменен."
 
 msgid "Username"
-msgstr "Название пользователя"
+msgstr "Имя пользователя"
 
 msgid "Users"
 msgstr "Пользователи"
