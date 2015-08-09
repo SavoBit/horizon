@@ -77,6 +77,14 @@ class DataProcessingPanels(horizon.PanelGroup):
 class Project(horizon.Dashboard):
     name = _("Project")
     slug = "project"
+    panels = (
+        BasePanels,
+        NetworkPanels,
+        ObjectStorePanels,
+        OrchestrationPanels,
+        DatabasePanels,
+        DataProcessingPanels,)
+    default_panel = 'overview'
 
 
 horizon.register(Project)
