@@ -86,5 +86,4 @@ class Project(horizon.Dashboard):
         DataProcessingPanels,)
     default_panel = 'overview'
 
-
 horizon.register(Project)
