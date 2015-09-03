@@ -26,10 +26,8 @@ class UpdateAggregateForm(forms.SelfHandlingForm):
     name = forms.CharField(label=_("Name"),
                            max_length=255)
     availability_zone = forms.CharField(label=_("Availability Zone"),
+                                        required=False,
                                         max_length=255)
-
-    def __init__(self, request, *args, **kwargs):
-        super(UpdateAggregateForm, self).__init__(request, *args, **kwargs)
 
     def handle(self, request, data):
         id = self.initial['id']
