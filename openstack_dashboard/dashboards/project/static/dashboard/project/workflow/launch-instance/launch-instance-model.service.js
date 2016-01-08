@@ -21,7 +21,6 @@
     '$log',
     'horizon.app.core.openstack-service-api.cinder',
     'horizon.app.core.openstack-service-api.glance',
-    'horizon.app.core.openstack-service-api.keystone',
     'horizon.app.core.openstack-service-api.neutron',
     'horizon.app.core.openstack-service-api.nova',
     'horizon.app.core.openstack-service-api.novaExtensions',
@@ -47,7 +46,6 @@
     $log,
     cinderAPI,
     glanceAPI,
-    keystoneAPI,
     neutronAPI,
     novaAPI,
     novaExtensions,
@@ -252,7 +250,7 @@
 
     function successMessage() {
       var numberInstances = model.newInstanceSpec.instance_count;
-      var message = ngettext('Instance launched.', '%s instances launched.', numberInstances);
+      var message = ngettext('%s instance launched.', '%s instances launched.', numberInstances);
       toast.add('success', interpolate(message, [numberInstances]));
     }
 
