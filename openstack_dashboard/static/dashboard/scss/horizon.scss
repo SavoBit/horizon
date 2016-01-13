@@ -13,7 +13,6 @@
 // Vendor Components
 @import "/bootstrap/scss/bootstrap";
 @import "/horizon/lib/font-awesome/scss/font-awesome.scss";
-@import "/horizon/lib/magic_search/magic_search.scss";
 
 // Main Page Layout
 @import "layout";
@@ -72,17 +71,6 @@ a:hover,
 a:focus {
   color: $link-hover-color;
   text-decoration: underline;
-}
-
-.page-header {
-  margin: 0 0 5px 0;
-  padding: 10px 0 5px 0;
-  border-bottom: 0;
-  height: auto;
-  width: 100%;
-  h1 {
-    margin: 0;
-  }
 }
 
 h2 {
