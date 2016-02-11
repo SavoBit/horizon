@@ -29,6 +29,13 @@
             ]
           }
         };
+      },
+      getNamespaces: function () {
+        return {
+          then: function (callback) {
+            callback({data: {items: []}});
+          }
+        };
       }
     };
 
@@ -67,14 +74,20 @@
 
     beforeEach(module('horizon.app.core.images'));
 
+    beforeEach(module('horizon.dashboard.project'));
+    beforeEach(module('horizon.dashboard.project.workflow'));
+    beforeEach(module('horizon.dashboard.project.workflow.launch-instance'));
+
     beforeEach(inject(function ($injector, _$rootScope_) {
       $scope = _$rootScope_.$new();
       events = $injector.get('horizon.app.core.images.events');
       controller = $injector.get('$controller');
 
       spyOn(glanceAPI, 'getImages').and.callThrough();
+      spyOn(glanceAPI, 'getNamespaces').and.callThrough();
       spyOn(userSession, 'get').and.callThrough();
       spyOn(mockQ, 'all').and.callThrough();
+
     }));
 
     function createController() {
@@ -95,6 +108,7 @@
         expectedImages['1'],
         expectedImages['2']
       ]);
+      expect(glanceAPI.getNamespaces).toHaveBeenCalled();
     });
 
     it('should refresh images after delete', function() {
