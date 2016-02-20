@@ -15,7 +15,7 @@
       -->
       <th colspan="100" class="search-header">
         <hz-search-bar group-classes="input-group-sm" icon-classes="fa-search">
-          <actions allowed="table.batchActions.actions" type="batch">
+          <actions allowed="table.getBatchActions" type="batch">
           </actions>
         </hz-search-bar>
       </th>
@@ -58,7 +58,7 @@
 
       <td class="select-col">
         <input type="checkbox"
-               ng-model="selected[image.id].checked"
+               ng-model="tCtrl.selections[image.id].checked"
                hz-select="image">
       </td>
       <td class="expander">
@@ -80,7 +80,7 @@
         Table-row-action-column:
         Actions taken here applies to a single item/row.
         -->
-        <actions allowed="table.rowActions.actions" type="row" item="image">
+        <actions allowed="table.getRowActions" type="row" item="image">
         </actions>
       </td>
     </tr>
