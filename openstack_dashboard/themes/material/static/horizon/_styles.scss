@@ -1,6 +1,7 @@
 @import "icons";
 @import "components/context_selection";
 @import "components/messages";
+@import "components/checkboxes";
 @import "components/hamburger";
 @import "components/magic_search";
 @import "components/navbar";
@@ -70,8 +71,10 @@
       }
     }
 
-    .dropdown-header {
-      color: $navbar-inverse-link-color;
+    @media (max-width: $screen-sm) {
+      .dropdown-header {
+        color: $navbar-inverse-link-color;
+      }
     }
   }
 }
