@@ -429,10 +429,12 @@ This example sorts flavors by vcpus in descending order::
 
 .. versionadded:: 9.0.0(Mitaka)
 
-Default: ``AVAILABLE_THEMES = [
-    ('default', 'Default', 'themes/default'),
-    ('material', 'Material', 'themes/material'),
-]``
+Default::
+
+   AVAILABLE_THEMES = [
+        ('default', 'Default', 'themes/default'),
+        ('material', 'Material', 'themes/material'),
+   ]
 
 This setting tells Horizon which themes to use.
 
@@ -455,7 +457,7 @@ If you wish to include content other than static files in a theme
 directory, but do not wish that content to be served up, then you
 can create a sub directory named ``static``. If the theme folder
 contains a sub-directory with the name ``static``, then
-``static/custom/static``` will be used as the root for the content
+``static/custom/static`` will be used as the root for the content
 served at ``/static/custom``.
 
 The static root of the theme folder must always contain a _variables.scss
@@ -621,7 +623,8 @@ edited.
 Default::
 
     {
-        "config_drive": False
+        "config_drive": False,
+        "enable_scheduler_hints": True
     }
 
 A dictionary of settings which can be used to provide the default values for
@@ -630,6 +633,8 @@ properties found in the Launch Instance modal.
 The ``config_drive`` setting specifies the default value for the Configuration
 Drive property.
 
+The ``enable_scheduler_hints`` setting specifies whether or not Scheduler Hints
+can be provided when launching an instance.
 
 ``LAUNCH_INSTANCE_NG_ENABLED``
 ------------------------------
@@ -1196,7 +1201,7 @@ Network types defined in Horizon or defined in ``extra_provider_types``
 settings can be specified in this list.
 As of the Newton release, the network types defined in Horizon include
 network types supported by Neutron ML2 plugin with Open vSwitch driver
-(``local``, ``flat``, ``vlan``, ``gre``, and ``vxlan``)
+(``local``, ``flat``, ``vlan``, ``gre``, ``vxlan`` and ``geneve``)
 and supported by Midonet plugin (``midonet`` and ``uplink``).
 ``["*"]`` means that all provider network types supported by Neutron
 ML2 plugin will be available to choose from.
@@ -1916,4 +1921,3 @@ following content::
     PANEL_GROUP = 'plugin_panel_group'
     PANEL_GROUP_NAME = 'Plugin Panel Group'
     PANEL_GROUP_DASHBOARD = 'admin'
-
